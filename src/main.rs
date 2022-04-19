@@ -1,4 +1,6 @@
+mod bot;
 mod router;
+
 use actix_web::{App, HttpServer};
 // use dotenv::dotenv;
 
