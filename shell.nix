@@ -9,6 +9,7 @@ in pkgs.mkShell {
     rustc
     rustfmt
     clippy
+    ngrok
   ];
 
   # Certain Rust tools won't work without this
