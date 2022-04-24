@@ -10,6 +10,8 @@ in pkgs.mkShell {
     rustfmt
     clippy
     ngrok
+    openssl
+    pkg-config
   ];
 
   # Certain Rust tools won't work without this
