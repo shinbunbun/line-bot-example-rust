@@ -6,7 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = { version = "4" }
+actix-web = "4"
+actix-http = "3"
 serde = { version = "1", features = ["derive"] }
 awc = { version = "3.0.0", features = ["rustls"] }
 rustls = "0"
