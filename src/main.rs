@@ -1,4 +1,5 @@
 mod bot;
+mod client;
 mod config;
 mod error;
 mod models;
