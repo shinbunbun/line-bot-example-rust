@@ -1,6 +1,10 @@
-use self::{quick_reply::QuickReply, sender::Sender, stamp::StampMessage, text::TextMessage};
+use self::{
+    image::ImageMessage, quick_reply::QuickReply, sender::Sender, stamp::StampMessage,
+    text::TextMessage,
+};
 use serde::{Deserialize, Serialize};
 
+pub mod image;
 pub mod quick_reply;
 pub mod sender;
 pub mod stamp;
@@ -22,6 +26,7 @@ pub struct MessageObject {
 pub enum EachMessageFields {
     TextMessage(TextMessage),
     StampMessage(StampMessage),
+    ImageMessage(ImageMessage),
 }
 
 /* fn test() {
