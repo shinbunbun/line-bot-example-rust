@@ -1,9 +1,14 @@
 use serde::{Deserialize, Serialize};
 
-use self::buttons::ButtonsTemplate;
+use self::{
+    buttons::ButtonsTemplate, carousel::CarouselTemplate, confirm::ConfirmTemplate,
+    image_carousel::ImageCarouselTemplate,
+};
 
 pub mod buttons;
+pub mod carousel;
 pub mod confirm;
+pub mod image_carousel;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -18,7 +23,7 @@ pub struct TemplateMessage {
 #[serde(untagged)]
 pub enum Template {
     Buttons(ButtonsTemplate),
-    /* Confirm(ConfirmTemplate),
+    Confirm(ConfirmTemplate),
     Carousel(CarouselTemplate),
-    ImageCarousel(ImageCarouselTemplate), */
+    ImageCarousel(ImageCarouselTemplate),
 }

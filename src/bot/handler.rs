@@ -1,14 +1,16 @@
 use std::vec;
 
-use crate::config;
-use crate::{error::AppError, models::webhook_event_object};
-use actix_web::{http::header, web, HttpResponse, Responder};
-use awc::Client;
+use crate::client;
+
+use crate::models::message::text::TextMessage;
+use crate::models::message::EachMessageFields;
+use crate::models::message::MessageObject;
+use crate::{error::AppError, models::webhook_event};
+use actix_web::{web, HttpResponse, Responder};
+
 use serde::Serialize;
 
-pub async fn handler(
-    context: web::Json<webhook_event_object::Root>,
-) -> Result<impl Responder, AppError> {
+pub async fn handler(context: web::Json<webhook_event::Root>) -> Result<impl Responder, AppError> {
     println!("{:?}", context);
     for event in &context.events {
         let message = event
@@ -24,28 +26,23 @@ pub async fn handler(
                 .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?
                 .to_string(),
             messages: vec![{
-                Message {
-                    r#type: "text".to_string(),
-                    text: message.text.to_string(),
+                MessageObject {
+                    quick_reply: None,
+                    sender: None,
+                    message: EachMessageFields::Text(TextMessage {
+                        text: message.text.clone(),
+                        type_field: "text".to_string(),
+                        emojis: None,
+                    }),
                 }
             }],
         };
 
         println!("{:?}", &reply_messages);
 
-        let mut response = Client::new()
-            .post("https://api.line.me/v2/bot/message/reply")
-            .insert_header((
-                header::AUTHORIZATION,
-                format!(
-                    "{}{}",
-                    "Bearer ".to_string(),
-                    config::get_token().map_err(AppError::Env)?
-                ),
-            ))
-            .send_json(&reply_messages)
-            .await
-            .map_err(AppError::AwcRequestError)?;
+        let mut response =
+            client::line_post_request(reply_messages, "https://api.line.me/v2/bot/message/reply")
+                .await?;
 
         println!("{:?}", response.body().await.unwrap());
     }
@@ -56,11 +53,5 @@ pub async fn handler(
 struct ReplyMessage {
     #[serde(rename(serialize = "replyToken"))]
     reply_token: String,
-    messages: Vec<Message>,
-}
-
-#[derive(Debug, Serialize)]
-struct Message {
-    r#type: String,
-    text: String,
+    messages: Vec<MessageObject>,
 }
