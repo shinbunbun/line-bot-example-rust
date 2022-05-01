@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Text {
+pub struct TextMessage {
     #[serde(rename = "type")]
     pub type_field: String,
     pub text: String,
