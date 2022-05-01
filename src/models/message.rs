@@ -12,6 +12,7 @@ pub mod location;
 pub mod quick_reply;
 pub mod sender;
 pub mod stamp;
+pub mod template;
 pub mod text;
 pub mod video;
 
@@ -29,13 +30,13 @@ pub struct MessageObject {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum EachMessageFields {
-    TextMessage(TextMessage),
-    StampMessage(StampMessage),
-    ImageMessage(ImageMessage),
-    VideoMessage(VideoMessage),
-    AudioMessage(AudioMessage),
-    LocationMessage(LocationMessage),
-    ImagemapMessage(ImagemapMessage),
+    Text(TextMessage),
+    Stamp(StampMessage),
+    Image(ImageMessage),
+    Video(VideoMessage),
+    Audio(AudioMessage),
+    Location(LocationMessage),
+    Imagemap(ImagemapMessage),
 }
 
 /* fn test() {
