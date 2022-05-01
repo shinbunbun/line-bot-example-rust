@@ -1,6 +1,18 @@
 use serde::{Deserialize, Serialize};
 // use validator::Validate;
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum Actions {
+    PostbackAction,
+    MessageAction,
+    URIAction,
+    DatetimePickerAction,
+    CameraAction,
+    CameraRollAction,
+    LocationAction,
+    RichMenuSwitchAction,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize /* , Validate */)]
 #[serde(rename_all = "camelCase")]
 pub struct PostbackAction {
