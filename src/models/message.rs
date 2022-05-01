@@ -1,9 +1,10 @@
 use self::{
-    image::ImageMessage, quick_reply::QuickReply, sender::Sender, stamp::StampMessage,
-    text::TextMessage, video::VideoMessage,
+    audio::AudioMessage, image::ImageMessage, quick_reply::QuickReply, sender::Sender,
+    stamp::StampMessage, text::TextMessage, video::VideoMessage,
 };
 use serde::{Deserialize, Serialize};
 
+pub mod audio;
 pub mod image;
 pub mod quick_reply;
 pub mod sender;
@@ -29,6 +30,7 @@ pub enum EachMessageFields {
     StampMessage(StampMessage),
     ImageMessage(ImageMessage),
     VideoMessage(VideoMessage),
+    AudioMessage(AudioMessage),
 }
 
 /* fn test() {
