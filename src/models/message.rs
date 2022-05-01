@@ -1,6 +1,6 @@
 use self::{
     image::ImageMessage, quick_reply::QuickReply, sender::Sender, stamp::StampMessage,
-    text::TextMessage,
+    text::TextMessage, video::VideoMessage,
 };
 use serde::{Deserialize, Serialize};
 
@@ -9,6 +9,7 @@ pub mod quick_reply;
 pub mod sender;
 pub mod stamp;
 pub mod text;
+pub mod video;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -27,6 +28,7 @@ pub enum EachMessageFields {
     TextMessage(TextMessage),
     StampMessage(StampMessage),
     ImageMessage(ImageMessage),
+    VideoMessage(VideoMessage),
 }
 
 /* fn test() {
