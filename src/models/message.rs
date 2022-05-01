@@ -1,11 +1,13 @@
 use self::{
-    audio::AudioMessage, image::ImageMessage, location::LocationMessage, quick_reply::QuickReply,
-    sender::Sender, stamp::StampMessage, text::TextMessage, video::VideoMessage,
+    audio::AudioMessage, image::ImageMessage, imagemap::ImagemapMessage, location::LocationMessage,
+    quick_reply::QuickReply, sender::Sender, stamp::StampMessage, text::TextMessage,
+    video::VideoMessage,
 };
 use serde::{Deserialize, Serialize};
 
 pub mod audio;
 pub mod image;
+pub mod imagemap;
 pub mod location;
 pub mod quick_reply;
 pub mod sender;
@@ -33,6 +35,7 @@ pub enum EachMessageFields {
     VideoMessage(VideoMessage),
     AudioMessage(AudioMessage),
     LocationMessage(LocationMessage),
+    ImagemapMessage(ImagemapMessage),
 }
 
 /* fn test() {
