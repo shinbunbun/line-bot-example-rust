@@ -1,7 +1,5 @@
 use serde::{Deserialize, Serialize};
 
-use crate::models::action::Actions;
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ImagemapMessage {
@@ -44,4 +42,29 @@ pub struct Area {
 pub struct ExternalLink {
     link_uri: String,
     label: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum Actions {
+    URIAction(URIAction),
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct URIAction {
+    #[serde(rename = "type")]
+    pub type_field: String,
+    pub label: Option<String>,
+    pub link_uri: String,
+    pub area: Area,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MessageAction {
+    #[serde(rename = "type")]
+    pub type_field: String,
+    pub label: Option<String>,
+    pub text: String,
+    pub area: Area,
 }
