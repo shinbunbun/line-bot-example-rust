@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use self::buttons::ButtonsTemplate;
 
 pub mod buttons;
+pub mod confirm;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
