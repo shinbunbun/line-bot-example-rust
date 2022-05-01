@@ -770,6 +770,7 @@ dependencies = [
  "awc",
  "rustls",
  "serde",
+ "serde_json",
  "validator",
 ]
 
