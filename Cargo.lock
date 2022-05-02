@@ -583,6 +583,7 @@ dependencies = [
  "futures-task",
  "pin-project-lite 0.2.8",
  "pin-utils",
+ "slab",
 ]
 
 [[package]]
@@ -768,6 +769,7 @@ dependencies = [
  "actix-rt 1.1.1",
  "actix-web",
  "awc",
+ "futures-util",
  "rustls",
  "serde",
  "serde_json",
