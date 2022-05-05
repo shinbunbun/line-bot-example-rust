@@ -1,11 +1,12 @@
 use crate::config;
-use actix_http::{body::EitherBody, HttpMessage};
+use actix_http::{body::EitherBody, error::PayloadError, header, HttpMessage};
 use actix_web::{
     dev::{self, Service, ServiceRequest, ServiceResponse, Transform},
+    http::header::Encoding,
     web::{self, Bytes, BytesMut},
-    Error, FromRequest, HttpRequest, HttpResponse,
+    Either, Error, FromRequest, HttpRequest, HttpResponse,
 };
-use futures::executor::block_on;
+use futures::{executor::block_on, Future, FutureExt};
 use futures_util::{
     future::{self, LocalBoxFuture},
     StreamExt,
@@ -13,8 +14,12 @@ use futures_util::{
 use hex_literal::hex;
 use hmac::{Hmac, Mac};
 use sha2::Sha256;
-use std::future::{ready, Ready};
-
+use std::{
+    future::{ready, Ready},
+    pin::Pin,
+    rc::Rc,
+};
+const DEFAULT_CONFIG_LIMIT: usize = 262_144;
 pub struct Verifier;
 
 impl<S, B> Transform<S, ServiceRequest> for Verifier
@@ -46,7 +51,7 @@ where
 {
     type Response = ServiceResponse<EitherBody<B>>;
     type Error = Error;
-    type Future = LocalBoxFuture<'static, Result<Self::Response, Self::Error>>;
+    type Future = Pin<Box<dyn Future<Output = Result<Self::Response, Self::Error>>>>;
 
     dev::forward_ready!(service);
 
@@ -65,7 +70,63 @@ where
         let signature = signature.unwrap(); */
 
         println!("{}", 2);
-        let (request, mut payload) = request.into_parts();
+        let (req, payload) = request.into_parts();
+
+        /* async move {
+            println!("{}", 3);
+            let mut stream = payload;
+            let mut body = BytesMut::new();
+            while let Some(chunk) = stream.next().await {
+                println!("{}", 4);
+                body.extend_from_slice(&chunk.unwrap());
+            }
+            println!("{}", 5);
+            println!("request body: {:?}", body);
+
+            /* let svc_res = svc.call(req).await?;
+
+            let mut svc_res = enable_response_buffering(&wrapper, svc_res);
+
+            let mut stream = svc_res.take_body();
+            let mut body = BytesMut::new();
+            while let Some(chunk) = stream.next().await {
+                body.extend_from_slice(&chunk.unwrap());
+            }
+            let svc_res = svc_res.map_body(|_, _| stream);
+            println!("response body: {:?}", body); */
+
+            /* self.service
+            .call(request)
+            .await
+            .map(ServiceResponse::map_into_left_body) */
+            let request = ServiceRequest::from_request(req);
+
+            let res = self.service.call(request);
+
+            // forwarded responses map to "left" body
+
+            res.await.map(ServiceResponse::map_into_left_body)
+        }
+        .boxed_local() */
+
+        /* let mut length = None;
+        let mut err = None;
+        if let Some(l) = req.headers().get(&header::CONTENT_LENGTH) {
+            match l.to_str() {
+                Ok(s) => match s.parse::<usize>() {
+                    Ok(l) => {
+                        if l > DEFAULT_CONFIG_LIMIT {
+                            err = Some(PayloadError::Overflow);
+                        }
+                        length = Some(l)
+                    }
+                    Err(_) => err = Some(PayloadError::UnknownLength),
+                },
+                Err(_) => err = Some(PayloadError::UnknownLength),
+            }
+        }
+
+        let stream = payload.take(); */
         /* println!("{}", 3);
         let body = block_on(actix_web::web::Bytes::from_request(&request, &mut payload)).unwrap();
         println!("{}", 4);
@@ -158,12 +219,12 @@ where
         );
         assert_eq!(code_bytes[..], expected[..]); */
 
-        let request = ServiceRequest::from_request(request);
+        /* let request = ServiceRequest::from_request(req);
 
         let res = self.service.call(request);
 
         // forwarded responses map to "left" body
 
-        Box::pin(async move { res.await.map(ServiceResponse::map_into_left_body) })
+        Box::pin(async move { res.await.map(ServiceResponse::map_into_left_body) }) */
     }
 }
