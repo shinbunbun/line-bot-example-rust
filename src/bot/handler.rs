@@ -2,6 +2,7 @@ use std::vec;
 
 use crate::client;
 
+use super::verify_signature;
 use crate::models::message::text::TextMessage;
 use crate::models::message::EachMessageFields;
 use crate::models::message::MessageObject;
