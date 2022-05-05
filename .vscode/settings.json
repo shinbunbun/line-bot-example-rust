@@ -2,6 +2,7 @@
   "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
   "editor.formatOnSave": true,
   "cSpell.words": [
+    "Hmac",
     "Imagemap"
   ]
 }
