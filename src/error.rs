@@ -2,6 +2,7 @@ use std::env::VarError;
 
 use base64::DecodeError;
 use hmac::digest::{InvalidLength, MacError};
+use log::error;
 
 #[derive(Debug)]
 pub enum AppError {
@@ -30,7 +31,7 @@ impl actix_web::error::ResponseError for AppError {
     }
 
     fn error_response(&self) -> actix_web::HttpResponse<actix_web::body::BoxBody> {
-        println!("{}", self.to_string());
+        error!("{}", self.to_string());
         actix_web::HttpResponse::build(self.status_code()).body(self.to_string())
     }
 }
