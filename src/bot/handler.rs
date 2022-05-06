@@ -4,18 +4,14 @@ use crate::client;
 
 use crate::config;
 use crate::extractor::CustomHeader;
-use crate::models;
 use crate::models::message::text::TextMessage;
 use crate::models::message::EachMessageFields;
 use crate::models::message::MessageObject;
-use crate::models::webhook_event::Event;
 use crate::{error::AppError, models::webhook_event};
-use actix_http::RequestHead;
-use actix_web::{http::header, web, HttpResponse, Responder};
+use actix_web::{HttpResponse, Responder};
 
 use hmac::Hmac;
 use hmac::Mac;
-use serde::Deserialize;
 use serde::Serialize;
 use sha2::Sha256;
 

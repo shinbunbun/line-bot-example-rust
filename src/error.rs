@@ -1,6 +1,5 @@
 use std::env::VarError;
 
-use actix_web::App;
 use base64::DecodeError;
 use hmac::digest::{InvalidLength, MacError};
 
