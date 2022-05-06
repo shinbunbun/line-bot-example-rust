@@ -2,6 +2,7 @@ mod bot;
 mod client;
 mod config;
 mod error;
+mod extractor;
 mod models;
 mod router;
 // mod verify_signature;
