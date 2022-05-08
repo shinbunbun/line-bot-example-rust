@@ -1,5 +1,4 @@
-use line_bot_sdk::send_message;
-use line_bot_sdk::verify_signature;
+use line_bot_sdk::client::Client;
 use log::info;
 use std::vec;
 
@@ -12,7 +11,12 @@ use line_bot_sdk::{error::AppError, models::webhook_event};
 
 use serde::Serialize;
 
-async fn webhook_handler(context: webhook_event::Root) -> Result<HttpResponse, AppError> {
+use crate::config;
+
+async fn webhook_handler(
+    context: webhook_event::Root,
+    client: Client,
+) -> Result<HttpResponse, AppError> {
     for event in &context.events {
         let message = event
             .message
@@ -22,7 +26,7 @@ async fn webhook_handler(context: webhook_event::Root) -> Result<HttpResponse, A
             .reply_token
             .as_ref()
             .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?
-            .to_string();
+            .as_str();
         let reply_messages = vec![{
             MessageObject {
                 quick_reply: None,
@@ -35,7 +39,7 @@ async fn webhook_handler(context: webhook_event::Root) -> Result<HttpResponse, A
             }
         }];
 
-        send_message::reply(reply_token, reply_messages, None).await?;
+        client.reply(reply_token, reply_messages, None).await?;
     }
     return Ok(HttpResponse::Ok().json("Ok"));
 }
@@ -46,12 +50,17 @@ pub async fn handler(
 ) -> Result<impl Responder, AppError> {
     info!("Request body: {}", context);
 
-    let x_line_signature = custom_header.x_line_signature;
-    verify_signature::verify(&x_line_signature, context.clone())?;
+    let client = Client::new(
+        config::get_token().map_err(AppError::Env)?,
+        config::get_secret().map_err(AppError::Env)?,
+    );
+
+    let signature = custom_header.x_line_signature.as_str();
+    client.verify(signature, context.as_str())?;
 
     let context: webhook_event::Root =
         serde_json::from_str(context.as_str()).map_err(AppError::SerdeJson)?;
-    webhook_handler(context).await
+    webhook_handler(context, client).await
 }
 
 #[derive(Debug, Serialize)]

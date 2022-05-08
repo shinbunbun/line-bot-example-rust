@@ -1,4 +1,5 @@
 mod bot;
+mod config;
 mod router;
 
 use actix_web::{middleware::Logger, App, HttpServer};
