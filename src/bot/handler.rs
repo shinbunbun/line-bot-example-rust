@@ -18,14 +18,12 @@ async fn webhook_handler(context: webhook_event::Root) -> Result<HttpResponse, A
             .message
             .as_ref()
             .ok_or_else(|| AppError::BadRequest("Message not found".to_string()))?;
-
         let reply_token = event
             .reply_token
             .as_ref()
             .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?
             .to_string();
-
-        let messages = vec![{
+        let reply_messages = vec![{
             MessageObject {
                 quick_reply: None,
                 sender: None,
@@ -37,7 +35,7 @@ async fn webhook_handler(context: webhook_event::Root) -> Result<HttpResponse, A
             }
         }];
 
-        send_message::reply(reply_token, messages, None).await?;
+        send_message::reply(reply_token, reply_messages, None).await?;
     }
     return Ok(HttpResponse::Ok().json("Ok"));
 }
