@@ -12,18 +12,7 @@ use actix_web::{HttpResponse, Responder};
 
 use serde::Serialize;
 
-pub async fn handler(
-    context: String,
-    custom_header: CustomHeader,
-) -> Result<impl Responder, AppError> {
-    info!("Request body: {}", context);
-
-    let x_line_signature = custom_header.x_line_signature;
-    verify_signature::verify(&x_line_signature, context.clone())?;
-
-    let context: webhook_event::Root =
-        serde_json::from_str(context.as_str()).map_err(AppError::SerdeJson)?;
-
+async fn webhook_handler(context: webhook_event::Root) -> Result<HttpResponse, AppError> {
     for event in &context.events {
         let message = event
             .message
@@ -55,6 +44,20 @@ pub async fn handler(
         info!("API Response: {:#?}", response);
     }
     return Ok(HttpResponse::Ok().json("Ok"));
+}
+
+pub async fn handler(
+    context: String,
+    custom_header: CustomHeader,
+) -> Result<impl Responder, AppError> {
+    info!("Request body: {}", context);
+
+    let x_line_signature = custom_header.x_line_signature;
+    verify_signature::verify(&x_line_signature, context.clone())?;
+
+    let context: webhook_event::Root =
+        serde_json::from_str(context.as_str()).map_err(AppError::SerdeJson)?;
+    webhook_handler(context).await
 }
 
 #[derive(Debug, Serialize)]
