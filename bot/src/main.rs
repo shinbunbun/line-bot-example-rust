@@ -1,11 +1,5 @@
 mod bot;
-mod client;
-mod config;
-mod error;
-mod extractor;
-mod models;
 mod router;
-mod send_message;
 
 use actix_web::{middleware::Logger, App, HttpServer};
 

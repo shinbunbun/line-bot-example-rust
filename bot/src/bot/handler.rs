@@ -1,14 +1,14 @@
-use crate::bot::verify_signature;
-use crate::send_message;
+use line_bot_sdk::send_message;
+use line_bot_sdk::verify_signature;
 use log::info;
 use std::vec;
 
-use crate::extractor::CustomHeader;
-use crate::models::message::text::TextMessage;
-use crate::models::message::EachMessageFields;
-use crate::models::message::MessageObject;
-use crate::{error::AppError, models::webhook_event};
 use actix_web::{HttpResponse, Responder};
+use line_bot_sdk::extractor::CustomHeader;
+use line_bot_sdk::models::message::text::TextMessage;
+use line_bot_sdk::models::message::EachMessageFields;
+use line_bot_sdk::models::message::MessageObject;
+use line_bot_sdk::{error::AppError, models::webhook_event};
 
 use serde::Serialize;
 

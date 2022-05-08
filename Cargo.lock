@@ -881,6 +881,30 @@ dependencies = [
  "futures-util",
  "hex-literal",
  "hmac",
+ "line_bot_sdk",
+ "log",
+ "rustls",
+ "serde",
+ "serde_json",
+ "sha2",
+ "validator",
+]
+
+[[package]]
+name = "line_bot_sdk"
+version = "0.1.0"
+dependencies = [
+ "actix-http",
+ "actix-rt 1.1.1",
+ "actix-web",
+ "async-trait",
+ "awc",
+ "base64",
+ "env_logger",
+ "futures",
+ "futures-util",
+ "hex-literal",
+ "hmac",
  "log",
  "rustls",
  "serde",
