@@ -1,4 +1,4 @@
-pub mod client;
+pub mod api_request;
 pub mod config;
 pub mod error;
 pub mod extractor;

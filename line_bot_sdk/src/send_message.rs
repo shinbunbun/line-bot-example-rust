@@ -2,7 +2,7 @@ pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
 
 use serde::Serialize;
 
-use crate::{client, error::AppError, models::message::MessageObject};
+use crate::{api_request, error::AppError, models::message::MessageObject};
 
 pub async fn reply(
     reply_token: String,
@@ -14,7 +14,7 @@ pub async fn reply(
         messages,
         notification_disabled,
     };
-    client::line_post_request(
+    api_request::line_post_request(
         body,
         format!("{}/v2/bot/message/reply", API_ENDPOINT_BASE).as_str(),
     )
