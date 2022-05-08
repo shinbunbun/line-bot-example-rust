@@ -1,6 +1,7 @@
 use actix_http::encoding::Decoder;
 use actix_web::{dev::Payload, http::header};
 use awc::{Client, ClientResponse};
+use log::info;
 
 use crate::{config, error::AppError};
 
@@ -8,7 +9,7 @@ pub async fn line_post_request<T: serde::Serialize>(
     body: T,
     url: &str,
 ) -> Result<ClientResponse<Decoder<Payload>>, AppError> {
-    Client::new()
+    let response = Client::new()
         .post(url)
         .insert_header((
             header::AUTHORIZATION,
@@ -20,5 +21,7 @@ pub async fn line_post_request<T: serde::Serialize>(
         ))
         .send_json(&body)
         .await
-        .map_err(AppError::AwcRequestError)
+        .map_err(AppError::AwcRequestError)?;
+    info!("API Response: {:#?}", response);
+    Ok(response)
 }

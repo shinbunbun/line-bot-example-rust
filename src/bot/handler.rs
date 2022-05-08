@@ -1,5 +1,5 @@
 use crate::bot::verify_signature;
-use crate::client;
+use crate::send_message;
 use log::info;
 use std::vec;
 
@@ -19,29 +19,25 @@ async fn webhook_handler(context: webhook_event::Root) -> Result<HttpResponse, A
             .as_ref()
             .ok_or_else(|| AppError::BadRequest("Message not found".to_string()))?;
 
-        let reply_messages = ReplyMessage {
-            reply_token: event
-                .reply_token
-                .as_ref()
-                .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?
-                .to_string(),
-            messages: vec![{
-                MessageObject {
-                    quick_reply: None,
-                    sender: None,
-                    message: EachMessageFields::Text(TextMessage {
-                        text: message.text.clone(),
-                        type_field: "text".to_string(),
-                        emojis: None,
-                    }),
-                }
-            }],
-        };
+        let reply_token = event
+            .reply_token
+            .as_ref()
+            .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?
+            .to_string();
 
-        let response =
-            client::line_post_request(reply_messages, "https://api.line.me/v2/bot/message/reply")
-                .await?;
-        info!("API Response: {:#?}", response);
+        let messages = vec![{
+            MessageObject {
+                quick_reply: None,
+                sender: None,
+                message: EachMessageFields::Text(TextMessage {
+                    text: message.text.clone(),
+                    type_field: "text".to_string(),
+                    emojis: None,
+                }),
+            }
+        }];
+
+        send_message::reply(reply_token, messages, None).await?;
     }
     return Ok(HttpResponse::Ok().json("Ok"));
 }
