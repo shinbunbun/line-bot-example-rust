@@ -1,33 +1,27 @@
 use line_bot_sdk::client::Client;
 use log::info;
-use std::vec;
 
 use actix_web::{HttpResponse, Responder};
 use line_bot_sdk::extractor::CustomHeader;
-use line_bot_sdk::models::message::text::TextMessage;
-use line_bot_sdk::models::message::EachMessageFields;
 use line_bot_sdk::models::message::MessageObject;
 use line_bot_sdk::{error::AppError, models::webhook_event};
 
 use serde::Serialize;
 
 use crate::config;
+use crate::event::message;
 
 async fn webhook_handler(
     context: webhook_event::Root,
     client: Client,
 ) -> Result<HttpResponse, AppError> {
     for event in &context.events {
-        let message = event
-            .message
-            .as_ref()
-            .ok_or_else(|| AppError::BadRequest("Message not found".to_string()))?;
         let reply_token = event
             .reply_token
             .as_ref()
             .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?
             .as_str();
-        let reply_messages = vec![{
+        /* let reply_messages = vec![{
             MessageObject {
                 quick_reply: None,
                 sender: None,
@@ -37,7 +31,11 @@ async fn webhook_handler(
                     emojis: None,
                 }),
             }
-        }];
+        }]; */
+        let reply_messages = match event.type_field.as_str() {
+            "message" => message::index(event),
+            _ => return Err(AppError::BadRequest("Unknown event type".to_string())),
+        }?;
 
         client.reply(reply_token, reply_messages, None).await?;
     }
