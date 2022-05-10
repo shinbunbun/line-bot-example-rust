@@ -2,11 +2,12 @@ use line_bot_sdk::{
     error::AppError,
     models::{
         message::{text::TextMessage, EachMessageFields, MessageObject},
-        webhook_event::{Event, Message},
+        webhook_event::{Event, Message, Text},
     },
 };
 
-pub fn text_event(message: &Message) -> Result<Vec<MessageObject>, AppError> {
+pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
+    let message = message;
     match message.text.as_str() {
         "こんにちは" => Ok(vec![{
             MessageObject {
@@ -41,18 +42,7 @@ pub fn index(event: &Event) -> Result<Vec<MessageObject>, AppError> {
         .message
         .as_ref()
         .ok_or_else(|| AppError::BadRequest("Message not found".to_string()))?;
-    match message.type_field.as_str() {
-        "text" => text_event(message),
-        _ => Ok(vec![{
-            MessageObject {
-                quick_reply: None,
-                sender: None,
-                message: EachMessageFields::Text(TextMessage {
-                    text: "そのイベントには対応していません...".to_string(),
-                    type_field: "text".to_string(),
-                    emojis: None,
-                }),
-            }
-        }]),
+    match message {
+        Message::Text(x) => text_event(x),
     }
 }
