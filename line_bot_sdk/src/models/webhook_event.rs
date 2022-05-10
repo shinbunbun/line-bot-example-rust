@@ -31,6 +31,7 @@ pub struct DeliveryContext {
 #[serde(untagged)]
 pub enum Message {
     Text(Text),
+    Image(Image),
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -42,6 +43,33 @@ pub struct Text {
     pub text: String,
     pub emojis: Option<Vec<Emoji>>,
     pub mention: Option<Mention>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Image {
+    pub id: String,
+    #[serde(rename = "type")]
+    pub type_field: String,
+    pub content_provider: ContentProvider,
+    pub image_set: Option<ImageSet>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ContentProvider {
+    #[serde(rename = "type")]
+    pub type_field: String,
+    pub original_content_url: Option<String>,
+    pub preview_image_url: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ImageSet {
+    pub id: String,
+    pub index: i64,
+    pub total: i64,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
