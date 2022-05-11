@@ -29,8 +29,10 @@ pub struct DeliveryContext {
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 #[serde(untagged)]
+// TODO: VideoとImageの順番を入れ替えるとVideoがImageとしてDesirializeされる問題を調査
 pub enum Message {
     Text(Text),
+    Video(Video),
     Image(Image),
 }
 
@@ -103,4 +105,14 @@ pub struct Source {
     pub user_id: String,
     pub group_id: Option<String>,
     pub room_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Video {
+    pub id: String,
+    #[serde(rename = "type")]
+    pub type_field: String,
+    pub duration: i64,
+    pub content_provider: ContentProvider,
 }

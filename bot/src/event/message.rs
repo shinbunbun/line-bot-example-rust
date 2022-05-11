@@ -6,7 +6,7 @@ use line_bot_sdk::{
     },
 };
 
-use super::{image, text::text_event};
+use super::{image, text, video};
 
 pub fn index(event: &Event) -> Result<Vec<MessageObject>, AppError> {
     let message = event
@@ -14,7 +14,8 @@ pub fn index(event: &Event) -> Result<Vec<MessageObject>, AppError> {
         .as_ref()
         .ok_or_else(|| AppError::BadRequest("Message not found".to_string()))?;
     match message {
-        Message::Text(text_message) => text_event(text_message),
+        Message::Text(text_message) => text::text_event(text_message),
         Message::Image(image_message) => image::handler(image_message),
+        Message::Video(video_message) => video::handler(video_message),
     }
 }
