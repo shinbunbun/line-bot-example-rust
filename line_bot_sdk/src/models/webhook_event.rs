@@ -20,6 +20,7 @@ pub struct Event {
     pub message: Option<Message>,
     pub reply_token: Option<String>,
     pub unsend: Option<Unsend>,
+    pub joined: Option<Joined>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -167,4 +168,9 @@ pub enum ResourceType {
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct Unsend {
     message_id: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct Joined {
+    members: Vec<Source>,
 }
