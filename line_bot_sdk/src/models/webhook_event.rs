@@ -36,6 +36,7 @@ pub enum Message {
     Image(Image),
     Audio(Audio),
     File(File),
+    Location(Location),
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
@@ -127,4 +128,14 @@ pub struct File {
     pub id: String,
     pub file_name: String,
     pub file_size: i64,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Location {
+    pub id: String,
+    pub title: String,
+    pub address: String,
+    pub latitude: f64,
+    pub longitude: f64,
 }
