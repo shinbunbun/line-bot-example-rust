@@ -44,7 +44,7 @@ pub enum Message {
     Audio(Audio),
     File(File),
     Location(Location),
-    Stamp(Stamp),
+    Sticker(Sticker),
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
@@ -150,7 +150,7 @@ pub struct Location {
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Stamp {
+pub struct Sticker {
     pub id: String,
     pub package_id: String,
     pub sticker_id: String,
