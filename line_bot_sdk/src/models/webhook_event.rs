@@ -25,6 +25,7 @@ pub struct Event {
     pub postback: Option<Postback>,
     pub video_play_complete: Option<VideoPlayComplete>,
     pub beacon: Option<Beacon>,
+    pub link: Option<Link>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -218,4 +219,10 @@ pub struct Beacon {
     #[serde(rename = "type")]
     type_field: String,
     dm: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct Link {
+    result: String,
+    nonce: String,
 }
