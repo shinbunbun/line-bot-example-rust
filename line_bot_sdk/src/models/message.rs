@@ -16,20 +16,20 @@ pub mod template;
 pub mod text;
 pub mod video;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct MessageObject {
+// #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+// #[serde(rename_all = "camelCase")]
+/* pub struct MessageObject {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quick_reply: Option<QuickReply>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sender: Option<Sender>,
-    #[serde(flatten)]
-    pub message: EachMessageFields,
-}
-
+    // #[serde(flatten)]
+    // pub message: EachMessageFields,
+} */
+// pub enum EachMessageFields {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum EachMessageFields {
+pub enum MessageObject {
     Text(TextMessage),
     Stamp(StampMessage),
     Image(ImageMessage),

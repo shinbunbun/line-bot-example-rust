@@ -10,6 +10,16 @@ pub struct TextMessage {
     pub emojis: Option<Vec<Emoji>>,
 }
 
+impl TextMessage {
+    pub fn new(text: String, emojis: Option<Vec<Emoji>>) -> Self {
+        Self {
+            type_field: "text".to_string(),
+            text,
+            emojis,
+        }
+    }
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Emoji {
