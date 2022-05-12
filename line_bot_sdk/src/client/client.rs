@@ -48,7 +48,7 @@ impl super::Client {
             .send_json(&body)
             .await
             .map_err(AppError::AwcRequestError)?;
-        info!("API Response: {:#?}", response);
+        // info!("API Response: {:#?}", response);
         Ok(response)
     }
 }

@@ -5,10 +5,12 @@ use line_bot_sdk::{
         webhook_event::{Event, Message},
     },
 };
+use log::info;
 
 use super::{audio, image, text, video};
 
 pub fn index(event: &Event) -> Result<Vec<MessageObject>, AppError> {
+    info!("{:?}", event);
     let message = event
         .message
         .as_ref()
