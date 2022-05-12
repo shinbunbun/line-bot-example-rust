@@ -2,7 +2,10 @@ use line_bot_sdk::{
     error::AppError,
     models::{
         message::text::TextMessage,
-        message::{EachMessageFields, MessageObject},
+        message::{
+            quick_reply::{Item, QuickReply},
+            EachMessageFields, MessageObject,
+        },
         webhook_event::Text,
     },
 };
@@ -21,6 +24,30 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
                 }),
             }
         }]),
+        "複数メッセージ" => Ok(vec![
+            {
+                MessageObject {
+                    quick_reply: None,
+                    sender: None,
+                    message: EachMessageFields::Text(TextMessage {
+                        text: "Hello, user".to_string(),
+                        type_field: "text".to_string(),
+                        emojis: None,
+                    }),
+                }
+            },
+            {
+                MessageObject {
+                    quick_reply: None,
+                    sender: None,
+                    message: EachMessageFields::Text(TextMessage {
+                        text: "May I help you?".to_string(),
+                        type_field: "text".to_string(),
+                        emojis: None,
+                    }),
+                }
+            },
+        ]),
         _ => Ok(vec![{
             MessageObject {
                 quick_reply: None,
