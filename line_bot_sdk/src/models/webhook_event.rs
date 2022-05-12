@@ -19,6 +19,7 @@ pub struct Event {
     pub delivery_context: DeliveryContext,
     pub message: Option<Message>,
     pub reply_token: Option<String>,
+    pub unsend: Option<Unsend>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -37,6 +38,7 @@ pub enum Message {
     Audio(Audio),
     File(File),
     Location(Location),
+    Stamp(Stamp),
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
@@ -138,4 +140,31 @@ pub struct Location {
     pub address: String,
     pub latitude: f64,
     pub longitude: f64,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Stamp {
+    pub id: String,
+    pub package_id: String,
+    pub sticker_id: String,
+    pub sticker_resource_type: ResourceType,
+    pub keywords: Option<Vec<String>>,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub enum ResourceType {
+    STATIC,
+    ANIMATION,
+    SOUND,
+    ANIMATION_SOUND,
+    POPUP,
+    POPUP_SOUND,
+    CUSTOM,
+    MESSAGE,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct Unsend {
+    message_id: String,
 }
