@@ -22,6 +22,9 @@ pub struct Event {
     pub unsend: Option<Unsend>,
     pub joined: Option<Join>,
     pub left: Option<Left>,
+    pub postback: Option<Postback>,
+    pub video_play_complete: Option<VideoPlayComplete>,
+    pub beacon: Option<Beacon>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -179,4 +182,40 @@ pub struct Join {
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct Left {
     members: Vec<Source>,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct Postback {
+    data: String,
+    params: Option<Vec<Param>>,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct Param {
+    date: Option<String>,
+    time: Option<String>,
+    datetime: Option<String>,
+    new_rich_menu_alias_id: Option<String>,
+    status: Option<Status>,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub enum Status {
+    SUCCESS,
+    RICHMENU_ALIAS_ID_NOTFOUND,
+    RICHMENU_NOTFOUND,
+    FAILED,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct VideoPlayComplete {
+    tracking_id: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct Beacon {
+    hwid: String,
+    #[serde(rename = "type")]
+    type_field: String,
+    dm: Option<String>,
 }
