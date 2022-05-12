@@ -20,7 +20,8 @@ pub struct Event {
     pub message: Option<Message>,
     pub reply_token: Option<String>,
     pub unsend: Option<Unsend>,
-    pub joined: Option<MemberJoined>,
+    pub joined: Option<Join>,
+    pub left: Option<Left>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -171,6 +172,11 @@ pub struct Unsend {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
-pub struct MemberJoined {
+pub struct Join {
+    members: Vec<Source>,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct Left {
     members: Vec<Source>,
 }
