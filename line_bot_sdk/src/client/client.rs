@@ -1,7 +1,7 @@
 use actix_http::{encoding::Decoder, header, Payload};
 use awc::ClientResponse;
 use hmac::{Hmac, Mac};
-use log::info;
+use log::error;
 use sha2::Sha256;
 
 use crate::error::AppError;
@@ -48,7 +48,11 @@ impl super::Client {
             .send_json(&body)
             .await
             .map_err(AppError::AwcRequestError)?;
-        // info!("API Response: {:#?}", response);
+        if response.status() != 200 {
+            return Err(AppError::Internal(
+                format!("Error response: {:#?}", response).to_string(),
+            ));
+        }
         Ok(response)
     }
 }
