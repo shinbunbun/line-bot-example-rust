@@ -1,7 +1,7 @@
 use line_bot_sdk::{
     error::AppError,
     models::{
-        message::{text::TextMessage, EachMessageFields, MessageObject},
+        message::{text::TextMessage, MessageObject},
         webhook_event::{Event, Message},
     },
 };
@@ -20,16 +20,8 @@ pub fn index(event: &Event) -> Result<Vec<MessageObject>, AppError> {
         Message::Image(image_message) => image::handler(image_message),
         Message::Video(video_message) => video::handler(video_message),
         Message::Audio(audio_message) => audio::handler(audio_message),
-        _ => Ok(vec![{
-            MessageObject {
-                quick_reply: None,
-                sender: None,
-                message: EachMessageFields::Text(TextMessage {
-                    text: "そのイベントには対応していません...".to_string(),
-                    type_field: "text".to_string(),
-                    emojis: None,
-                }),
-            }
-        }]),
+        _ => Ok(vec![MessageObject::Text(TextMessage::new(
+            "そのイベントには対応していません...".to_string(),
+        ))]),
     }
 }

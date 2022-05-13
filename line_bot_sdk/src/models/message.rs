@@ -39,6 +39,11 @@ pub enum MessageObject {
     Imagemap(ImagemapMessage),
 }
 
+pub trait CommonFields {
+    fn with_quick_reply(&mut self, quick_reply: QuickReply) -> &Self;
+    fn with_sender(&mut self, sender: Sender) -> &Self;
+}
+
 /* fn test() {
     let s = MessageObject {
         quick_reply: None,
