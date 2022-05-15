@@ -28,6 +28,20 @@ impl CommonFields for ImagemapMessage {
     }
 }
 
+impl ImagemapMessage {
+    pub fn new(base_url: String, alt_text: String, base_size: BaseSize) -> Self {
+        ImagemapMessage {
+            type_field: "imagemap".to_string(),
+            base_url,
+            alt_text,
+            base_size,
+            video: None,
+            quick_reply: None,
+            sender: None,
+        }
+    }
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BaseSize {
