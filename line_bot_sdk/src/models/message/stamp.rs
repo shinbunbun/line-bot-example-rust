@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{quick_reply::QuickReply, sender::Sender, CommonFields};
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct StampMessage {
     #[serde(rename = "type")]
@@ -23,5 +23,17 @@ impl CommonFields for StampMessage {
     fn with_sender(mut self, sender: super::sender::Sender) -> Self {
         self.sender = Some(sender);
         self
+    }
+}
+
+impl StampMessage {
+    pub fn new(package_id: String, sticker_id: String) -> Self {
+        StampMessage {
+            type_field: "stamp".to_string(),
+            package_id,
+            sticker_id,
+            quick_reply: None,
+            sender: None,
+        }
     }
 }
