@@ -3,7 +3,7 @@ use line_bot_sdk::{
     models::{
         message::{quick_reply::QuickReply, MessageObject},
         message::{text::TextMessage, CommonFields, quick_reply::Item},
-        webhook_event::Text, action::{Actions, PostbackAction, CameraAction, CameraRollAction, LocationAction},
+        webhook_event::Text, action::{Actions, CameraAction, CameraRollAction, LocationAction},
     },
 };
 
