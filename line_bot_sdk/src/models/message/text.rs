@@ -26,18 +26,18 @@ impl TextMessage {
             sender: None,
         }
     }
-    pub fn with_emojis(&mut self, emojis: Vec<Emoji>) -> &Self {
+    pub fn with_emojis(mut self, emojis: Vec<Emoji>) -> Self {
         self.emojis = Some(emojis);
         self
     }
 }
 
 impl CommonFields for TextMessage {
-    fn with_quick_reply(&mut self, quick_reply: super::quick_reply::QuickReply) -> &Self {
+    fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
         self.quick_reply = Some(quick_reply);
         self
     }
-    fn with_sender(&mut self, sender: super::sender::Sender) -> &Self {
+    fn with_sender(mut self, sender: super::sender::Sender) -> Self {
         self.sender = Some(sender);
         self
     }
