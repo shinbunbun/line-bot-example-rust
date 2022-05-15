@@ -14,6 +14,7 @@ pub enum AppError {
     HmacVerifyError(MacError),
     Base64Decode(DecodeError),
     SerdeJson(serde_json::Error),
+    ActixWebPayloadError(actix_web::error::PayloadError),
 }
 
 impl actix_web::error::ResponseError for AppError {
@@ -25,7 +26,10 @@ impl actix_web::error::ResponseError for AppError {
             | AppError::HmacInvalidLength(_)
             | AppError::HmacVerifyError(_)
             | AppError::Base64Decode(_)
-            | AppError::SerdeJson(_) => actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
+            | AppError::SerdeJson(_)
+            | AppError::ActixWebPayloadError(_) => {
+                actix_web::http::StatusCode::INTERNAL_SERVER_ERROR
+            }
             AppError::BadRequest(_) => actix_web::http::StatusCode::BAD_REQUEST,
         }
     }
@@ -47,6 +51,9 @@ impl std::fmt::Display for AppError {
             AppError::HmacVerifyError(errors) => write!(f, "Hmac verify Error: {}", errors),
             AppError::Base64Decode(errors) => write!(f, "base64 decode error: {}", errors),
             AppError::SerdeJson(errors) => write!(f, "serde json error: {}", errors),
+            AppError::ActixWebPayloadError(erros) => {
+                write!(f, "actix web payload error: {}", erros)
+            }
         }
     }
 }
