@@ -15,6 +15,7 @@ pub enum AppError {
     Base64Decode(DecodeError),
     SerdeJson(serde_json::Error),
     ActixWebPayloadError(actix_web::error::PayloadError),
+    FromUtf8Error(std::string::FromUtf8Error),
 }
 
 impl actix_web::error::ResponseError for AppError {
@@ -27,9 +28,8 @@ impl actix_web::error::ResponseError for AppError {
             | AppError::HmacVerifyError(_)
             | AppError::Base64Decode(_)
             | AppError::SerdeJson(_)
-            | AppError::ActixWebPayloadError(_) => {
-                actix_web::http::StatusCode::INTERNAL_SERVER_ERROR
-            }
+            | AppError::ActixWebPayloadError(_)
+            | AppError::FromUtf8Error(_) => actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
             AppError::BadRequest(_) => actix_web::http::StatusCode::BAD_REQUEST,
         }
     }
@@ -54,6 +54,7 @@ impl std::fmt::Display for AppError {
             AppError::ActixWebPayloadError(erros) => {
                 write!(f, "actix web payload error: {}", erros)
             }
+            AppError::FromUtf8Error(errors) => write!(f, "from utf8 error: {}", errors),
         }
     }
 }
