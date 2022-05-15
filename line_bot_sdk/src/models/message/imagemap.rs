@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{quick_reply::QuickReply, sender::Sender, CommonFields};
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ImagemapMessage {
     #[serde(rename = "type")]
@@ -10,6 +10,7 @@ pub struct ImagemapMessage {
     pub base_url: String,
     pub alt_text: String,
     pub base_size: BaseSize,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub video: Option<Video>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quick_reply: Option<QuickReply>,
@@ -39,6 +40,10 @@ impl ImagemapMessage {
             quick_reply: None,
             sender: None,
         }
+    }
+    pub fn with_video(mut self, video: Video) -> Self {
+        self.video = Some(video);
+        self
     }
 }
 
