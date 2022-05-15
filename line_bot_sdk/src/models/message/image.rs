@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{quick_reply::QuickReply, sender::Sender, CommonFields};
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ImageMessage {
     #[serde(rename = "type")]
@@ -23,5 +23,17 @@ impl CommonFields for ImageMessage {
     fn with_sender(mut self, sender: super::sender::Sender) -> Self {
         self.sender = Some(sender);
         self
+    }
+}
+
+impl ImageMessage {
+    pub fn new(original_content_url: String, preview_image_url: String) -> Self {
+        ImageMessage {
+            type_field: "image".to_string(),
+            original_content_url,
+            preview_image_url,
+            quick_reply: None,
+            sender: None,
+        }
     }
 }
