@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{quick_reply::QuickReply, sender::Sender, CommonFields};
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoMessage {
     #[serde(rename = "type")]
@@ -24,6 +24,23 @@ impl CommonFields for VideoMessage {
     }
     fn with_sender(mut self, sender: super::sender::Sender) -> Self {
         self.sender = Some(sender);
+        self
+    }
+}
+
+impl VideoMessage {
+    pub fn new(original_content_url: String, preview_image_url: String) -> Self {
+        VideoMessage {
+            type_field: "video".to_string(),
+            original_content_url,
+            preview_image_url,
+            tracking_id: None,
+            quick_reply: None,
+            sender: None,
+        }
+    }
+    pub fn with_tracking_id(mut self, tracking_id: String) -> Self {
+        self.tracking_id = Some(tracking_id);
         self
     }
 }
