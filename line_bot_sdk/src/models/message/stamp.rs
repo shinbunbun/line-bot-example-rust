@@ -29,7 +29,7 @@ impl CommonFields for StampMessage {
 impl StampMessage {
     pub fn new(package_id: String, sticker_id: String) -> Self {
         StampMessage {
-            type_field: "stamp".to_string(),
+            type_field: "sticker".to_string(),
             package_id,
             sticker_id,
             quick_reply: None,
