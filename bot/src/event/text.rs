@@ -2,7 +2,7 @@ use line_bot_sdk::{
     error::AppError,
     models::{
         message::{quick_reply::QuickReply, MessageObject},
-        message::{text::TextMessage, CommonFields, quick_reply::Item},
+        message::{text::TextMessage, CommonFields, quick_reply::Item, stamp::StampMessage},
         webhook_event::Text, action::{Actions, CameraAction, CameraRollAction, LocationAction},
     },
 };
@@ -23,6 +23,9 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
                 Item::new(Actions::CameraRollAction(CameraRollAction::new("カメラロールを開く".to_string()))), 
                 Item::new(Actions::LocationAction(LocationAction::new("位置情報画面を開く".to_string()))),
             ]})) 
+        ],
+        "スタンプメッセージ" => vec![
+            MessageObject::Stamp(StampMessage::new("446".to_string(), "1988".to_string())),
         ],
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
