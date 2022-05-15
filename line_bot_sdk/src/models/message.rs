@@ -40,8 +40,8 @@ pub enum MessageObject {
 }
 
 pub trait CommonFields {
-    fn with_quick_reply(&mut self, quick_reply: QuickReply) -> &Self;
-    fn with_sender(&mut self, sender: Sender) -> &Self;
+    fn with_quick_reply(self, quick_reply: QuickReply) -> Self;
+    fn with_sender(self, sender: Sender) -> Self;
 }
 
 /* fn test() {
