@@ -36,6 +36,18 @@ impl CommonFields for TemplateMessage {
     }
 }
 
+impl TemplateMessage {
+    pub fn new(alt_text: String, template: Template) -> Self {
+        TemplateMessage {
+            type_field: "template".to_string(),
+            alt_text,
+            template,
+            quick_reply: None,
+            sender: None,
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Template {
