@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{quick_reply::QuickReply, sender::Sender, CommonFields};
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AudioMessage {
     #[serde(rename = "type")]
@@ -23,5 +23,17 @@ impl CommonFields for AudioMessage {
     fn with_sender(mut self, sender: super::sender::Sender) -> Self {
         self.sender = Some(sender);
         self
+    }
+}
+
+impl AudioMessage {
+    pub fn new(original_content_url: String, duration: u64) -> Self {
+        AudioMessage {
+            type_field: "audio".to_string(),
+            original_content_url,
+            duration,
+            quick_reply: None,
+            sender: None,
+        }
     }
 }
