@@ -1,7 +1,7 @@
 use actix_http::{encoding::Decoder, header, Payload};
 use awc::ClientResponse;
 use hmac::{Hmac, Mac};
-use log::error;
+use log::info;
 use sha2::Sha256;
 
 use crate::error::AppError;
@@ -35,7 +35,9 @@ impl super::Client {
         body: T,
         url: &str,
     ) -> Result<ClientResponse<Decoder<Payload>>, AppError> {
-        let response = awc::Client::new()
+        let json = serde_json::to_string(&body).expect("json encode error");
+        info!("{}", json);
+        let mut response = awc::Client::new()
             .post(url)
             .insert_header((
                 header::AUTHORIZATION,
@@ -49,9 +51,12 @@ impl super::Client {
             .await
             .map_err(AppError::AwcRequestError)?;
         if response.status() != 200 {
-            return Err(AppError::Internal(
-                format!("Error response: {:#?}", response).to_string(),
-            ));
+            let res_body = response
+                .body()
+                .await
+                .map_err(AppError::ActixWebPayloadError)?;
+            let res_body = String::from_utf8(res_body.to_vec()).map_err(AppError::FromUtf8Error)?;
+            return Err(AppError::LINEReplyError(res_body));
         }
         Ok(response)
     }
