@@ -30,5 +30,6 @@ impl Client {
 struct ReplyMessage {
     reply_token: String,
     messages: Vec<MessageObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     notification_disabled: Option<bool>,
 }
