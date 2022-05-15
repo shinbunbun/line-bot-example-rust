@@ -27,3 +27,17 @@ impl CommonFields for LocationMessage {
         self
     }
 }
+
+impl LocationMessage {
+    pub fn new(title: String, address: String, latitude: f64, longitude: f64) -> Self {
+        LocationMessage {
+            type_field: "location".to_string(),
+            title,
+            address,
+            latitude,
+            longitude,
+            quick_reply: None,
+            sender: None,
+        }
+    }
+}
