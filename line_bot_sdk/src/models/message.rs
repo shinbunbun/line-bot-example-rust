@@ -1,7 +1,7 @@
 use self::{
     audio::AudioMessage, image::ImageMessage, imagemap::ImagemapMessage, location::LocationMessage,
-    quick_reply::QuickReply, sender::Sender, stamp::StampMessage, text::TextMessage,
-    video::VideoMessage,
+    quick_reply::QuickReply, sender::Sender, stamp::StampMessage, template::TemplateMessage,
+    text::TextMessage, video::VideoMessage,
 };
 use serde::{Deserialize, Serialize};
 
@@ -37,6 +37,7 @@ pub enum MessageObject {
     Audio(AudioMessage),
     Location(LocationMessage),
     Imagemap(ImagemapMessage),
+    Template(TemplateMessage),
 }
 
 pub trait CommonFields {
