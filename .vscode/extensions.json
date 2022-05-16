@@ -1,7 +1,7 @@
 {
   "recommendations": [
     "arrterian.nix-env-selector",
-    "matklad.rust-analyzer",
+    "rust-lang.rust-analyzer",
     "rust-lang.rust",
     "vadimcn.vscode-lldb",
     "bungcip.better-toml"
