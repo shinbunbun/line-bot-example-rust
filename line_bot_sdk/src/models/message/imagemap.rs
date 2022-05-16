@@ -12,7 +12,7 @@ pub struct ImagemapMessage {
     pub base_size: BaseSize,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video: Option<Video>,
-    pub actions: Action,
+    pub actions: Vec<Action>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quick_reply: Option<QuickReply>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -31,7 +31,12 @@ impl CommonFields for ImagemapMessage {
 }
 
 impl ImagemapMessage {
-    pub fn new(base_url: String, alt_text: String, base_size: BaseSize, actions: Action) -> Self {
+    pub fn new(
+        base_url: String,
+        alt_text: String,
+        base_size: BaseSize,
+        actions: Vec<Action>,
+    ) -> Self {
         ImagemapMessage {
             type_field: "imagemap".to_string(),
             base_url,
@@ -69,10 +74,10 @@ pub struct Video {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Area {
-    x: u64,
-    y: u64,
-    width: u64,
-    height: u64,
+    pub x: u64,
+    pub y: u64,
+    pub width: u64,
+    pub height: u64,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -83,6 +88,7 @@ pub struct ExternalLink {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum Action {
     URIAction(URIAction),
     MessageAction(MessageAction),
