@@ -50,8 +50,8 @@ impl ImagemapMessage {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BaseSize {
-    width: u64,
-    height: u64,
+    pub width: u64,
+    pub height: u64,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
