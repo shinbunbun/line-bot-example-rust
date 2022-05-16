@@ -1,9 +1,20 @@
 use line_bot_sdk::{
     error::AppError,
     models::{
+        action::{Actions, CameraAction, CameraRollAction, LocationAction},
+        message::{
+            audio::AudioMessage,
+            image::ImageMessage,
+            imagemap::{self, Area, BaseSize, ImagemapMessage, URIAction},
+            location::LocationMessage,
+            quick_reply::Item,
+            stamp::StampMessage,
+            text::TextMessage,
+            video::VideoMessage,
+            CommonFields,
+        },
         message::{quick_reply::QuickReply, MessageObject},
-        message::{text::TextMessage, CommonFields, quick_reply::Item, stamp::StampMessage, image::ImageMessage, audio::AudioMessage, video::VideoMessage, location::LocationMessage, imagemap::{ImagemapMessage, BaseSize, self, URIAction, Area}},
-        webhook_event::Text, action::{Actions, CameraAction, CameraRollAction, LocationAction},
+        webhook_event::Text,
     },
 };
 
@@ -22,7 +33,7 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
                 Item::new(Actions::CameraAction(CameraAction::new("カメラを開く".to_string()))),
                 Item::new(Actions::CameraRollAction(CameraRollAction::new("カメラロールを開く".to_string()))), 
                 Item::new(Actions::LocationAction(LocationAction::new("位置情報画面を開く".to_string()))),
-            ]})) 
+            ]}))
         ],
         "スタンプメッセージ" => vec![
             MessageObject::Stamp(StampMessage::new("446".to_string(), "1988".to_string())),
@@ -40,7 +51,17 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
             MessageObject::Location(LocationMessage::new("my location".to_string(), "〒160-0004 東京都新宿区四谷一丁目6番1号".to_string(), 35.687574 ,139.72922))
         ],
         "イメージマップメッセージ" => vec![
-            MessageObject::Imagemap(ImagemapMessage::new("https://youkan-storage.s3.ap-northeast-1.amazonaws.com/ubic_bunbun".to_string(), "This is an imagemap".to_string(), BaseSize{width: 1040, height: 597}, imagemap::Action::URIAction(URIAction::new("https://www.u-aizu.ac.jp/intro/faculty/ubic/".to_string(), Area{ x: 26, y: 113, width: 525, height: 170 })) ))
+            MessageObject::Imagemap(ImagemapMessage::new(
+                "https://youkan-storage.s3.ap-northeast-1.amazonaws.com/ubic_bunbun".to_string(), 
+                "This is an imagemap".to_string(), 
+                BaseSize{width: 1040, height: 597},
+                vec![
+                    imagemap::Action::URIAction(URIAction::new("https://www.u-aizu.ac.jp/intro/faculty/ubic/".to_string(),Area{ x: 26, y: 113, width: 525, height: 170 })),
+                    imagemap::Action::URIAction(URIAction::new("https://shinbunbun.info/about/".to_string(), Area{x:33, y:331, width: 780, height:177})),
+                    imagemap::Action::URIAction(URIAction::new("https://www.u-aizu.ac.jp/".to_string(), Area{x:939, y:484, width: 94, height:105})),
+                ],
+            )),
+            MessageObject::Text(TextMessage::new("「UBIC」や「しんぶんぶん」のところをTAPしてみよう!".to_string()))
         ],
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
