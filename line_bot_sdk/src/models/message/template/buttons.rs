@@ -16,3 +16,39 @@ pub struct ButtonsTemplate {
     pub default_action: Actions,
     pub actions: Vec<Actions>,
 }
+
+impl ButtonsTemplate {
+    pub fn new(text: String, default_action: Actions, actions: Vec<Actions>) -> Self {
+        ButtonsTemplate {
+            type_field: "buttons".to_string(),
+            thumbnail_image_url: None,
+            image_aspect_ratio: None,
+            image_size: None,
+            image_background_color: None,
+            title: None,
+            text,
+            default_action,
+            actions,
+        }
+    }
+    pub fn with_thumbnail_image_url(mut self, thumbnail_image_url: String) -> Self {
+        self.thumbnail_image_url = Some(thumbnail_image_url);
+        self
+    }
+    pub fn with_image_aspect_ratio(mut self, image_aspect_ratio: String) -> Self {
+        self.image_aspect_ratio = Some(image_aspect_ratio);
+        self
+    }
+    pub fn with_image_size(mut self, image_size: String) -> Self {
+        self.image_size = Some(image_size);
+        self
+    }
+    pub fn with_image_background_color(mut self, image_background_color: String) -> Self {
+        self.image_background_color = Some(image_background_color);
+        self
+    }
+    pub fn with_title(mut self, title: String) -> Self {
+        self.title = Some(title);
+        self
+    }
+}
