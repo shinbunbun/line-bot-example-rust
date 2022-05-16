@@ -2,7 +2,7 @@ use line_bot_sdk::{
     error::AppError,
     models::{
         message::{quick_reply::QuickReply, MessageObject},
-        message::{text::TextMessage, CommonFields, quick_reply::Item, stamp::StampMessage, image::ImageMessage},
+        message::{text::TextMessage, CommonFields, quick_reply::Item, stamp::StampMessage, image::ImageMessage, audio::AudioMessage},
         webhook_event::Text, action::{Actions, CameraAction, CameraRollAction, LocationAction},
     },
 };
@@ -29,6 +29,9 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
         ],
         "画像メッセージ" => vec![
             MessageObject::Image(ImageMessage::new("https://shinbunbun.info/images/photos/7.jpeg".to_string(), "https://shinbunbun.info/images/photos/7.jpeg".to_string()))
+        ],
+        "音声メッセージ" => vec![
+            MessageObject::Audio(AudioMessage::new("https://github.com/shinbunbun/aizuhack-bot/blob/master/media/demo.m4a?raw=true".to_string(), 6000))
         ],
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
