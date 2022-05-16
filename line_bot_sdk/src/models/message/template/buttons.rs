@@ -7,10 +7,15 @@ use crate::models::action::Actions;
 pub struct ButtonsTemplate {
     #[serde(rename = "type")]
     pub type_field: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_image_url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_aspect_ratio: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_size: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_background_color: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     pub text: String,
     pub default_action: Actions,

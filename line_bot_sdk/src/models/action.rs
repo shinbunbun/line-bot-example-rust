@@ -32,7 +32,9 @@ pub struct PostbackAction {
     // #[validate(length(max = 300))]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_option: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fill_in_text: Option<String>,
 }
 
@@ -71,6 +73,7 @@ impl PostbackAction {
 pub struct MessageAction {
     #[serde(rename = "type")]
     pub type_field: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
     // #[validate(length(max = 300))]
     pub text: String,
@@ -91,8 +94,10 @@ impl MessageAction {
 pub struct URIAction {
     #[serde(rename = "type")]
     pub type_field: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
     pub uri: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alt_uri: Option<AltUri>,
 }
 
@@ -122,11 +127,15 @@ pub struct AltUri {
 pub struct DatetimePickerAction {
     #[serde(rename = "type")]
     pub type_field: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
     pub data: String,
     pub mode: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initial: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub min: Option<String>,
 }
 
@@ -210,6 +219,7 @@ impl LocationAction {
 pub struct RichMenuSwitchAction {
     #[serde(rename = "type")]
     pub type_field: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
     pub rich_menu_alias_id: String,
     pub data: String,
