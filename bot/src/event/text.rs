@@ -2,7 +2,7 @@ use line_bot_sdk::{
     error::AppError,
     models::{
         message::{quick_reply::QuickReply, MessageObject},
-        message::{text::TextMessage, CommonFields, quick_reply::Item, stamp::StampMessage, image::ImageMessage, audio::AudioMessage, video::VideoMessage},
+        message::{text::TextMessage, CommonFields, quick_reply::Item, stamp::StampMessage, image::ImageMessage, audio::AudioMessage, video::VideoMessage, location::LocationMessage},
         webhook_event::Text, action::{Actions, CameraAction, CameraRollAction, LocationAction},
     },
 };
@@ -35,6 +35,9 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
         ],
         "動画メッセージ" => vec![
             MessageObject::Video(VideoMessage::new("https://github.com/shinbunbun/aizuhack-bot/blob/master/media/demo.mp4?raw=true".to_string(), "https://raw.githubusercontent.com/shinbunbun/aizuhack-bot/master/media/thumbnail.jpg?raw=true".to_string()))
+        ],
+        "位置情報メッセージ" => vec![
+            MessageObject::Location(LocationMessage::new("my location".to_string(), "〒160-0004 東京都新宿区四谷一丁目6番1号".to_string(), 35.687574 ,139.72922))
         ],
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
