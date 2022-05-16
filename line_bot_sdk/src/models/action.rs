@@ -76,6 +76,16 @@ pub struct MessageAction {
     pub text: String,
 }
 
+impl MessageAction {
+    pub fn new(label: String, text: String) -> Self {
+        Self {
+            type_field: "message".to_string(),
+            label: Some(label),
+            text,
+        }
+    }
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct URIAction {
