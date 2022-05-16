@@ -96,6 +96,21 @@ pub struct URIAction {
     pub alt_uri: Option<AltUri>,
 }
 
+impl URIAction {
+    pub fn new(label: Option<String>, uri: String) -> Self {
+        Self {
+            type_field: "uri".to_string(),
+            label,
+            uri,
+            alt_uri: None,
+        }
+    }
+    pub fn with_alt_uri(mut self, alt_uri: AltUri) -> Self {
+        self.alt_uri = Some(alt_uri);
+        self
+    }
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AltUri {
