@@ -2,7 +2,7 @@ use line_bot_sdk::{
     error::AppError,
     models::{
         message::{quick_reply::QuickReply, MessageObject},
-        message::{text::TextMessage, CommonFields, quick_reply::Item, stamp::StampMessage, image::ImageMessage, audio::AudioMessage, video::VideoMessage, location::LocationMessage},
+        message::{text::TextMessage, CommonFields, quick_reply::Item, stamp::StampMessage, image::ImageMessage, audio::AudioMessage, video::VideoMessage, location::LocationMessage, imagemap::{ImagemapMessage, BaseSize, self, URIAction, Area}},
         webhook_event::Text, action::{Actions, CameraAction, CameraRollAction, LocationAction},
     },
 };
@@ -38,6 +38,9 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
         ],
         "位置情報メッセージ" => vec![
             MessageObject::Location(LocationMessage::new("my location".to_string(), "〒160-0004 東京都新宿区四谷一丁目6番1号".to_string(), 35.687574 ,139.72922))
+        ],
+        "イメージマップメッセージ" => vec![
+            MessageObject::Imagemap(ImagemapMessage::new("https://youkan-storage.s3.ap-northeast-1.amazonaws.com/ubic_bunbun".to_string(), "This is an imagemap".to_string(), BaseSize{width: 1040, height: 597}, imagemap::Action::URIAction(URIAction::new("https://www.u-aizu.ac.jp/intro/faculty/ubic/".to_string(), Area{ x: 26, y: 113, width: 525, height: 170 })) ))
         ],
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
