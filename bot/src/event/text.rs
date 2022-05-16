@@ -1,11 +1,14 @@
 use line_bot_sdk::{
     error::AppError,
     models::{
-        action::{Actions, CameraAction, CameraRollAction, LocationAction},
+        action::{
+            Actions, CameraAction, CameraRollAction, DatetimePickerAction, LocationAction,
+            MessageAction, PostbackAction, URIAction,
+        },
         message::{
             audio::AudioMessage,
             image::ImageMessage,
-            imagemap::{self, Area, BaseSize, ImagemapMessage, URIAction},
+            imagemap::{self, Area, BaseSize, ImagemapMessage},
             location::LocationMessage,
             quick_reply::Item,
             stamp::StampMessage,
@@ -13,7 +16,11 @@ use line_bot_sdk::{
             video::VideoMessage,
             CommonFields,
         },
-        message::{quick_reply::QuickReply, MessageObject},
+        message::{
+            quick_reply::QuickReply,
+            template::{buttons::ButtonsTemplate, TemplateMessage},
+            MessageObject,
+        },
         webhook_event::Text,
     },
 };
@@ -56,13 +63,28 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
                 "This is an imagemap".to_string(), 
                 BaseSize{width: 1040, height: 597},
                 vec![
-                    imagemap::Action::URIAction(URIAction::new("https://www.u-aizu.ac.jp/intro/faculty/ubic/".to_string(),Area{ x: 26, y: 113, width: 525, height: 170 })),
-                    imagemap::Action::URIAction(URIAction::new("https://shinbunbun.info/about/".to_string(), Area{x:33, y:331, width: 780, height:177})),
-                    imagemap::Action::URIAction(URIAction::new("https://www.u-aizu.ac.jp/".to_string(), Area{x:939, y:484, width: 94, height:105})),
+                    imagemap::Action::URIAction(imagemap::URIAction::new("https://www.u-aizu.ac.jp/intro/faculty/ubic/".to_string(),Area{ x: 26, y: 113, width: 525, height: 170 })),
+                    imagemap::Action::URIAction(imagemap::URIAction::new("https://shinbunbun.info/about/".to_string(), Area{x:33, y:331, width: 780, height:177})),
+                    imagemap::Action::URIAction(imagemap::URIAction::new("https://www.u-aizu.ac.jp/".to_string(), Area{x:939, y:484, width: 94, height:105})),
                 ],
             )),
             MessageObject::Text(TextMessage::new("「UBIC」や「しんぶんぶん」のところをTAPしてみよう!".to_string()))
         ],
+        "ボタンテンプレート" => vec![MessageObject::Template(TemplateMessage::new(
+            "ボタンテンプレート".to_string(),
+            line_bot_sdk::models::message::template::Template::Buttons(ButtonsTemplate::new(
+                "ボタンだお".to_string(),
+                Actions::URIAction(URIAction::new(Some("View detail".to_string()), "https://shinbunbun.info/images/photos/".to_string())),
+                vec![
+                    Actions::PostbackAction(PostbackAction::new("ポストバックアクション".to_string(), "button-postback".to_string())),
+                    Actions::MessageAction(MessageAction::new("メッセージアクション".to_string(), "button-message".to_string())),
+                    Actions::URIAction(URIAction::new(Some("URIアクション".to_string()), "https://shinbunbun.info/".to_string())),
+                    Actions::DatetimePickerAction(DatetimePickerAction::new("button-date".to_string(), "datetime".to_string(), Some("日時選択アクション".to_string()))
+                    .with_initial("2021-06-01t00:00".to_string())
+                    .with_max("2022-12-31t23:59".to_string())
+                    .with_min("2021-06-01t00:00".to_string()))
+                ],
+            ))))],
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
                 "受け取ったメッセージ: {}\nそのメッセージの返信には対応してません...",
