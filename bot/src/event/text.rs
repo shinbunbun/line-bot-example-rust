@@ -2,7 +2,7 @@ use line_bot_sdk::{
     error::AppError,
     models::{
         message::{quick_reply::QuickReply, MessageObject},
-        message::{text::TextMessage, CommonFields, quick_reply::Item, stamp::StampMessage},
+        message::{text::TextMessage, CommonFields, quick_reply::Item, stamp::StampMessage, image::ImageMessage},
         webhook_event::Text, action::{Actions, CameraAction, CameraRollAction, LocationAction},
     },
 };
@@ -26,6 +26,9 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
         ],
         "スタンプメッセージ" => vec![
             MessageObject::Stamp(StampMessage::new("446".to_string(), "1988".to_string())),
+        ],
+        "画像メッセージ" => vec![
+            MessageObject::Image(ImageMessage::new("https://shinbunbun.info/images/photos/7.jpeg".to_string(), "https://shinbunbun.info/images/photos/7.jpeg".to_string()))
         ],
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
