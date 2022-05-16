@@ -12,6 +12,7 @@ pub struct ImagemapMessage {
     pub base_size: BaseSize,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video: Option<Video>,
+    pub actions: Action,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quick_reply: Option<QuickReply>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -30,13 +31,14 @@ impl CommonFields for ImagemapMessage {
 }
 
 impl ImagemapMessage {
-    pub fn new(base_url: String, alt_text: String, base_size: BaseSize) -> Self {
+    pub fn new(base_url: String, alt_text: String, base_size: BaseSize, actions: Action) -> Self {
         ImagemapMessage {
             type_field: "imagemap".to_string(),
             base_url,
             alt_text,
             base_size,
             video: None,
+            actions,
             quick_reply: None,
             sender: None,
         }
@@ -61,7 +63,7 @@ pub struct Video {
     preview_image_url: String,
     area: Area,
     external_link: Option<ExternalLink>,
-    actions: Actions,
+    actions: Vec<Action>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -81,8 +83,9 @@ pub struct ExternalLink {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum Actions {
+pub enum Action {
     URIAction(URIAction),
+    MessageAction(MessageAction),
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -90,9 +93,25 @@ pub enum Actions {
 pub struct URIAction {
     #[serde(rename = "type")]
     pub type_field: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
     pub link_uri: String,
     pub area: Area,
+}
+
+impl URIAction {
+    pub fn new(link_uri: String, area: Area) -> Self {
+        URIAction {
+            type_field: "uri".to_string(),
+            label: None,
+            link_uri,
+            area,
+        }
+    }
+    pub fn with_label(mut self, label: String) -> Self {
+        self.label = Some(label);
+        self
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -100,6 +119,7 @@ pub struct URIAction {
 pub struct MessageAction {
     #[serde(rename = "type")]
     pub type_field: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
     pub text: String,
     pub area: Area,
