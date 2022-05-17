@@ -7,6 +7,16 @@ use crate::models::action::Actions;
 pub struct ConfirmTemplate {
     #[serde(rename = "type")]
     pub type_field: String,
-    pub title: String,
-    pub actions: Actions,
+    pub text: String,
+    pub actions: Vec<Actions>,
+}
+
+impl ConfirmTemplate {
+    pub fn new(text: String, actions: Vec<Actions>) -> Self {
+        ConfirmTemplate {
+            type_field: "confirm".to_string(),
+            text,
+            actions,
+        }
+    }
 }
