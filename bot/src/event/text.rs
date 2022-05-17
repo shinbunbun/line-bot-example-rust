@@ -19,7 +19,10 @@ use line_bot_sdk::{
         message::{
             quick_reply::QuickReply,
             template::{
-                buttons::ButtonsTemplate, confirm::ConfirmTemplate, Template, TemplateMessage,
+                buttons::ButtonsTemplate,
+                carousel::{self, CarouselTemplate},
+                confirm::ConfirmTemplate,
+                Template, TemplateMessage,
             },
             MessageObject,
         },
@@ -96,6 +99,37 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
                     Actions::MessageAction(MessageAction::new(Some("いいえ".to_string()), "no".to_string())),
                 ]
             ))
+        ))],
+        "カルーセルテンプレート" => vec![MessageObject::Template(TemplateMessage::new(
+            "カルーセルテンプレート".to_string(),
+            Template::Carousel(CarouselTemplate::new(vec![
+                carousel::Column::new(
+                    "説明1".to_string(),
+                    vec![
+                        Actions::PostbackAction(PostbackAction::new("ポストバック".to_string(), "postback-carousel-1".to_string())),
+                        Actions::URIAction(URIAction::new(Some("URIアクション".to_string()), "https://shinbunbun.info/".to_string())),
+                    ]
+                )
+                .with_default_action(Actions::URIAction(URIAction::new(Some("View detail".to_string()), "https://shinbunbun.info/".to_string())))
+                .with_thumbnail_image_url("https://shinbunbun.info/images/photos/7.jpeg".to_string())
+                .with_image_background_color("#FFFFFF".to_string())
+                .with_title("タイトル1".to_string()),
+                carousel::Column::new(
+                    "説明2".to_string(),
+                    vec![
+                        Actions::PostbackAction(PostbackAction::new("ポストバック".to_string(), "postback-carousel-2".to_string())),
+                        Actions::URIAction(URIAction::new(Some("URIアクション".to_string()), "https://shinbunbun.info/".to_string())),
+                    ]
+                )
+                .with_default_action(Actions::URIAction(URIAction::new(Some("View detail".to_string()), "https://shinbunbun.info/".to_string())))
+                .with_thumbnail_image_url("https://shinbunbun.info/images/photos/10.jpeg".to_string())
+                .with_image_background_color("#FFFFFF".to_string())
+                .with_title("タイトル2".to_string()),
+
+            ])
+            .with_image_aspect_ratio("rectangle".to_string())
+            .with_image_size("cover".to_string())
+            )
         ))],
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
