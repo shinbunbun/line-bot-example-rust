@@ -77,7 +77,7 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
                 Actions::URIAction(URIAction::new(Some("View detail".to_string()), "https://shinbunbun.info/images/photos/".to_string())),
                 vec![
                     Actions::PostbackAction(PostbackAction::new("ポストバックアクション".to_string(), "button-postback".to_string())),
-                    Actions::MessageAction(MessageAction::new("メッセージアクション".to_string(), "button-message".to_string())),
+                    Actions::MessageAction(MessageAction::new(Some("メッセージアクション".to_string()), "button-message".to_string())),
                     Actions::URIAction(URIAction::new(Some("URIアクション".to_string()), "https://shinbunbun.info/".to_string())),
                     Actions::DatetimePickerAction(DatetimePickerAction::new("button-date".to_string(), "datetime".to_string(), Some("日時選択アクション".to_string()))
                     .with_initial("2021-06-01t00:00".to_string())

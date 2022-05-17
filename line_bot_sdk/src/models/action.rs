@@ -80,10 +80,10 @@ pub struct MessageAction {
 }
 
 impl MessageAction {
-    pub fn new(label: String, text: String) -> Self {
+    pub fn new(label: Option<String>, text: String) -> Self {
         Self {
             type_field: "message".to_string(),
-            label: Some(label),
+            label,
             text,
         }
     }
