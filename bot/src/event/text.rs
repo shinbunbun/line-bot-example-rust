@@ -18,7 +18,9 @@ use line_bot_sdk::{
         },
         message::{
             quick_reply::QuickReply,
-            template::{buttons::ButtonsTemplate, TemplateMessage},
+            template::{
+                buttons::ButtonsTemplate, confirm::ConfirmTemplate, Template, TemplateMessage,
+            },
             MessageObject,
         },
         webhook_event::Text,
@@ -85,6 +87,16 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
                     .with_min("2021-06-01t00:00".to_string()))
                 ],
             ))))],
+        "確認テンプレート" => vec![MessageObject::Template(TemplateMessage::new(
+            "確認テンプレート".to_string(),
+            Template::Confirm(ConfirmTemplate::new(
+                "確認テンプレート".to_string(),
+                vec![
+                    Actions::MessageAction(MessageAction::new(Some("はい".to_string()), "yes".to_string())),
+                    Actions::MessageAction(MessageAction::new(Some("いいえ".to_string()), "no".to_string())),
+                ]
+            ))
+        ))],
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
                 "受け取ったメッセージ: {}\nそのメッセージの返信には対応してません...",
