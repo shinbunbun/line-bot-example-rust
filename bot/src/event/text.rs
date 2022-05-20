@@ -1,4 +1,7 @@
+use std::fmt::format;
+
 use line_bot_sdk::{
+    client::Client,
     error::AppError,
     models::{
         action::{
@@ -27,12 +30,15 @@ use line_bot_sdk::{
             },
             MessageObject,
         },
-        webhook_event::Text,
+        webhook_event::{Event, Text},
     },
 };
 
-pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
-    let message = message;
+pub async fn text_event(
+    client: &Client,
+    event: &Event,
+    message: &Text,
+) -> Result<Vec<MessageObject>, AppError> {
     let messages = match message.text.as_str() {
         "こんにちは" => vec![MessageObject::Text(TextMessage::new(
             "Hello, World!".to_string(),
@@ -153,6 +159,12 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
                 ))
             )),
         ],
+        "プロフィール"=>{
+            let profile = client.get_profile(event.source.user_id.as_str()).await?;
+            vec![
+                MessageObject::Text(TextMessage::new(format!("あなたの名前: {}\nユーザーID: {}\nプロフィール画像のURL: {}\nステータスメッセージ: {}", profile.display_name, profile.user_id, profile.picture_url, profile.status_message))),
+            ]
+        },
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
                 "受け取ったメッセージ: {}\nそのメッセージの返信には対応してません...",

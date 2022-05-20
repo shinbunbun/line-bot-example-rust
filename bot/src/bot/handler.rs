@@ -33,7 +33,7 @@ async fn webhook_handler(
             }
         }]; */
         let reply_messages = match event.type_field.as_str() {
-            "message" => message::index(event),
+            "message" => message::index(&client, event).await,
             _ => return Err(AppError::BadRequest("Unknown event type".to_string())),
         }?;
 
