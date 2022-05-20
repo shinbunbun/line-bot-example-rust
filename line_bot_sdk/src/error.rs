@@ -16,7 +16,7 @@ pub enum AppError {
     SerdeJson(serde_json::Error),
     ActixWebPayloadError(actix_web::error::PayloadError),
     FromUtf8Error(std::string::FromUtf8Error),
-    LINEReplyError(String),
+    AWCClientError(String),
 }
 
 impl actix_web::error::ResponseError for AppError {
@@ -31,7 +31,7 @@ impl actix_web::error::ResponseError for AppError {
             | AppError::SerdeJson(_)
             | AppError::ActixWebPayloadError(_)
             | AppError::FromUtf8Error(_)
-            | AppError::LINEReplyError(_) => actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
+            | AppError::AWCClientError(_) => actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
             AppError::BadRequest(_) => actix_web::http::StatusCode::BAD_REQUEST,
         }
     }
@@ -57,7 +57,7 @@ impl std::fmt::Display for AppError {
                 write!(f, "actix web payload error: {}", erros)
             }
             AppError::FromUtf8Error(errors) => write!(f, "from utf8 error: {}", errors),
-            AppError::LINEReplyError(errors) => write!(f, "LINE reply error: {}", errors),
+            AppError::AWCClientError(errors) => write!(f, "AWC client error: {}", errors),
         }
     }
 }

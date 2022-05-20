@@ -2,6 +2,7 @@ use actix_http::{encoding::Decoder, header, Payload};
 use awc::ClientResponse;
 use hmac::{Hmac, Mac};
 use log::info;
+use serde::{Deserialize, Serialize};
 use sha2::Sha256;
 
 use crate::error::AppError;
@@ -56,8 +57,55 @@ impl super::Client {
                 .await
                 .map_err(AppError::ActixWebPayloadError)?;
             let res_body = String::from_utf8(res_body.to_vec()).map_err(AppError::FromUtf8Error)?;
-            return Err(AppError::LINEReplyError(res_body));
+            return Err(AppError::AWCClientError(res_body));
         }
         Ok(response)
     }
+    async fn line_get_request(
+        &self,
+        url: &str,
+    ) -> Result<ClientResponse<Decoder<Payload>>, AppError> {
+        let mut response = awc::Client::new()
+            .get(url)
+            .insert_header((
+                header::AUTHORIZATION,
+                format!(
+                    "{}{}",
+                    "Bearer ".to_string(),
+                    &self.get_channel_access_token()
+                ),
+            ))
+            .send()
+            .await
+            .map_err(AppError::AwcRequestError)?;
+        if response.status() != 200 {
+            let res_body = response
+                .body()
+                .await
+                .map_err(AppError::ActixWebPayloadError)?;
+            let res_body = String::from_utf8(res_body.to_vec()).map_err(AppError::FromUtf8Error)?;
+            return Err(AppError::AWCClientError(res_body));
+        }
+        Ok(response)
+    }
+    pub async fn get_profile(&self, user_id: &str) -> Result<Profile, AppError> {
+        let url = format!("https://api.line.me/v2/bot/profile/{}", user_id);
+        let mut res = self.line_get_request(url.as_str()).await?;
+        let res_body = res
+            .body()
+            .await
+            .map_err(AppError::ActixWebPayloadError)?
+            .to_vec();
+        serde_json::from_slice(&res_body).map_err(AppError::SerdeJson)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Profile {
+    pub display_name: String,
+    pub user_id: String,
+    pub language: String,
+    pub picture_url: String,
+    pub status_message: String,
 }
