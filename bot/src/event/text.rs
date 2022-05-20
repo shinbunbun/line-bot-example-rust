@@ -22,6 +22,7 @@ use line_bot_sdk::{
                 buttons::ButtonsTemplate,
                 carousel::{self, CarouselTemplate},
                 confirm::ConfirmTemplate,
+                image_carousel::{self, ImageCarouselTemplate},
                 Template, TemplateMessage,
             },
             MessageObject,
@@ -77,7 +78,7 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
         ],
         "ボタンテンプレート" => vec![MessageObject::Template(TemplateMessage::new(
             "ボタンテンプレート".to_string(),
-            line_bot_sdk::models::message::template::Template::Buttons(ButtonsTemplate::new(
+            Template::Buttons(ButtonsTemplate::new(
                 "ボタンだお".to_string(),
                 Actions::URIAction(URIAction::new(Some("View detail".to_string()), "https://shinbunbun.info/images/photos/".to_string())),
                 vec![
@@ -131,6 +132,27 @@ pub fn text_event(message: &Text) -> Result<Vec<MessageObject>, AppError> {
             .with_image_size("cover".to_string())
             )
         ))],
+        "画像カルーセルテンプレート"=> vec![
+            MessageObject::Template(TemplateMessage::new(
+                "画像カルーセルテンプレート".to_string(),
+                Template::ImageCarousel(ImageCarouselTemplate::new(
+                    vec![
+                        image_carousel::Column::new(
+                            "https://shinbunbun.info/images/photos/4.jpeg".to_string(),
+                            Actions::PostbackAction(PostbackAction::new("ポストバック".to_string(), "image-carousel-1".to_string()))
+                        ),
+                        image_carousel::Column::new(
+                            "https://shinbunbun.info/images/photos/5.jpeg".to_string(),
+                            Actions::MessageAction(MessageAction::new(Some("メッセージ".to_string()), "text".to_string()))
+                        ),
+                        image_carousel::Column::new(
+                            "https://shinbunbun.info/images/photos/7.jpeg".to_string(),
+                            Actions::URIAction(URIAction::new(Some("URIアクション".to_string()), "https://shinbunbun.info/".to_string()))
+                        )
+                    ]
+                ))
+            )),
+        ],
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
                 "受け取ったメッセージ: {}\nそのメッセージの返信には対応してません...",
