@@ -158,6 +158,7 @@ pub struct Sticker {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub enum ResourceType {
     STATIC,
     ANIMATION,
@@ -170,27 +171,32 @@ pub enum ResourceType {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Unsend {
     pub message_id: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Join {
     pub members: Vec<Source>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Left {
     pub members: Vec<Source>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Postback {
     pub data: String,
     pub params: Option<Vec<Param>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Param {
     pub date: Option<String>,
     pub time: Option<String>,
@@ -200,6 +206,7 @@ pub struct Param {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub enum Status {
     SUCCESS,
     RICHMENU_ALIAS_ID_NOTFOUND,
@@ -208,11 +215,13 @@ pub enum Status {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct VideoPlayComplete {
     pub tracking_id: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Beacon {
     pub hwid: String,
     #[serde(rename = "type")]
@@ -221,6 +230,7 @@ pub struct Beacon {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Link {
     pub result: String,
     pub nonce: String,
