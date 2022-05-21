@@ -2,7 +2,7 @@ use line_bot_sdk::{
     client::Client,
     error::AppError,
     models::{
-        message::{text::TextMessage, MessageObject},
+        message::MessageObject,
         webhook_event::{Event, Message},
     },
 };
@@ -30,8 +30,5 @@ pub async fn index(client: &Client, event: &Event) -> Result<Vec<MessageObject>,
         Message::File(file_message) => file::handler(file_message),
         Message::Location(location_message) => location::handler(location_message),
         Message::Sticker(sticker_message) => sticker::handler(sticker_message),
-        _ => Ok(vec![MessageObject::Text(TextMessage::new(
-            "そのイベントには対応していません...".to_string(),
-        ))]),
     }
 }
