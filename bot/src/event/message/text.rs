@@ -158,7 +158,7 @@ pub async fn text_event(
             )),
         ],
         "プロフィール"=>{
-            let profile = client.get_profile(event.source.user_id.as_str()).await?;
+            let profile = client.get_profile(event.source.user_id.as_ref().ok_or_else(|| AppError::BadRequest("userId not found".to_string()))?.as_str()).await?;
             vec![
                 MessageObject::Text(TextMessage::new(format!("あなたの名前: {}\nユーザーID: {}\nプロフィール画像のURL: {}\nステータスメッセージ: {}", profile.display_name, profile.user_id, profile.picture_url, profile.status_message))),
             ]
