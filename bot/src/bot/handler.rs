@@ -9,7 +9,7 @@ use line_bot_sdk::{error::AppError, models::webhook_event};
 use serde::Serialize;
 
 use crate::config;
-use crate::event::{join, message, postback, unsend};
+use crate::event::{join, leave, message, postback, unsend};
 
 pub async fn handler(
     context: String,
@@ -40,6 +40,7 @@ async fn webhook_handler(
             "unsend" => unsend::index(event).await,
             "postback" => postback::index(event).await,
             "join" => join::index().await,
+            "leave" => leave::index().await,
             _ => return Err(AppError::BadRequest("Unknown event type".to_string())),
         }?;
         if let Some(reply_messages) = reply_messages {
