@@ -171,32 +171,32 @@ pub enum ResourceType {
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct Unsend {
-    message_id: String,
+    pub message_id: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct Join {
-    members: Vec<Source>,
+    pub members: Vec<Source>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct Left {
-    members: Vec<Source>,
+    pub members: Vec<Source>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct Postback {
-    data: String,
-    params: Option<Vec<Param>>,
+    pub data: String,
+    pub params: Option<Vec<Param>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct Param {
-    date: Option<String>,
-    time: Option<String>,
-    datetime: Option<String>,
-    new_rich_menu_alias_id: Option<String>,
-    status: Option<Status>,
+    pub date: Option<String>,
+    pub time: Option<String>,
+    pub datetime: Option<String>,
+    pub new_rich_menu_alias_id: Option<String>,
+    pub status: Option<Status>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
@@ -209,19 +209,19 @@ pub enum Status {
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct VideoPlayComplete {
-    tracking_id: String,
+    pub tracking_id: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct Beacon {
-    hwid: String,
+    pub hwid: String,
     #[serde(rename = "type")]
-    type_field: String,
-    dm: Option<String>,
+    pub type_field: String,
+    pub dm: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct Link {
-    result: String,
-    nonce: String,
+    pub result: String,
+    pub nonce: String,
 }
