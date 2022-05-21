@@ -108,7 +108,7 @@ pub struct Mentionee {
 pub struct Source {
     #[serde(rename = "type")]
     pub type_field: String,
-    pub user_id: String,
+    pub user_id: Option<String>,
     pub group_id: Option<String>,
     pub room_id: Option<String>,
 }
