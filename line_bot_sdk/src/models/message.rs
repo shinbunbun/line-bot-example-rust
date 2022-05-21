@@ -1,11 +1,12 @@
 use self::{
-    audio::AudioMessage, image::ImageMessage, imagemap::ImagemapMessage, location::LocationMessage,
-    quick_reply::QuickReply, sender::Sender, stamp::StampMessage, template::TemplateMessage,
-    text::TextMessage, video::VideoMessage,
+    audio::AudioMessage, flex::FlexMessage, image::ImageMessage, imagemap::ImagemapMessage,
+    location::LocationMessage, quick_reply::QuickReply, sender::Sender, stamp::StampMessage,
+    template::TemplateMessage, text::TextMessage, video::VideoMessage,
 };
 use serde::{Deserialize, Serialize};
 
 pub mod audio;
+pub mod flex;
 pub mod image;
 pub mod imagemap;
 pub mod location;
@@ -38,6 +39,7 @@ pub enum MessageObject {
     Location(LocationMessage),
     Imagemap(ImagemapMessage),
     Template(TemplateMessage),
+    Flex(FlexMessage),
 }
 
 pub trait CommonFields {
