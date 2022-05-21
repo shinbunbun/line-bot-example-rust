@@ -25,7 +25,7 @@ pub async fn handler(
     );
 
     let signature = &custom_header.x_line_signature;
-    client.verify(signature, &context)?;
+    client.verify_signature(signature, &context)?;
 
     let context: webhook_event::Root =
         serde_json::from_str(&context).map_err(AppError::SerdeJson)?;

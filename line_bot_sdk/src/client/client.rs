@@ -22,7 +22,7 @@ impl super::Client {
     pub fn get_channel_secret(&self) -> &str {
         &self.channel_secret
     }
-    pub fn verify(&self, signature: &str, context: &str) -> Result<(), AppError> {
+    pub fn verify_signature(&self, signature: &str, context: &str) -> Result<(), AppError> {
         type HmacSha256 = Hmac<Sha256>;
         let secret = self.get_channel_secret();
         let mut mac =
