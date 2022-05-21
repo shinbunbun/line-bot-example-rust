@@ -36,7 +36,6 @@ pub struct DeliveryContext {
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
-// TODO: VideoとImageの順番を入れ替えるとVideoがImageとしてDesirializeされる問題を調査
 pub enum Message {
     Text(Text),
     Video(Video),
