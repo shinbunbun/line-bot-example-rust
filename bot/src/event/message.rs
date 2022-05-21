@@ -8,7 +8,13 @@ use line_bot_sdk::{
 };
 use log::info;
 
-use super::{audio, file, image, location, sticker, text, video};
+pub mod audio;
+pub mod file;
+pub mod image;
+pub mod location;
+pub mod sticker;
+pub mod text;
+pub mod video;
 
 pub async fn index(client: &Client, event: &Event) -> Result<Vec<MessageObject>, AppError> {
     info!("{:?}", event);
