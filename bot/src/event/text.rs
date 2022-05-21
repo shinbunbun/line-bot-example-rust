@@ -1,5 +1,3 @@
-use std::fmt::format;
-
 use line_bot_sdk::{
     client::Client,
     error::AppError,
@@ -165,6 +163,15 @@ pub async fn text_event(
                 MessageObject::Text(TextMessage::new(format!("あなたの名前: {}\nユーザーID: {}\nプロフィール画像のURL: {}\nステータスメッセージ: {}", profile.display_name, profile.user_id, profile.picture_url, profile.status_message))),
             ]
         },
+        "ここはどこ"=>{
+            if event.source.type_field=="user"{
+                vec![MessageObject::Text(TextMessage::new("ここは個チャだよ!".to_string()))]
+            } else if event.source.type_field=="group"{
+                vec![MessageObject::Text(TextMessage::new("ここはグループだよ!".to_string()))]
+            } else {
+                vec![MessageObject::Text(TextMessage::new("非対応のソースです".to_string()))]
+            }
+        }
         _ => vec![{
             MessageObject::Text(TextMessage::new(format!(
                 "受け取ったメッセージ: {}\nそのメッセージの返信には対応してません...",
