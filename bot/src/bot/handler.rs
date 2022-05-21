@@ -24,11 +24,11 @@ pub async fn handler(
         config::get_secret().map_err(AppError::Env)?,
     );
 
-    let signature = custom_header.x_line_signature.as_str();
-    client.verify(signature, context.as_str())?;
+    let signature = &custom_header.x_line_signature;
+    client.verify(signature, &context)?;
 
     let context: webhook_event::Root =
-        serde_json::from_str(context.as_str()).map_err(AppError::SerdeJson)?;
+        serde_json::from_str(&context).map_err(AppError::SerdeJson)?;
     webhook_handler(context, client).await
 }
 
@@ -53,8 +53,7 @@ async fn webhook_handler(
             let reply_token = event
                 .reply_token
                 .as_ref()
-                .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?
-                .as_str();
+                .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?;
             client.reply(reply_token, reply_messages, None).await?;
         }
     }

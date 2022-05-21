@@ -16,11 +16,8 @@ impl Client {
             messages,
             notification_disabled,
         };
-        self.line_post_request(
-            body,
-            format!("{}/v2/bot/message/reply", API_ENDPOINT_BASE).as_str(),
-        )
-        .await?;
+        self.line_post_request(body, &format!("{}/v2/bot/message/reply", API_ENDPOINT_BASE))
+            .await?;
         Ok(())
     }
 }

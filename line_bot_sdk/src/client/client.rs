@@ -90,7 +90,7 @@ impl super::Client {
     }
     pub async fn get_profile(&self, user_id: &str) -> Result<Profile, AppError> {
         let url = format!("https://api.line.me/v2/bot/profile/{}", user_id);
-        let mut res = self.line_get_request(url.as_str()).await?;
+        let mut res = self.line_get_request(&url).await?;
         let res_body = res
             .body()
             .await
