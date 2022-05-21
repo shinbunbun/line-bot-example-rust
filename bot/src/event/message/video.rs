@@ -3,9 +3,9 @@ use line_bot_sdk::{
     models::{message::text::TextMessage, message::MessageObject, webhook_event::Video},
 };
 
-pub fn handler(message: &Video) -> Result<Vec<MessageObject>, AppError> {
+pub fn handler(message: &Video) -> Result<Option<Vec<MessageObject>>, AppError> {
     println!("{:?}", message);
-    Ok(vec![MessageObject::Text(TextMessage::new(
+    Ok(Some(vec![MessageObject::Text(TextMessage::new(
         "動画を受け取りました！".to_string(),
-    ))])
+    ))]))
 }

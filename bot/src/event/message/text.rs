@@ -36,7 +36,7 @@ pub async fn text_event(
     client: &Client,
     event: &Event,
     message: &Text,
-) -> Result<Vec<MessageObject>, AppError> {
+) -> Result<Option<Vec<MessageObject>>, AppError> {
     let messages = match message.text.as_str() {
         "こんにちは" => vec![MessageObject::Text(TextMessage::new(
             "Hello, World!".to_string(),
@@ -179,5 +179,5 @@ pub async fn text_event(
             )))
         }],
     };
-    Ok(messages)
+    Ok(Some(messages))
 }

@@ -3,10 +3,10 @@ use line_bot_sdk::{
     models::{message::text::TextMessage, message::MessageObject, webhook_event::Location},
 };
 
-pub fn handler(message: &Location) -> Result<Vec<MessageObject>, AppError> {
+pub fn handler(message: &Location) -> Result<Option<Vec<MessageObject>>, AppError> {
     println!("{:?}", message);
-    Ok(vec![MessageObject::Text(TextMessage::new(format!(
+    Ok(Some(vec![MessageObject::Text(TextMessage::new(format!(
         "受け取った住所: {}",
         message.address
-    )))])
+    )))]))
 }

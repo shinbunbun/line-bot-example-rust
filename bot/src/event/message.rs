@@ -16,7 +16,7 @@ pub mod sticker;
 pub mod text;
 pub mod video;
 
-pub async fn index(client: &Client, event: &Event) -> Result<Vec<MessageObject>, AppError> {
+pub async fn index(client: &Client, event: &Event) -> Result<Option<Vec<MessageObject>>, AppError> {
     info!("{:?}", event);
     let message = event
         .message
