@@ -45,8 +45,9 @@ async fn webhook_handler(
             "unsend" => unsend::index(event).await,
             _ => return Err(AppError::BadRequest("Unknown event type".to_string())),
         }?;
-
-        client.reply(reply_token, reply_messages, None).await?;
+        if let Some(reply_messages) = reply_messages {
+            client.reply(reply_token, reply_messages, None).await?;
+        }
     }
     return Ok(HttpResponse::Ok().json("Ok"));
 }
