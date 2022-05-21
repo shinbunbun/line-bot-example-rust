@@ -68,6 +68,20 @@ impl Client {
             .to_vec();
         serde_json::from_slice(&res_body).map_err(AppError::SerdeJson)
     }
+
+    pub async fn get_content(&self, message_id: &str) -> Result<Vec<u8>, AppError> {
+        let url = format!(
+            "{}/v2/bot/message/{}/content",
+            API_ENDPOINT_BASE, message_id
+        );
+        let mut res = line_get_request(&self, &url).await?;
+        let res_body = res
+            .body()
+            .await
+            .map_err(AppError::ActixWebPayloadError)?
+            .to_vec();
+        Ok(res_body)
+    }
 }
 
 async fn line_post_request<T: serde::Serialize>(
