@@ -8,7 +8,7 @@ use line_bot_sdk::{
 };
 use log::info;
 
-use super::{audio, image, text, video};
+use super::{audio, file, image, text, video};
 
 pub async fn index(client: &Client, event: &Event) -> Result<Vec<MessageObject>, AppError> {
     info!("{:?}", event);
@@ -21,6 +21,7 @@ pub async fn index(client: &Client, event: &Event) -> Result<Vec<MessageObject>,
         Message::Image(image_message) => image::handler(image_message),
         Message::Video(video_message) => video::handler(video_message),
         Message::Audio(audio_message) => audio::handler(audio_message),
+        Message::File(file_message) => file::handler(file_message),
         _ => Ok(vec![MessageObject::Text(TextMessage::new(
             "そのイベントには対応していません...".to_string(),
         ))]),
