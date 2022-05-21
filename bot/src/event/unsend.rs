@@ -1,9 +1,6 @@
 use line_bot_sdk::{
     error::AppError,
-    models::{
-        message::{text::TextMessage, MessageObject},
-        webhook_event::Event,
-    },
+    models::{message::MessageObject, webhook_event::Event},
 };
 
 pub async fn index(event: &Event) -> Result<Option<Vec<MessageObject>>, AppError> {

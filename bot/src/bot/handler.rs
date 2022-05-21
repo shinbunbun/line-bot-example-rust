@@ -35,17 +35,17 @@ async fn webhook_handler(
     client: Client,
 ) -> Result<HttpResponse, AppError> {
     for event in &context.events {
-        let reply_token = event
-            .reply_token
-            .as_ref()
-            .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?
-            .as_str();
         let reply_messages = match event.type_field.as_str() {
             "message" => message::index(&client, event).await,
             "unsend" => unsend::index(event).await,
             _ => return Err(AppError::BadRequest("Unknown event type".to_string())),
         }?;
         if let Some(reply_messages) = reply_messages {
+            let reply_token = event
+                .reply_token
+                .as_ref()
+                .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?
+                .as_str();
             client.reply(reply_token, reply_messages, None).await?;
         }
     }
