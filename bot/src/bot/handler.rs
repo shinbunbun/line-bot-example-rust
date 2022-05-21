@@ -21,17 +21,6 @@ async fn webhook_handler(
             .as_ref()
             .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?
             .as_str();
-        /* let reply_messages = vec![{
-            MessageObject {
-                quick_reply: None,
-                sender: None,
-                message: EachMessageFields::Text(TextMessage {
-                    text: message.text.clone(),
-                    type_field: "text".to_string(),
-                    emojis: None,
-                }),
-            }
-        }]; */
         let reply_messages = match event.type_field.as_str() {
             "message" => message::index(&client, event).await,
             _ => return Err(AppError::BadRequest("Unknown event type".to_string())),
