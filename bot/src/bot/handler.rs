@@ -11,6 +11,25 @@ use serde::Serialize;
 use crate::config;
 use crate::event::message;
 
+pub async fn handler(
+    context: String,
+    custom_header: CustomHeader,
+) -> Result<impl Responder, AppError> {
+    info!("Request body: {}", context);
+
+    let client = Client::new(
+        config::get_token().map_err(AppError::Env)?,
+        config::get_secret().map_err(AppError::Env)?,
+    );
+
+    let signature = custom_header.x_line_signature.as_str();
+    client.verify(signature, context.as_str())?;
+
+    let context: webhook_event::Root =
+        serde_json::from_str(context.as_str()).map_err(AppError::SerdeJson)?;
+    webhook_handler(context, client).await
+}
+
 async fn webhook_handler(
     context: webhook_event::Root,
     client: Client,
@@ -29,25 +48,6 @@ async fn webhook_handler(
         client.reply(reply_token, reply_messages, None).await?;
     }
     return Ok(HttpResponse::Ok().json("Ok"));
-}
-
-pub async fn handler(
-    context: String,
-    custom_header: CustomHeader,
-) -> Result<impl Responder, AppError> {
-    info!("Request body: {}", context);
-
-    let client = Client::new(
-        config::get_token().map_err(AppError::Env)?,
-        config::get_secret().map_err(AppError::Env)?,
-    );
-
-    let signature = custom_header.x_line_signature.as_str();
-    client.verify(signature, context.as_str())?;
-
-    let context: webhook_event::Root =
-        serde_json::from_str(context.as_str()).map_err(AppError::SerdeJson)?;
-    webhook_handler(context, client).await
 }
 
 #[derive(Debug, Serialize)]
