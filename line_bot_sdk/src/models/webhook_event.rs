@@ -192,12 +192,12 @@ pub struct Left {
 #[serde(rename_all = "camelCase")]
 pub struct Postback {
     pub data: String,
-    pub params: Option<Vec<Param>>,
+    pub params: Option<Params>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Param {
+pub struct Params {
     pub date: Option<String>,
     pub time: Option<String>,
     pub datetime: Option<String>,
