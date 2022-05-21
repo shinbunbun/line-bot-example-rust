@@ -141,7 +141,7 @@ pub struct File {
 #[serde(rename_all = "camelCase")]
 pub struct Location {
     pub id: String,
-    pub title: String,
+    pub title: Option<String>,
     pub address: String,
     pub latitude: f64,
     pub longitude: f64,
