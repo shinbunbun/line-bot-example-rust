@@ -5,7 +5,9 @@ use log::info;
 use serde::{Deserialize, Serialize};
 use sha2::Sha256;
 
-use crate::error::AppError;
+use crate::{error::AppError, models::message::MessageObject};
+
+pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
 
 impl super::Client {
     pub fn new(channel_access_token: String, channel_secret: String) -> Self {
@@ -89,7 +91,7 @@ impl super::Client {
         Ok(response)
     }
     pub async fn get_profile(&self, user_id: &str) -> Result<Profile, AppError> {
-        let url = format!("https://api.line.me/v2/bot/profile/{}", user_id);
+        let url = format!("{}/v2/bot/profile/{}", API_ENDPOINT_BASE, user_id);
         let mut res = self.line_get_request(&url).await?;
         let res_body = res
             .body()
@@ -97,6 +99,21 @@ impl super::Client {
             .map_err(AppError::ActixWebPayloadError)?
             .to_vec();
         serde_json::from_slice(&res_body).map_err(AppError::SerdeJson)
+    }
+    pub async fn reply(
+        &self,
+        reply_token: &str,
+        messages: Vec<MessageObject>,
+        notification_disabled: Option<bool>,
+    ) -> Result<(), AppError> {
+        let body = ReplyMessage {
+            reply_token: reply_token.to_string(),
+            messages,
+            notification_disabled,
+        };
+        self.line_post_request(body, &format!("{}/v2/bot/message/reply", API_ENDPOINT_BASE))
+            .await?;
+        Ok(())
     }
 }
 
@@ -108,4 +125,13 @@ pub struct Profile {
     pub language: String,
     pub picture_url: String,
     pub status_message: String,
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct ReplyMessage {
+    reply_token: String,
+    messages: Vec<MessageObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    notification_disabled: Option<bool>,
 }
