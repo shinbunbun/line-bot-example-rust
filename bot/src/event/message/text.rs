@@ -18,6 +18,7 @@ use line_bot_sdk::{
             CommonFields,
         },
         message::{
+            flex::FlexMessage,
             quick_reply::QuickReply,
             template::{
                 buttons::ButtonsTemplate,
@@ -26,7 +27,7 @@ use line_bot_sdk::{
                 image_carousel::{self, ImageCarouselTemplate},
                 Template, TemplateMessage,
             },
-            MessageObject,
+            Message, MessageObject,
         },
         webhook_event::{Event, Text},
     },
@@ -157,6 +158,10 @@ pub async fn text_event(
                 ))
             )),
         ],
+        "Flex Message" => {
+            let flex_message = FlexMessage::from_json(r##"{"type":"flex","altText":"Flex Message","contents":{"type":"bubble","header":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"Flex Message","color":"#FFFFFF","weight":"bold"}]},"hero":{"type":"image","url":"https://pbs.twimg.com/profile_images/1236928986212478976/wDa51i9T_400x400.jpg","size":"xl"},"body":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"しんぶんぶん","size":"xl","weight":"bold","align":"center"},{"type":"text","text":"会津大学学部一年","align":"center"},{"type":"separator","margin":"md"},{"type":"box","layout":"vertical","contents":[{"type":"button","action":{"type":"uri","label":"ホームページ","uri":"https://shinbunbun.info/"},"style":"primary","offsetBottom":"10px"},{"type":"button","action":{"type":"uri","label":"Twitter","uri":"https://twitter.com/shinbunbun_"},"style":"primary","color":"#1DA1F2"}],"paddingTop":"10px"}]},"styles":{"header":{"backgroundColor":"#008282"}}}}"##)?;
+            vec![MessageObject::Flex(flex_message)]
+        }
         "プロフィール"=>{
             let profile = client.get_profile(&event.source.user_id.as_ref().ok_or_else(|| AppError::BadRequest("userId not found".to_string()))?).await?;
             vec![

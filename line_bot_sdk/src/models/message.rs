@@ -1,3 +1,5 @@
+use crate::error::AppError;
+
 use self::{
     audio::AudioMessage, flex::FlexMessage, image::ImageMessage, imagemap::ImagemapMessage,
     location::LocationMessage, quick_reply::QuickReply, sender::Sender, stamp::StampMessage,
@@ -47,26 +49,11 @@ pub trait CommonFields {
     fn with_sender(self, sender: Sender) -> Self;
 }
 
-/* fn test() {
-    let s = MessageObject {
-        quick_reply: None,
-        sender: None,
-        message: EachMessageFields::Text(Text {
-            text: "hello".to_string(),
-            type_field: "text".to_string(),
-            emojis: None,
-        }),
-    };
-    let json = serde_json::to_string(&s).unwrap();
-    println!("{}", json);
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn internal() {
-        test();
+pub trait Message<'a> {
+    fn from_json(json: &'a str) -> Result<Self, AppError>
+    where
+        Self: std::marker::Sized + Deserialize<'a>,
+    {
+        serde_json::from_str(json).map_err(AppError::SerdeJson)
     }
-} */
+}
