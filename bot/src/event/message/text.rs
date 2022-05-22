@@ -15,7 +15,6 @@ use line_bot_sdk::{
             stamp::StampMessage,
             text::TextMessage,
             video::VideoMessage,
-            CommonFields,
         },
         message::{
             flex::FlexMessage,

@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::models::action::{Actions, URIAction};
 
-use super::Message;
+use super::{quick_reply::QuickReply, sender::Sender, Message};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -11,9 +11,20 @@ pub struct FlexMessage {
     pub type_field: String,
     pub alt_text: String,
     pub contents: FlexContainer,
+    pub quick_reply: Option<QuickReply>,
+    pub sender: Option<Sender>,
 }
 
-impl Message<'_> for FlexMessage {}
+impl Message<'_> for FlexMessage {
+    fn with_quick_reply(mut self, quick_reply: QuickReply) -> Self {
+        self.quick_reply = Some(quick_reply);
+        self
+    }
+    fn with_sender(mut self, sender: Sender) -> Self {
+        self.sender = Some(sender);
+        self
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", untagged)]

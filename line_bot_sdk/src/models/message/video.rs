@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::{quick_reply::QuickReply, sender::Sender, CommonFields};
+use super::{quick_reply::QuickReply, sender::Sender, Message};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -17,7 +17,7 @@ pub struct VideoMessage {
     pub sender: Option<Sender>,
 }
 
-impl CommonFields for VideoMessage {
+impl Message<'_> for VideoMessage {
     fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
         self.quick_reply = Some(quick_reply);
         self

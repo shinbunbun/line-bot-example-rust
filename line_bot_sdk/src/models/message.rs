@@ -44,11 +44,6 @@ pub enum MessageObject {
     Flex(FlexMessage),
 }
 
-pub trait CommonFields {
-    fn with_quick_reply(self, quick_reply: QuickReply) -> Self;
-    fn with_sender(self, sender: Sender) -> Self;
-}
-
 pub trait Message<'a> {
     fn from_json(json: &'a str) -> Result<Self, AppError>
     where
@@ -56,4 +51,6 @@ pub trait Message<'a> {
     {
         serde_json::from_str(json).map_err(AppError::SerdeJson)
     }
+    fn with_quick_reply(self, quick_reply: QuickReply) -> Self;
+    fn with_sender(self, sender: Sender) -> Self;
 }

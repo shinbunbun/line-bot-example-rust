@@ -5,7 +5,7 @@ use self::{
     image_carousel::ImageCarouselTemplate,
 };
 
-use super::{quick_reply::QuickReply, sender::Sender, CommonFields};
+use super::{quick_reply::QuickReply, sender::Sender, Message};
 
 pub mod buttons;
 pub mod carousel;
@@ -25,7 +25,7 @@ pub struct TemplateMessage {
     pub sender: Option<Sender>,
 }
 
-impl CommonFields for TemplateMessage {
+impl Message<'_> for TemplateMessage {
     fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
         self.quick_reply = Some(quick_reply);
         self

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::{quick_reply::QuickReply, sender::Sender, CommonFields};
+use super::{quick_reply::QuickReply, sender::Sender, Message};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -32,7 +32,7 @@ impl TextMessage {
     }
 }
 
-impl CommonFields for TextMessage {
+impl Message<'_> for TextMessage {
     fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
         self.quick_reply = Some(quick_reply);
         self
