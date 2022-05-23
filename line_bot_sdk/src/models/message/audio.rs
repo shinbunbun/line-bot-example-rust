@@ -36,4 +36,7 @@ impl AudioMessage {
             sender: None,
         }
     }
+    pub fn build(self) -> super::MessageObject {
+        super::MessageObject::Audio(self)
+    }
 }

@@ -30,6 +30,9 @@ impl TextMessage {
         self.emojis = Some(emojis);
         self
     }
+    pub fn build(self) -> super::MessageObject {
+        super::MessageObject::Text(self)
+    }
 }
 
 impl Message<'_> for TextMessage {

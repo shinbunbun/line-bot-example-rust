@@ -36,4 +36,7 @@ impl StampMessage {
             sender: None,
         }
     }
+    pub fn build(self) -> super::MessageObject {
+        super::MessageObject::Stamp(self)
+    }
 }

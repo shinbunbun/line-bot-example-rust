@@ -40,4 +40,7 @@ impl LocationMessage {
             sender: None,
         }
     }
+    pub fn build(self) -> super::MessageObject {
+        super::MessageObject::Location(self)
+    }
 }
