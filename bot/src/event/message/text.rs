@@ -18,6 +18,7 @@ use line_bot_sdk::{
         },
         message::{
             flex::FlexMessage,
+            message_builder::{ImageMapURIActionBuilder, MessageBuilder},
             quick_reply::QuickReply,
             template::{
                 buttons::ButtonsTemplate,
@@ -38,19 +39,33 @@ pub async fn text_event(
     message: &Text,
 ) -> Result<Option<Vec<MessageObject>>, AppError> {
     let messages = match message.text.as_str() {
-        "こんにちは" => vec![MessageObject::Text(TextMessage::new(
-            "Hello, World!".to_string(),
-        ))],
+        "こんにちは" => vec![
+            // MessageObject::Text(TextMessage::new("Hello, World!".to_string()))
+            MessageBuilder::new()
+            .text_message("Hello, World")
+            .build()
+        ],
         "複数メッセージ" => vec![
-            MessageObject::Text(TextMessage::new("Hello, user".to_string())),
-            MessageObject::Text(TextMessage::new("May I help you?".to_string())),
+            // MessageObject::Text(TextMessage::new("Hello, user".to_string())),
+            // MessageObject::Text(TextMessage::new("May I help you?".to_string())),
+            MessageBuilder::new()
+            .text_message("Hello, user")
+            .build(),
+            MessageBuilder::new()
+            .text_message("May I help you?")
+            .build()
         ],
         "クイックリプライ" => vec![
-            MessageObject::Text(TextMessage::new("クイックリプライ（以下のアクションはクイックリプライ専用で、他のメッセージタイプでは使用できません）".to_string()).with_quick_reply(QuickReply{ items: vec![
+            /* MessageObject::Text(TextMessage::new("クイックリプライ（以下のアクションはクイックリプライ専用で、他のメッセージタイプでは使用できません）".to_string()).with_quick_reply(QuickReply{ items: vec![
                 Item::new(Actions::CameraAction(CameraAction::new("カメラを開く".to_string()))),
                 Item::new(Actions::CameraRollAction(CameraRollAction::new("カメラロールを開く".to_string()))), 
                 Item::new(Actions::LocationAction(LocationAction::new("位置情報画面を開く".to_string()))),
-            ]}))
+            ]})) */
+            MessageBuilder::new()
+            .text_message("クイックリプライ（以下のアクションはクイックリプライ専用で、他のメッセージタイプでは使用できません）")
+            .with_quick_reply()
+            .build()
+
         ],
         "スタンプメッセージ" => vec![
             MessageObject::Stamp(StampMessage::new("446".to_string(), "1988".to_string())),
@@ -68,7 +83,7 @@ pub async fn text_event(
             MessageObject::Location(LocationMessage::new("my location".to_string(), "〒160-0004 東京都新宿区四谷一丁目6番1号".to_string(), 35.687574 ,139.72922))
         ],
         "イメージマップメッセージ" => vec![
-            MessageObject::Imagemap(ImagemapMessage::new(
+            /* MessageObject::Imagemap(ImagemapMessage::new(
                 "https://youkan-storage.s3.ap-northeast-1.amazonaws.com/ubic_bunbun".to_string(), 
                 "This is an imagemap".to_string(), 
                 BaseSize{width: 1040, height: 597},
@@ -77,7 +92,35 @@ pub async fn text_event(
                     imagemap::Action::URIAction(imagemap::URIAction::new("https://shinbunbun.info/about/".to_string(), Area{x:33, y:331, width: 780, height:177})),
                     imagemap::Action::URIAction(imagemap::URIAction::new("https://www.u-aizu.ac.jp/".to_string(), Area{x:939, y:484, width: 94, height:105})),
                 ],
-            )),
+            )), */
+            MessageBuilder::new()
+            .imagemap_message(
+                "https://youkan-storage.s3.ap-northeast-1.amazonaws.com/ubic_bunbun",
+                "This is an imagemap",
+            )
+            .base_size(1040, 597)
+            .add_action(
+                ImageMapURIActionBuilder::new(
+                    "https://www.u-aizu.ac.jp/intro/faculty/ubic/",
+                    Area::new(26, 113, 525, 170),
+                )
+                .build(),
+            )
+            .add_action(
+                ImageMapURIActionBuilder::new(
+                    "https://shinbunbun.info/about/",
+                    Area::new(33, 331, 780, 177),
+                )
+                .build(),
+            )
+            .add_action(
+                ImageMapURIActionBuilder::new(
+                    "https://www.u-aizu.ac.jp/",
+                    Area::new(939, 484, 94, 105),
+                )
+                .build(),
+            )
+            .build(),
             MessageObject::Text(TextMessage::new("「UBIC」や「しんぶんぶん」のところをTAPしてみよう!".to_string()))
         ],
         "ボタンテンプレート" => vec![MessageObject::Template(TemplateMessage::new(

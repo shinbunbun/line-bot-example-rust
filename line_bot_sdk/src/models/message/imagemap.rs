@@ -61,6 +61,12 @@ pub struct BaseSize {
     pub height: u64,
 }
 
+impl BaseSize {
+    pub fn new(width: u64, height: u64) -> Self {
+        BaseSize { width, height }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Video {
@@ -78,6 +84,17 @@ pub struct Area {
     pub y: u64,
     pub width: u64,
     pub height: u64,
+}
+
+impl Area {
+    pub fn new(x: u64, y: u64, width: u64, height: u64) -> Self {
+        Area {
+            x,
+            y,
+            width,
+            height,
+        }
+    }
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -106,17 +123,13 @@ pub struct URIAction {
 }
 
 impl URIAction {
-    pub fn new(link_uri: String, area: Area) -> Self {
+    pub fn new(link_uri: String, area: Area, label: Option<String>) -> Self {
         URIAction {
             type_field: "uri".to_string(),
-            label: None,
+            label,
             link_uri,
             area,
         }
-    }
-    pub fn with_label(mut self, label: String) -> Self {
-        self.label = Some(label);
-        self
     }
 }
 
@@ -129,4 +142,15 @@ pub struct MessageAction {
     pub label: Option<String>,
     pub text: String,
     pub area: Area,
+}
+
+impl MessageAction {
+    pub fn new(text: String, area: Area, label: Option<String>) -> Self {
+        MessageAction {
+            type_field: "message".to_string(),
+            label,
+            text,
+            area,
+        }
+    }
 }
