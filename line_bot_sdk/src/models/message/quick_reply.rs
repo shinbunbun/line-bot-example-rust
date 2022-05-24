@@ -7,6 +7,12 @@ pub struct QuickReply {
     pub items: Vec<Item>,
 }
 
+impl QuickReply {
+    pub fn new(items: Vec<Item>) -> Self {
+        Self { items }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Item {
@@ -18,15 +24,11 @@ pub struct Item {
 }
 
 impl Item {
-    pub fn new(action: Actions) -> Self {
+    pub fn new(image_url: Option<String>, action: Actions) -> Self {
         Self {
             type_field: "action".to_string(),
-            image_url: None,
+            image_url,
             action,
         }
-    }
-    pub fn with_image_url(mut self, image_url: String) -> Self {
-        self.image_url = Some(image_url);
-        self
     }
 }
