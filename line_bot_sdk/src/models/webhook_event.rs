@@ -201,7 +201,7 @@ pub struct Params {
     pub date: Option<String>,
     pub time: Option<String>,
     pub datetime: Option<String>,
-    pub new_rich_menu_alias_id: Option<String>,
+    pub new_richmenu_alias_id: Option<String>,
     pub status: Option<Status>,
 }
 
