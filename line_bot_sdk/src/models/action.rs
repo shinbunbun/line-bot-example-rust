@@ -109,6 +109,12 @@ pub struct AltUri {
     pub desktop: String,
 }
 
+impl AltUri {
+    pub fn new(desktop: String) -> Self {
+        Self { desktop }
+    }
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DatetimePickerAction {
@@ -127,28 +133,23 @@ pub struct DatetimePickerAction {
 }
 
 impl DatetimePickerAction {
-    pub fn new(data: String, mode: String, label: Option<String>) -> Self {
+    pub fn new(
+        data: String,
+        mode: String,
+        label: Option<String>,
+        initial: Option<String>,
+        max: Option<String>,
+        min: Option<String>,
+    ) -> Self {
         Self {
             type_field: "datetimepicker".to_string(),
             label,
             data,
             mode,
-            initial: None,
-            max: None,
-            min: None,
+            initial,
+            max,
+            min,
         }
-    }
-    pub fn with_initial(mut self, initial: String) -> Self {
-        self.initial = Some(initial);
-        self
-    }
-    pub fn with_max(mut self, max: String) -> Self {
-        self.max = Some(max);
-        self
-    }
-    pub fn with_min(mut self, min: String) -> Self {
-        self.min = Some(min);
-        self
     }
 }
 
