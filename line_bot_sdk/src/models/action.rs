@@ -93,17 +93,13 @@ pub struct URIAction {
 }
 
 impl URIAction {
-    pub fn new(label: Option<String>, uri: String) -> Self {
+    pub fn new(label: Option<String>, uri: String, alt_uri: Option<AltUri>) -> Self {
         Self {
             type_field: "uri".to_string(),
             label,
             uri,
-            alt_uri: None,
+            alt_uri,
         }
-    }
-    pub fn with_alt_uri(mut self, alt_uri: AltUri) -> Self {
-        self.alt_uri = Some(alt_uri);
-        self
     }
 }
 
