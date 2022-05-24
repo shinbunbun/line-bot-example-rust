@@ -12,7 +12,6 @@ pub mod flex;
 pub mod image;
 pub mod imagemap;
 pub mod location;
-pub mod message_builder;
 pub mod quick_reply;
 pub mod sender;
 pub mod stamp;

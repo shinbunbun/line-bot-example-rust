@@ -1,4 +1,5 @@
 use line_bot_sdk::{
+    builder::{imagemap::ImageMapURIActionBuilder, message::MessageBuilder},
     client::Client,
     error::AppError,
     models::{
@@ -18,7 +19,6 @@ use line_bot_sdk::{
         },
         message::{
             flex::FlexMessage,
-            message_builder::{ImageMapURIActionBuilder, MessageBuilder},
             quick_reply::QuickReply,
             template::{
                 buttons::ButtonsTemplate,
@@ -56,15 +56,15 @@ pub async fn text_event(
             .build()
         ],
         "クイックリプライ" => vec![
-            /* MessageObject::Text(TextMessage::new("クイックリプライ（以下のアクションはクイックリプライ専用で、他のメッセージタイプでは使用できません）".to_string()).with_quick_reply(QuickReply{ items: vec![
+            MessageObject::Text(TextMessage::new("クイックリプライ（以下のアクションはクイックリプライ専用で、他のメッセージタイプでは使用できません）".to_string()).with_quick_reply(QuickReply{ items: vec![
                 Item::new(Actions::CameraAction(CameraAction::new("カメラを開く".to_string()))),
                 Item::new(Actions::CameraRollAction(CameraRollAction::new("カメラロールを開く".to_string()))), 
                 Item::new(Actions::LocationAction(LocationAction::new("位置情報画面を開く".to_string()))),
-            ]})) */
-            MessageBuilder::new()
+            ]}))
+            /* MessageBuilder::new()
             .text_message("クイックリプライ（以下のアクションはクイックリプライ専用で、他のメッセージタイプでは使用できません）")
             .with_quick_reply()
-            .build()
+            .build() */
 
         ],
         "スタンプメッセージ" => vec![

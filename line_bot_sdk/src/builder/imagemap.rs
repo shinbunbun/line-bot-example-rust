@@ -1,67 +1,9 @@
-use crate::models::action::Actions;
-
-use super::{
-    audio::AudioMessage,
-    image::ImageMessage,
+use crate::models::message::{
     imagemap::{self, Area, ImagemapMessage},
-    location::LocationMessage,
-    quick_reply::{self, QuickReply},
+    quick_reply::QuickReply,
     sender::Sender,
-    stamp::StampMessage,
-    text::TextMessage,
-    video::VideoMessage,
     Message, MessageObject,
 };
-
-pub struct MessageBuilder {}
-
-impl MessageBuilder {
-    pub fn new() -> Self {
-        Self {}
-    }
-    // pub fn audio(self) ->
-    pub fn text_message(self, text: &str) -> TextMessage {
-        TextMessage::new(text.to_string())
-    }
-    pub fn stamp_message(self, package_id: &str, sticker_id: &str) -> StampMessage {
-        StampMessage::new(package_id.to_string(), sticker_id.to_string())
-    }
-    pub fn image_message(
-        self,
-        original_content_url: &str,
-        preview_image_url: &str,
-    ) -> ImageMessage {
-        ImageMessage::new(
-            original_content_url.to_string(),
-            preview_image_url.to_string(),
-        )
-    }
-    pub fn video_message(
-        self,
-        original_content_url: &str,
-        preview_image_url: &str,
-    ) -> VideoMessage {
-        VideoMessage::new(
-            original_content_url.to_string(),
-            preview_image_url.to_string(),
-        )
-    }
-    pub fn audio_message(self, original_content_url: &str, duration: u64) -> AudioMessage {
-        AudioMessage::new(original_content_url.to_string(), duration)
-    }
-    pub fn location_message(
-        self,
-        title: &str,
-        address: &str,
-        latitude: f64,
-        longitude: f64,
-    ) -> LocationMessage {
-        LocationMessage::new(title.to_string(), address.to_string(), latitude, longitude)
-    }
-    pub fn imagemap_message(self, base_url: &str, alt_text: &str) -> ImagemapMessageBuilder<()> {
-        ImagemapMessageBuilder::new(base_url.to_string(), alt_text.to_string())
-    }
-}
 
 pub struct ImagemapMessageBuilder<BaseSize> {
     base_url: String,
@@ -73,11 +15,11 @@ pub struct ImagemapMessageBuilder<BaseSize> {
 }
 
 impl<BaseSize> Message<'_> for ImagemapMessageBuilder<BaseSize> {
-    fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
+    fn with_quick_reply(mut self, quick_reply: QuickReply) -> Self {
         self.quick_reply = Some(quick_reply);
         self
     }
-    fn with_sender(mut self, sender: super::sender::Sender) -> Self {
+    fn with_sender(mut self, sender: Sender) -> Self {
         self.sender = Some(sender);
         self
     }
@@ -184,63 +126,12 @@ impl ImageMapMessageActionBuilder {
     }
 }
 
-pub struct QuickReplyBuilder {
-    items: Vec<quick_reply::Item>,
-}
-
-impl QuickReplyBuilder {
-    pub fn new() -> Self {
-        Self { items: Vec::new() }
-    }
-    pub fn add_item(mut self, item: quick_reply::Item) -> Self {
-        self.items.push(item);
-        self
-    }
-    /* pub fn build(self) -> quick_reply::QuickReply {
-        quick_reply::QuickReply::new(self.items)
-    } */
-}
-
-pub struct QuickReplyItemBuilder<Actions> {
-    pub image_url: Option<String>,
-    pub action: Actions,
-}
-
-impl QuickReplyItemBuilder<()> {
-    pub fn new() -> Self {
-        Self {
-            image_url: None,
-            action: (),
-        }
-    }
-    pub fn with_image_url(mut self, image_url: String) -> Self {
-        self.image_url = Some(image_url);
-        self
-    }
-    /* pub fn build(self) -> quick_reply::Item {
-        quick_reply::Item::new(self.image_url, self.action)
-    } */
-}
-
-impl QuickReplyItemBuilder<Actions> {
-    pub fn action(mut self, action: Actions) -> Self {
-        self.action = action;
-        self
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use crate::models::message::{
-        imagemap::Area,
-        message_builder::{ImageMapURIActionBuilder, MessageBuilder},
+    use crate::{
+        builder::{imagemap::ImageMapURIActionBuilder, message::MessageBuilder},
+        models::message::imagemap::Area,
     };
-
-    #[test]
-    fn text_message() {
-        let text_message = MessageBuilder::new().text_message("hello").build();
-        println!("{:?}", text_message);
-    }
 
     #[test]
     fn imagemap_message() {
