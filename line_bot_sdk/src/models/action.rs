@@ -39,32 +39,23 @@ pub struct PostbackAction {
 }
 
 impl PostbackAction {
-    pub fn new(label: String, data: String) -> Self {
+    pub fn new(
+        label: Option<String>,
+        data: String,
+        display_text: Option<String>,
+        text: Option<String>,
+        input_option: Option<String>,
+        fill_in_text: Option<String>,
+    ) -> Self {
         Self {
             type_field: "postback".to_string(),
-            label: Some(label),
+            label,
             data,
-            display_text: None,
-            text: None,
-            input_option: None,
-            fill_in_text: None,
+            display_text,
+            text,
+            input_option,
+            fill_in_text,
         }
-    }
-    pub fn with_display_text(mut self, display_text: String) -> Self {
-        self.display_text = Some(display_text);
-        self
-    }
-    pub fn with_text(mut self, text: String) -> Self {
-        self.text = Some(text);
-        self
-    }
-    pub fn with_input_option(mut self, input_option: String) -> Self {
-        self.input_option = Some(input_option);
-        self
-    }
-    pub fn with_fill_in_text(mut self, fill_in_text: String) -> Self {
-        self.fill_in_text = Some(fill_in_text);
-        self
     }
 }
 
