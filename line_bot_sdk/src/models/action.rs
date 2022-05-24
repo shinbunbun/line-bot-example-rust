@@ -11,7 +11,7 @@ pub enum Actions {
     CameraAction(CameraAction),
     CameraRollAction(CameraRollAction),
     LocationAction(LocationAction),
-    RichMenuSwitchAction(RichMenuSwitchAction),
+    RichmenuSwitchAction(RichmenuSwitchAction),
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize /* , Validate */)]
@@ -204,11 +204,22 @@ impl LocationAction {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct RichMenuSwitchAction {
+pub struct RichmenuSwitchAction {
     #[serde(rename = "type")]
     pub type_field: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
-    pub rich_menu_alias_id: String,
+    pub richmenu_alias_id: String,
     pub data: String,
+}
+
+impl RichmenuSwitchAction {
+    pub fn new(label: Option<String>, richmenu_alias_id: String, data: String) -> Self {
+        Self {
+            type_field: "richMenuSwitch".to_string(),
+            label,
+            richmenu_alias_id,
+            data,
+        }
+    }
 }
