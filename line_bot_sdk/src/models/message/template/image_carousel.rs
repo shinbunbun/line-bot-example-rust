@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::models::action::Actions;
+use crate::models::{
+    action::Actions,
+    message::{quick_reply::QuickReply, sender::Sender},
+};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -8,6 +11,10 @@ pub struct ImageCarouselTemplate {
     #[serde(rename = "type")]
     pub type_field: String,
     pub columns: Vec<Column>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quick_reply: Option<QuickReply>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sender: Option<Sender>,
 }
 
 impl ImageCarouselTemplate {
@@ -15,6 +22,8 @@ impl ImageCarouselTemplate {
         ImageCarouselTemplate {
             type_field: "image_carousel".to_string(),
             columns,
+            quick_reply: None,
+            sender: None,
         }
     }
 }

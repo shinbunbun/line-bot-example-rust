@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::models::action::Actions;
+use crate::models::{
+    action::Actions,
+    message::{quick_reply::QuickReply, sender::Sender},
+};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -10,6 +13,10 @@ pub struct CarouselTemplate {
     pub columns: Vec<Column>,
     pub image_aspect_ratio: Option<String>,
     pub image_size: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quick_reply: Option<QuickReply>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sender: Option<Sender>,
 }
 
 impl CarouselTemplate {
@@ -19,6 +26,8 @@ impl CarouselTemplate {
             columns,
             image_aspect_ratio: None,
             image_size: None,
+            quick_reply: None,
+            sender: None,
         }
     }
     pub fn with_image_aspect_ratio(mut self, image_aspect_ratio: String) -> Self {

@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::models::action::Actions;
+use crate::models::{
+    action::Actions,
+    message::{quick_reply::QuickReply, sender::Sender},
+};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -20,6 +23,10 @@ pub struct ButtonsTemplate {
     pub text: String,
     pub default_action: Actions,
     pub actions: Vec<Actions>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quick_reply: Option<QuickReply>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sender: Option<Sender>,
 }
 
 impl ButtonsTemplate {
@@ -34,6 +41,8 @@ impl ButtonsTemplate {
             text,
             default_action,
             actions,
+            quick_reply: None,
+            sender: None,
         }
     }
     pub fn with_thumbnail_image_url(mut self, thumbnail_image_url: String) -> Self {
