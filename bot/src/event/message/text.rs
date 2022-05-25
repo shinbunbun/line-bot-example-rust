@@ -1,5 +1,10 @@
 use line_bot_sdk::{
-    builder::{imagemap::ImageMapURIActionBuilder, message::MessageBuilder},
+    builder::{
+        action::ActionBuilder,
+        imagemap::ImageMapURIActionBuilder,
+        message::MessageBuilder,
+        quick_reply::{QuickReplyBuilder, QuickReplyItemBuilder},
+    },
     client::Client,
     error::AppError,
     models::{
@@ -56,16 +61,33 @@ pub async fn text_event(
             .build()
         ],
         "クイックリプライ" => vec![
-            MessageObject::Text(TextMessage::new("クイックリプライ（以下のアクションはクイックリプライ専用で、他のメッセージタイプでは使用できません）".to_string()).with_quick_reply(QuickReply{ items: vec![
+            /* MessageObject::Text(TextMessage::new("クイックリプライ（以下のアクションはクイックリプライ専用で、他のメッセージタイプでは使用できません）".to_string()).with_quick_reply(QuickReply{ items: vec![
                 Item::new(Actions::CameraAction(CameraAction::new("カメラを開く".to_string()))),
                 Item::new(Actions::CameraRollAction(CameraRollAction::new("カメラロールを開く".to_string()))), 
                 Item::new(Actions::LocationAction(LocationAction::new("位置情報画面を開く".to_string()))),
-            ]}))
-            /* MessageBuilder::new()
+            ]})) */
+            MessageBuilder::new()
             .text_message("クイックリプライ（以下のアクションはクイックリプライ専用で、他のメッセージタイプでは使用できません）")
-            .with_quick_reply()
-            .build() */
-
+            .with_quick_reply(
+                QuickReplyBuilder::new()
+                .add_item(
+                    QuickReplyItemBuilder::new()
+                    .action(ActionBuilder::new().camera_action("カメラを開く").build())
+                    .build(),
+                )
+                .add_item(
+                    QuickReplyItemBuilder::new()
+                    .action(ActionBuilder::new().camera_roll_action("カメラロールを開く").build())
+                    .build(),
+                )
+                .add_item(
+                    QuickReplyItemBuilder::new()
+                    .action(ActionBuilder::new().location_action("位置情報画面を開く").build())
+                    .build(),
+                )
+                .build(),
+            )
+            .build()
         ],
         "スタンプメッセージ" => vec![
             MessageObject::Stamp(StampMessage::new("446".to_string(), "1988".to_string())),
