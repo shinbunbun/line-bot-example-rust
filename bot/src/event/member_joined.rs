@@ -7,7 +7,7 @@ use line_bot_sdk::{
 };
 
 pub async fn index(event: &Event) -> Result<Option<Vec<MessageObject>>, AppError> {
-    Ok(Some(vec![MessageObject::Text(TextMessage::new(format!(
+    /* Ok(Some(vec![MessageObject::Text(TextMessage::new(format!(
         "ユーザーが参加しました！\n参加したユーザー: {}",
         event
             .joined
@@ -17,5 +17,19 @@ pub async fn index(event: &Event) -> Result<Option<Vec<MessageObject>>, AppError
             .user_id
             .as_ref()
             .ok_or_else(|| AppError::BadRequest("userId not found".to_string()))?
-    )))]))
+    )))])) */
+    Ok(Some(vec![TextMessage::builder()
+        .text(&format!(
+            "ユーザーが参加しました！\n参加したユーザー: {}",
+            event
+                .joined
+                .as_ref()
+                .ok_or_else(|| AppError::BadRequest("joined not found".to_string()))?
+                .members[0]
+                .user_id
+                .as_ref()
+                .ok_or_else(|| AppError::BadRequest("userId not found".to_string()))?
+        ))
+        .build()
+        .into()]))
 }
