@@ -1,5 +1,5 @@
 use line_bot_sdk::{
-    client::Client,
+    Client,
     models::{
         action::{
              CameraAction, CameraRollAction, DatetimePickerAction, LocationAction,

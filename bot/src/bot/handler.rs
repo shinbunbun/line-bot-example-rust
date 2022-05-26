@@ -1,4 +1,4 @@
-use line_bot_sdk::client::Client;
+use line_bot_sdk::Client;
 use log::info;
 
 use actix_web::{HttpResponse, Responder};

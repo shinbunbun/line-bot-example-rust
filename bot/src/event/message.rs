@@ -1,9 +1,9 @@
 use line_bot_sdk::{
-    client::Client,
     models::{
         message::MessageObject,
         webhook_event::{Event, Message},
     },
+    Client,
 };
 use log::info;
 
