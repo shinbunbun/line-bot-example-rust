@@ -1,9 +1,7 @@
 use serde::{Deserialize, Serialize};
 use typed_builder::TypedBuilder;
 
-use crate::models::webhook_event::Image;
-
-use super::{quick_reply::QuickReply, sender::Sender, Message, MessageObject};
+use super::{quick_reply::QuickReply, sender::Sender, MessageObject};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
