@@ -21,7 +21,7 @@ pub struct QuickReplyItem {
     #[builder(default = "action".to_string())]
     pub type_field: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub image_url: Option<String>,
     pub action: Actions,
 }

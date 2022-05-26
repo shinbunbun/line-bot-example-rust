@@ -14,7 +14,7 @@ pub struct VideoMessage {
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub preview_image_url: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub tracking_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default, setter(strip_option))]

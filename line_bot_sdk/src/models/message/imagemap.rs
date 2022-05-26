@@ -141,7 +141,7 @@ pub struct ImagemapURIAction {
     #[builder(default = "uri".to_string())]
     pub type_field: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub label: Option<String>,
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub link_uri: String,
@@ -173,7 +173,7 @@ pub struct ImagemapMessageAction {
     #[builder(default = "message".to_string())]
     pub type_field: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub label: Option<String>,
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub text: String,

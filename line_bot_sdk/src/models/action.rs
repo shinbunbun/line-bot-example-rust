@@ -24,27 +24,27 @@ pub struct PostbackAction {
     #[builder(default = "postback".to_string())]
     pub type_field: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub label: Option<String>,
     // #[validate(length(max = 300))]
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub data: String,
     // #[validate(length(max = 300))]
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub display_text: Option<String>,
 
     /// This property will be abolished in the future.
     /// https://developers.line.biz/en/reference/messaging-api/#postback-action
     // #[validate(length(max = 300))]
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub text: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub input_option: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub fill_in_text: Option<String>,
 }
 
@@ -84,7 +84,7 @@ pub struct MessageAction {
     #[builder(default = "message".to_string())]
     pub type_field: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub label: Option<String>,
     // #[validate(length(max = 300))]
     #[builder(setter(transform = |x: &str| x.to_string()))]
@@ -114,7 +114,7 @@ pub struct URIAction {
     #[builder(default = "uri".to_string())]
     pub type_field: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub label: Option<String>,
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub uri: String,
@@ -160,20 +160,20 @@ pub struct DatetimePickerAction {
     #[builder(default = "datetimepicker".to_string())]
     pub type_field: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub label: Option<String>,
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub data: String,
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub mode: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub initial: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub max: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub min: Option<String>,
 }
 
@@ -284,7 +284,7 @@ pub struct RichmenuSwitchAction {
     #[builder(default = "richMenuSwitch".to_string())]
     pub type_field: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
+    #[builder(default, setter(transform = |x: &str| Some(x.to_string())))]
     pub label: Option<String>,
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub richmenu_alias_id: String,
