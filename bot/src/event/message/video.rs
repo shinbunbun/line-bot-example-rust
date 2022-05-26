@@ -5,7 +5,10 @@ use line_bot_sdk::{
 
 pub fn handler(message: &Video) -> Result<Option<Vec<MessageObject>>, AppError> {
     Ok(Some(vec![TextMessage::builder()
-        .text("動画を受け取りました！")
+        .text(&format!(
+            "動画を受け取りました！\nメッセージID: {}",
+            message.id
+        ))
         .build()
         .into()]))
 }
