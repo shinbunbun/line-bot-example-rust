@@ -4,9 +4,6 @@ use line_bot_sdk::{
 };
 
 pub async fn index() -> Result<Option<Vec<MessageObject>>, AppError> {
-    /* Ok(Some(vec![MessageObject::Text(TextMessage::new(
-        "招待ありがと!!".to_string(),
-    ))])) */
     Ok(Some(vec![TextMessage::builder()
         .text("招待ありがと!!")
         .build()
