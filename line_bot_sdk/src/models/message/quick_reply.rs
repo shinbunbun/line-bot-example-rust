@@ -18,10 +18,10 @@ pub struct QuickReply {
 #[serde(rename_all = "camelCase")]
 pub struct QuickReplyItem {
     #[serde(rename = "type")]
-    #[builder(default = "action")]
+    #[builder(default = "action".to_string())]
     pub type_field: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default, setter(strip_option))]
+    #[builder(default, setter(transform = |x: Option<String>| x.map(|x| x.to_string())))]
     pub image_url: Option<String>,
     pub action: Actions,
 }
