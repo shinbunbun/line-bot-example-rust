@@ -28,31 +28,3 @@ impl From<LocationMessage> for MessageObject {
         MessageObject::Location(message)
     }
 }
-
-/* impl Message<'_> for LocationMessage {
-    fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
-        self.quick_reply = Some(quick_reply);
-        self
-    }
-    fn with_sender(mut self, sender: super::sender::Sender) -> Self {
-        self.sender = Some(sender);
-        self
-    }
-}
-
-impl LocationMessage {
-    pub fn new(title: String, address: String, latitude: f64, longitude: f64) -> Self {
-        LocationMessage {
-            type_field: "location".to_string(),
-            title,
-            address,
-            latitude,
-            longitude,
-            quick_reply: None,
-            sender: None,
-        }
-    }
-    pub fn build(self) -> super::MessageObject {
-        super::MessageObject::Location(self)
-    }
-} */
