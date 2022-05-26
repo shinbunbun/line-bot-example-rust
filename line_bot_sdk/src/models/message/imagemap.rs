@@ -33,53 +33,12 @@ impl From<ImagemapMessage> for MessageObject {
     }
 }
 
-/* impl Message<'_> for ImagemapMessage {
-    fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
-        self.quick_reply = Some(quick_reply);
-        self
-    }
-    fn with_sender(mut self, sender: super::sender::Sender) -> Self {
-        self.sender = Some(sender);
-        self
-    }
-}
-
-impl ImagemapMessage {
-    pub fn new(
-        base_url: String,
-        alt_text: String,
-        base_size: BaseSize,
-        actions: Vec<Action>,
-    ) -> Self {
-        ImagemapMessage {
-            type_field: "imagemap".to_string(),
-            base_url,
-            alt_text,
-            base_size,
-            video: None,
-            actions,
-            quick_reply: None,
-            sender: None,
-        }
-    }
-    pub fn with_video(mut self, video: Video) -> Self {
-        self.video = Some(video);
-        self
-    }
-} */
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BaseSize {
     pub width: u64,
     pub height: u64,
 }
-
-/* impl BaseSize {
-    pub fn new(width: u64, height: u64) -> Self {
-        BaseSize { width, height }
-    }
-} */
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
@@ -104,17 +63,6 @@ pub struct Area {
     pub width: u64,
     pub height: u64,
 }
-
-/* impl Area {
-    pub fn new(x: u64, y: u64, width: u64, height: u64) -> Self {
-        Area {
-            x,
-            y,
-            width,
-            height,
-        }
-    }
-} */
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
@@ -153,17 +101,6 @@ impl From<ImagemapURIAction> for Action {
     }
 }
 
-/* impl URIAction {
-    pub fn new(link_uri: String, area: Area, label: Option<String>) -> Self {
-        URIAction {
-            type_field: "uri".to_string(),
-            label,
-            link_uri,
-            area,
-        }
-    }
-} */
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct ImagemapMessageAction {
@@ -184,14 +121,3 @@ impl From<ImagemapMessageAction> for Action {
         Action::MessageAction(action)
     }
 }
-
-/* impl MessageAction {
-    pub fn new(text: String, area: Area, label: Option<String>) -> Self {
-        MessageAction {
-            type_field: "message".to_string(),
-            label,
-            text,
-            area,
-        }
-    }
-} */
