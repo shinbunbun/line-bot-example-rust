@@ -26,29 +26,3 @@ impl From<StampMessage> for MessageObject {
         MessageObject::Stamp(message)
     }
 }
-
-/* impl Message<'_> for StampMessage {
-    fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
-        self.quick_reply = Some(quick_reply);
-        self
-    }
-    fn with_sender(mut self, sender: super::sender::Sender) -> Self {
-        self.sender = Some(sender);
-        self
-    }
-}
-
-impl StampMessage {
-    pub fn new(package_id: String, sticker_id: String) -> Self {
-        StampMessage {
-            type_field: "sticker".to_string(),
-            package_id,
-            sticker_id,
-            quick_reply: None,
-            sender: None,
-        }
-    }
-    pub fn build(self) -> super::MessageObject {
-        super::MessageObject::Stamp(self)
-    }
-} */

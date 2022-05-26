@@ -36,29 +36,6 @@ impl From<TemplateMessage> for MessageObject {
     }
 }
 
-/* impl Message<'_> for TemplateMessage {
-    fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
-        self.quick_reply = Some(quick_reply);
-        self
-    }
-    fn with_sender(mut self, sender: super::sender::Sender) -> Self {
-        self.sender = Some(sender);
-        self
-    }
-}
-
-impl TemplateMessage {
-    pub fn new(alt_text: String, template: Template) -> Self {
-        TemplateMessage {
-            type_field: "template".to_string(),
-            alt_text,
-            template,
-            quick_reply: None,
-            sender: None,
-        }
-    }
-} */
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Template {
