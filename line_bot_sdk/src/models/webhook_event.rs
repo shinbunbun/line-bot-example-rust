@@ -158,13 +158,14 @@ pub struct Sticker {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub enum ResourceType {
     STATIC,
     ANIMATION,
     SOUND,
+    #[allow(non_camel_case_types)]
     ANIMATION_SOUND,
     POPUP,
+    #[allow(non_camel_case_types)]
     POPUP_SOUND,
     CUSTOM,
     MESSAGE,
@@ -209,7 +210,9 @@ pub struct Params {
 #[serde(rename_all = "camelCase")]
 pub enum Status {
     SUCCESS,
+    #[allow(non_camel_case_types)]
     RICHMENU_ALIAS_ID_NOTFOUND,
+    #[allow(non_camel_case_types)]
     RICHMENU_NOTFOUND,
     FAILED,
 }
