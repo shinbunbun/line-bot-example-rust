@@ -2,10 +2,13 @@ use actix_http::{encoding::Decoder, header, Payload};
 use awc::ClientResponse;
 use hmac::{Hmac, Mac};
 use log::info;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use sha2::Sha256;
 
-use crate::{error::Error, models::message::MessageObject};
+use crate::{
+    error::Error,
+    models::{message::MessageObject, profile::Profile},
+};
 
 pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
 
@@ -135,16 +138,6 @@ async fn line_get_request(
         return Err(Error::AWCClientError(res_body));
     }
     Ok(response)
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Profile {
-    pub display_name: String,
-    pub user_id: String,
-    pub language: String,
-    pub picture_url: String,
-    pub status_message: String,
 }
 
 #[derive(Debug, Serialize)]
