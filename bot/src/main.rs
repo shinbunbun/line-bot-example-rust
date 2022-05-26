@@ -1,5 +1,6 @@
 mod bot;
 mod config;
+mod error;
 mod event;
 mod router;
 

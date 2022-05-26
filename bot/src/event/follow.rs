@@ -1,7 +1,6 @@
-use line_bot_sdk::{
-    error::AppError,
-    models::message::{text::TextMessage, MessageObject},
-};
+use line_bot_sdk::models::message::{text::TextMessage, MessageObject};
+
+use crate::error::AppError;
 
 pub async fn index() -> Result<Option<Vec<MessageObject>>, AppError> {
     Ok(Some(vec![TextMessage::builder()

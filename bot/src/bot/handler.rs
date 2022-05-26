@@ -4,11 +4,12 @@ use log::info;
 use actix_web::{HttpResponse, Responder};
 use line_bot_sdk::extractor::CustomHeader;
 use line_bot_sdk::models::message::MessageObject;
-use line_bot_sdk::{error::AppError, models::webhook_event};
+use line_bot_sdk::models::webhook_event;
 
 use serde::Serialize;
 
 use crate::config;
+use crate::error::AppError;
 use crate::event::{
     follow, join, leave, member_joined, member_left, message, postback, unfollow, unsend,
 };
@@ -25,7 +26,9 @@ pub async fn handler(
     );
 
     let signature = &custom_header.x_line_signature;
-    client.verify_signature(signature, &context)?;
+    client
+        .verify_signature(signature, &context)
+        .map_err(AppError::LineBotSdkError)?;
 
     let context: webhook_event::Root =
         serde_json::from_str(&context).map_err(AppError::SerdeJson)?;
@@ -54,7 +57,10 @@ async fn webhook_handler(
                 .reply_token
                 .as_ref()
                 .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?;
-            client.reply(reply_token, reply_messages, None).await?;
+            client
+                .reply(reply_token, reply_messages, None)
+                .await
+                .map_err(AppError::LineBotSdkError)?;
         }
     }
     return Ok(HttpResponse::Ok().json("Ok"));

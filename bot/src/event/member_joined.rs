@@ -1,10 +1,9 @@
-use line_bot_sdk::{
-    error::AppError,
-    models::{
-        message::{text::TextMessage, MessageObject},
-        webhook_event::Event,
-    },
+use line_bot_sdk::models::{
+    message::{text::TextMessage, MessageObject},
+    webhook_event::Event,
 };
+
+use crate::error::AppError;
 
 pub async fn index(event: &Event) -> Result<Option<Vec<MessageObject>>, AppError> {
     Ok(Some(vec![TextMessage::builder()

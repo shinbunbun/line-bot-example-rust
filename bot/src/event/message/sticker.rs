@@ -1,11 +1,10 @@
-use line_bot_sdk::{
-    error::AppError,
-    models::{
-        message::MessageObject,
-        message::{stamp::StampMessage, text::TextMessage},
-        webhook_event::Sticker,
-    },
+use line_bot_sdk::models::{
+    message::MessageObject,
+    message::{stamp::StampMessage, text::TextMessage},
+    webhook_event::Sticker,
 };
+
+use crate::error::AppError;
 
 pub fn handler(message: &Sticker) -> Result<Option<Vec<MessageObject>>, AppError> {
     if message.sticker_id == "1988" {
