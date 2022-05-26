@@ -54,27 +54,6 @@ impl From<PostbackAction> for Actions {
     }
 }
 
-/* impl PostbackAction {
-    pub fn new(
-        label: Option<String>,
-        data: String,
-        display_text: Option<String>,
-        text: Option<String>,
-        input_option: Option<String>,
-        fill_in_text: Option<String>,
-    ) -> Self {
-        Self {
-            type_field: "postback".to_string(),
-            label,
-            data,
-            display_text,
-            text,
-            input_option,
-            fill_in_text,
-        }
-    }
-} */
-
 #[derive(
     Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder /* , Validate */,
 )]
@@ -90,16 +69,6 @@ pub struct MessageAction {
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub text: String,
 }
-
-/* impl MessageAction {
-    pub fn new(label: Option<String>, text: String) -> Self {
-        Self {
-            type_field: "message".to_string(),
-            label,
-            text,
-        }
-    }
-} */
 
 impl From<MessageAction> for Actions {
     fn from(action: MessageAction) -> Self {
@@ -123,17 +92,6 @@ pub struct URIAction {
     pub alt_uri: Option<AltUri>,
 }
 
-/* impl URIAction {
-    pub fn new(label: Option<String>, uri: String, alt_uri: Option<AltUri>) -> Self {
-        Self {
-            type_field: "uri".to_string(),
-            label,
-            uri,
-            alt_uri,
-        }
-    }
-} */
-
 impl From<URIAction> for Actions {
     fn from(action: URIAction) -> Self {
         Actions::URIAction(action)
@@ -146,12 +104,6 @@ pub struct AltUri {
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub desktop: String,
 }
-
-/* impl AltUri {
-    pub fn new(desktop: String) -> Self {
-        Self { desktop }
-    }
-} */
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
@@ -177,27 +129,6 @@ pub struct DatetimePickerAction {
     pub min: Option<String>,
 }
 
-/* impl DatetimePickerAction {
-    pub fn new(
-        data: String,
-        mode: String,
-        label: Option<String>,
-        initial: Option<String>,
-        max: Option<String>,
-        min: Option<String>,
-    ) -> Self {
-        Self {
-            type_field: "datetimepicker".to_string(),
-            label,
-            data,
-            mode,
-            initial,
-            max,
-            min,
-        }
-    }
-} */
-
 impl From<DatetimePickerAction> for Actions {
     fn from(action: DatetimePickerAction) -> Self {
         Actions::DatetimePickerAction(action)
@@ -214,15 +145,6 @@ pub struct CameraAction {
     pub label: String,
 }
 
-/* impl CameraAction {
-    pub fn new(label: String) -> Self {
-        Self {
-            type_field: "camera".to_string(),
-            label,
-        }
-    }
-} */
-
 impl From<CameraAction> for Actions {
     fn from(action: CameraAction) -> Self {
         Actions::CameraAction(action)
@@ -238,14 +160,6 @@ pub struct CameraRollAction {
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub label: String,
 }
-/* impl CameraRollAction {
-    pub fn new(label: String) -> Self {
-        Self {
-            type_field: "cameraRoll".to_string(),
-            label,
-        }
-    }
-} */
 
 impl From<CameraRollAction> for Actions {
     fn from(action: CameraRollAction) -> Self {
@@ -262,14 +176,6 @@ pub struct LocationAction {
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub label: String,
 }
-/* impl LocationAction {
-    pub fn new(label: String) -> Self {
-        Self {
-            type_field: "location".to_string(),
-            label,
-        }
-    }
-} */
 
 impl From<LocationAction> for Actions {
     fn from(action: LocationAction) -> Self {
@@ -291,17 +197,6 @@ pub struct RichmenuSwitchAction {
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub data: String,
 }
-
-/* impl RichmenuSwitchAction {
-    pub fn new(label: Option<String>, richmenu_alias_id: String, data: String) -> Self {
-        Self {
-            type_field: "richMenuSwitch".to_string(),
-            label,
-            richmenu_alias_id,
-            data,
-        }
-    }
-} */
 
 impl From<RichmenuSwitchAction> for Actions {
     fn from(action: RichmenuSwitchAction) -> Self {
