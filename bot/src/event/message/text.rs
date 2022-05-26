@@ -380,6 +380,30 @@ pub async fn text_event(
                     .image_background_color("#FFFFFF")
                     .title("タイトル1")
                     .build(),
+                    carousel::Column::builder()
+                    .text("説明2")
+                    .actions(vec![
+                        PostbackAction::builder()
+                        .label("ポストバック")
+                        .data("postback-carousel-2")
+                        .build()
+                        .into(),
+                        URIAction::builder()
+                        .label("URIアクション")
+                        .uri("https://shinbunbun.info/")
+                        .build()
+                        .into(),
+                    ])
+                    .default_action(
+                        URIAction::builder()
+                        .uri("https://shinbunbun.info/images/photos/")
+                        .build()
+                        .into()
+                    )
+                    .thumbnail_image_url("https://shinbunbun.info/images/photos/10.jpeg")
+                    .image_background_color("#FFFFFF")
+                    .title("タイトル2")
+                    .build(),
                 ])
                 .build()
                 .into()
