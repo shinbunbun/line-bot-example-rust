@@ -1,25 +1,32 @@
 use serde::{Deserialize, Serialize};
+use typed_builder::TypedBuilder;
 
 use super::{quick_reply::QuickReply, sender::Sender, Message};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct ImagemapMessage {
     #[serde(rename = "type")]
+    #[builder(default = "imagemap".to_string())]
     pub type_field: String,
+    #[builder(setter(transform = |x: &str| x.to_string()))]
     pub base_url: String,
+    #[builder(setter(transform = |x: &str| x.to_string()))]
     pub alt_text: String,
     pub base_size: BaseSize,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default, setter(strip_option))]
     pub video: Option<Video>,
     pub actions: Vec<Action>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default, setter(strip_option))]
     pub quick_reply: Option<QuickReply>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default, setter(strip_option))]
     pub sender: Option<Sender>,
 }
 
-impl Message<'_> for ImagemapMessage {
+/* impl Message<'_> for ImagemapMessage {
     fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
         self.quick_reply = Some(quick_reply);
         self
@@ -52,27 +59,31 @@ impl ImagemapMessage {
         self.video = Some(video);
         self
     }
-}
+} */
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct BaseSize {
     pub width: u64,
     pub height: u64,
 }
 
-impl BaseSize {
+/* impl BaseSize {
     pub fn new(width: u64, height: u64) -> Self {
         BaseSize { width, height }
     }
-}
+} */
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct Video {
+    #[builder(setter(transform = |x: &str| x.to_string()))]
     original_content_url: String,
+    #[builder(setter(transform = |x: &str| x.to_string()))]
     preview_image_url: String,
     area: Area,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default, setter(strip_option))]
     external_link: Option<ExternalLink>,
     actions: Vec<Action>,
 }
