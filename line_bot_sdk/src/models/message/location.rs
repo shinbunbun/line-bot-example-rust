@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use typed_builder::TypedBuilder;
 
-use super::{quick_reply::QuickReply, sender::Sender, Message, MessageObject};
+use super::{quick_reply::QuickReply, sender::Sender, MessageObject};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
