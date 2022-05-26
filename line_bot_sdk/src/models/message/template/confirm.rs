@@ -30,15 +30,3 @@ impl From<ConfirmTemplate> for Template {
         Template::Confirm(message)
     }
 }
-
-/* impl ConfirmTemplate {
-    pub fn new(text: String, actions: Vec<Actions>) -> Self {
-        ConfirmTemplate {
-            type_field: "confirm".to_string(),
-            text,
-            actions,
-            quick_reply: None,
-            sender: None,
-        }
-    }
-} */

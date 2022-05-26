@@ -46,21 +46,3 @@ impl From<ButtonsTemplate> for Template {
         Template::Buttons(message)
     }
 }
-
-/* impl ButtonsTemplate {
-    pub fn new(text: String, default_action: Actions, actions: Vec<Actions>) -> Self {
-        ButtonsTemplate {
-            type_field: "buttons".to_string(),
-            thumbnail_image_url: None,
-            image_aspect_ratio: None,
-            image_size: None,
-            image_background_color: None,
-            title: None,
-            text,
-            default_action,
-            actions,
-            quick_reply: None,
-            sender: None,
-        }
-    }
-} */

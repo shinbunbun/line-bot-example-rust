@@ -25,31 +25,3 @@ impl From<AudioMessage> for MessageObject {
         MessageObject::Audio(message)
     }
 }
-
-/*
-impl Message<'_> for AudioMessage {
-    fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
-        self.quick_reply = Some(quick_reply);
-        self
-    }
-    fn with_sender(mut self, sender: super::sender::Sender) -> Self {
-        self.sender = Some(sender);
-        self
-    }
-}
-
-impl AudioMessage {
-    pub fn new(original_content_url: String, duration: u64) -> Self {
-        AudioMessage {
-            type_field: "audio".to_string(),
-            original_content_url,
-            duration,
-            quick_reply: None,
-            sender: None,
-        }
-    }
-    pub fn build(self) -> super::MessageObject {
-        super::MessageObject::Audio(self)
-    }
-}
- */
