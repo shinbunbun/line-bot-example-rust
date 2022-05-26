@@ -6,7 +6,7 @@ use self::{
     image_carousel::ImageCarouselTemplate,
 };
 
-use super::{quick_reply::QuickReply, sender::Sender, Message, MessageObject};
+use super::{quick_reply::QuickReply, sender::Sender, MessageObject};
 
 pub mod buttons;
 pub mod carousel;
