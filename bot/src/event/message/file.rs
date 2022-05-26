@@ -4,11 +4,11 @@ use line_bot_sdk::{
 };
 
 pub fn handler(message: &File) -> Result<Option<Vec<MessageObject>>, AppError> {
-    /* Ok(Some(vec![MessageObject::Text(TextMessage::new(
-        "ファイルを受け取りました！".to_string(),
-    ))])) */
     Ok(Some(vec![TextMessage::builder()
-        .text("ファイルを受け取りました！")
+        .text(&format!(
+            "ファイルを受け取りました！\nメッセージID: {}",
+            message.id
+        ))
         .build()
         .into()]))
 }
