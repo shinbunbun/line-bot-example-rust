@@ -1,22 +1,33 @@
 use serde::{Deserialize, Serialize};
+use typed_builder::TypedBuilder;
 
-use super::{quick_reply::QuickReply, sender::Sender, Message};
+use super::{quick_reply::QuickReply, sender::Sender, Message, MessageObject};
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct TextMessage {
     #[serde(rename = "type")]
+    #[builder(default = "text")]
     pub type_field: String,
     pub text: String,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default, setter(strip_option))]
     pub emojis: Option<Vec<Emoji>>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default, setter(strip_option))]
     pub quick_reply: Option<QuickReply>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default, setter(strip_option))]
     pub sender: Option<Sender>,
 }
 
-impl TextMessage {
+impl From<TextMessage> for MessageObject {
+    fn from(message: TextMessage) -> Self {
+        MessageObject::Text(message)
+    }
+}
+
+/* impl TextMessage {
     pub fn new(text: String) -> Self {
         Self {
             type_field: "text".to_string(),
@@ -33,9 +44,9 @@ impl TextMessage {
     pub fn build(self) -> super::MessageObject {
         super::MessageObject::Text(self)
     }
-}
+} */
 
-impl Message<'_> for TextMessage {
+/* impl Message<'_> for TextMessage {
     fn with_quick_reply(mut self, quick_reply: super::quick_reply::QuickReply) -> Self {
         self.quick_reply = Some(quick_reply);
         self
@@ -44,12 +55,11 @@ impl Message<'_> for TextMessage {
         self.sender = Some(sender);
         self
     }
-}
+} */
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct Emoji {
-    #[serde(rename = "type")]
     pub index: u32,
     pub product_id: String,
     pub emoji_id: String,
