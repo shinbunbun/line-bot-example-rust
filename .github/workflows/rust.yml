@@ -35,8 +35,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          /nix/store
-        key: ${{ runner.os }}-cargo-${{ hashFiles('**/shell.nix') }}
+          /nix/store/**
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/shell.nix') }}-0
       
     - name: Setup nix
       uses: cachix/install-nix-action@v17
