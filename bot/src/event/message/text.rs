@@ -1,21 +1,18 @@
 use line_bot_sdk::{
-    Client,
     models::{
         action::{
-             CameraAction, CameraRollAction, DatetimePickerAction, LocationAction,
-            MessageAction, PostbackAction, URIAction,
+            CameraAction, CameraRollAction, DatetimePickerAction, LocationAction, MessageAction,
+            PostbackAction, URIAction,
         },
         message::{
-            audio::AudioMessage,
-            image::ImageMessage,
-            imagemap::ImagemapMessage,
-            location::LocationMessage,
-            stamp::StampMessage,
-            text::TextMessage,
-            video::VideoMessage,
+            audio::AudioMessage, image::ImageMessage, imagemap::ImagemapMessage,
+            location::LocationMessage, stamp::StampMessage, text::TextMessage, video::VideoMessage,
         },
         message::{
-            flex::{FlexMessage, FlexText, FlexImage, FlexBox, FlexSeparator, FlexBubble, FlexButton, FlexBubbleStyles, FlexBlockStyle},
+            flex::{
+                FlexBlockStyle, FlexBox, FlexBubble, FlexBubbleStyles, FlexButton, FlexImage,
+                FlexMessage, FlexSeparator, FlexText,
+            },
             imagemap::ImagemapURIAction,
             quick_reply::{QuickReply, QuickReplyItem},
             template::{
@@ -29,6 +26,7 @@ use line_bot_sdk::{
         },
         webhook_event::{Event, Text},
     },
+    Client,
 };
 
 use crate::error::AppError;
@@ -172,7 +170,7 @@ pub async fn text_event(
             )
             .build()
             .into(),
-        ], 
+        ],
         "確認テンプレート" => vec![
             TemplateMessage::builder()
             .alt_text("確認テンプレート")
