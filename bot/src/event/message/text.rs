@@ -399,7 +399,7 @@ pub async fn text_event(
             let profile = client.get_profile(event.source.user_id.as_ref().ok_or_else(|| AppError::BadRequest("userId not found".to_string()))?).await.map_err(AppError::LineBotSdkError)?;
             vec![
                 TextMessage::builder()
-                .text(&format!("あなたの名前: {}\nユーザーID: {}\nプロフィール画像のURL: {}\nステータスメッセージ: {}", profile.display_name, profile.user_id, profile.picture_url, profile.status_message.unwrap_or("未設定".to_string())))
+                .text(&format!("あなたの名前: {}\nユーザーID: {}\nプロフィール画像のURL: {}\nステータスメッセージ: {}", profile.display_name, profile.user_id, profile.picture_url, profile.status_message.unwrap_or_else(|| "未設定".to_string())))
                 .build()
                 .into(),
             ]
