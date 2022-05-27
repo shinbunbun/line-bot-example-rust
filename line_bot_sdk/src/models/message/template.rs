@@ -39,7 +39,7 @@ impl From<TemplateMessage> for MessageObject {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Template {
-    Buttons(ButtonsTemplate),
+    Buttons(Box<ButtonsTemplate>),
     Confirm(ConfirmTemplate),
     Carousel(CarouselTemplate),
     ImageCarousel(ImageCarouselTemplate),

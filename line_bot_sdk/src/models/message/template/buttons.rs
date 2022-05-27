@@ -43,6 +43,6 @@ pub struct ButtonsTemplate {
 
 impl From<ButtonsTemplate> for Template {
     fn from(message: ButtonsTemplate) -> Self {
-        Template::Buttons(message)
+        Template::Buttons(Box::new(message))
     }
 }

@@ -119,11 +119,7 @@ async fn line_get_request(
         .get(url)
         .insert_header((
             header::AUTHORIZATION,
-            format!(
-                "{}{}",
-                "Bearer ".to_string(),
-                client.get_channel_access_token()
-            ),
+            format!("{}{}", "Bearer ", client.get_channel_access_token()),
         ))
         .send()
         .await

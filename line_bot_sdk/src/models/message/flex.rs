@@ -31,7 +31,7 @@ impl From<FlexMessage> for MessageObject {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum FlexContainer {
-    Bubble(FlexBubble),
+    Bubble(Box<FlexBubble>),
     Carousel(FlexCarousel),
 }
 
@@ -69,7 +69,7 @@ pub struct FlexBubble {
 
 impl From<FlexBubble> for FlexContainer {
     fn from(flex_bubble: FlexBubble) -> Self {
-        FlexContainer::Bubble(flex_bubble)
+        FlexContainer::Bubble(Box::new(flex_bubble))
     }
 }
 
@@ -122,8 +122,8 @@ impl From<FlexCarousel> for FlexContainer {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum FlexHero {
-    Box(FlexBox),
-    Image(FlexImage),
+    Box(Box<FlexBox>),
+    Image(Box<FlexImage>),
     Video(FlexVideo),
 }
 
@@ -212,19 +212,19 @@ pub struct FlexBox {
 
 impl From<FlexBox> for FlexHero {
     fn from(flex_box: FlexBox) -> Self {
-        FlexHero::Box(flex_box)
+        FlexHero::Box(Box::new(flex_box))
     }
 }
 
 impl From<FlexBox> for FlexBoxComponent {
     fn from(flex_box: FlexBox) -> Self {
-        FlexBoxComponent::Box(flex_box)
+        FlexBoxComponent::Box(Box::new(flex_box))
     }
 }
 
 impl From<FlexBox> for FlexVideoComponent {
     fn from(flex_box: FlexBox) -> Self {
-        FlexVideoComponent::Box(flex_box)
+        FlexVideoComponent::Box(Box::new(flex_box))
     }
 }
 
@@ -254,10 +254,10 @@ pub struct FlexBoxBackground {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum FlexBoxComponent {
-    Box(FlexBox),
-    Button(FlexButton),
-    Image(FlexImage),
-    Text(FlexText),
+    Box(Box<FlexBox>),
+    Button(Box<FlexButton>),
+    Image(Box<FlexImage>),
+    Text(Box<FlexText>),
     Separator(FlexSeparator),
     Filler(FlexFiller),
 }
@@ -309,7 +309,7 @@ pub struct FlexButton {
 
 impl From<FlexButton> for FlexBoxComponent {
     fn from(flex_button: FlexButton) -> Self {
-        FlexBoxComponent::Button(flex_button)
+        FlexBoxComponent::Button(Box::new(flex_button))
     }
 }
 
@@ -370,19 +370,19 @@ pub struct FlexImage {
 
 impl From<FlexImage> for FlexHero {
     fn from(flex_image: FlexImage) -> Self {
-        FlexHero::Image(flex_image)
+        FlexHero::Image(Box::new(flex_image))
     }
 }
 
 impl From<FlexImage> for FlexBoxComponent {
     fn from(flex_image: FlexImage) -> Self {
-        FlexBoxComponent::Image(flex_image)
+        FlexBoxComponent::Image(Box::new(flex_image))
     }
 }
 
 impl From<FlexImage> for FlexVideoComponent {
     fn from(flex_image: FlexImage) -> Self {
-        FlexVideoComponent::Image(flex_image)
+        FlexVideoComponent::Image(Box::new(flex_image))
     }
 }
 
@@ -414,8 +414,8 @@ impl From<FlexVideo> for FlexHero {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum FlexVideoComponent {
-    Box(FlexBox),
-    Image(FlexImage),
+    Box(Box<FlexBox>),
+    Image(Box<FlexImage>),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
@@ -525,7 +525,7 @@ pub struct FlexText {
 
 impl From<FlexText> for FlexBoxComponent {
     fn from(flex_text: FlexText) -> Self {
-        FlexBoxComponent::Text(flex_text)
+        FlexBoxComponent::Text(Box::new(flex_text))
     }
 }
 
