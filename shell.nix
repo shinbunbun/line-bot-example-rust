@@ -12,7 +12,6 @@ in pkgs.mkShell {
     ngrok
     openssl
     pkg-config
-    rust-analyzer
   ];
 
 #
