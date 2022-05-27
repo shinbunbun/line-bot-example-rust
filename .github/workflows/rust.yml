@@ -38,7 +38,7 @@ jobs:
       run: nix-shell
 
     - name: Build
-      run: cargo build
+      run: nix-shell && cargo build
 
     - name: Run tests
-      run: cargo test
+      run: nix-shell && cargo test
