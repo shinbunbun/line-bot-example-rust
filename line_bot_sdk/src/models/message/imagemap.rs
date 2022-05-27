@@ -29,7 +29,7 @@ pub struct ImagemapMessage {
 
 impl From<ImagemapMessage> for MessageObject {
     fn from(message: ImagemapMessage) -> Self {
-        MessageObject::Imagemap(message)
+        MessageObject::Imagemap(Box::new(message))
     }
 }
 

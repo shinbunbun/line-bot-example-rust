@@ -27,9 +27,9 @@ pub enum MessageObject {
     Video(VideoMessage),
     Audio(AudioMessage),
     Location(LocationMessage),
-    Imagemap(ImagemapMessage),
-    Template(TemplateMessage),
-    Flex(FlexMessage),
+    Imagemap(Box<ImagemapMessage>),
+    Template(Box<TemplateMessage>),
+    Flex(Box<FlexMessage>),
 }
 
 impl MessageObject {

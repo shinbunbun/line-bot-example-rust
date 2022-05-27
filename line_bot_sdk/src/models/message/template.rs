@@ -32,7 +32,7 @@ pub struct TemplateMessage {
 
 impl From<TemplateMessage> for MessageObject {
     fn from(message: TemplateMessage) -> Self {
-        MessageObject::Template(message)
+        MessageObject::Template(Box::new(message))
     }
 }
 

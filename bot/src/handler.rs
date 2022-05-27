@@ -63,7 +63,7 @@ async fn webhook_handler(
                 .map_err(AppError::LineBotSdkError)?;
         }
     }
-    return Ok(HttpResponse::Ok().json("Ok"));
+    Ok(HttpResponse::Ok().json("Ok"))
 }
 
 #[derive(Debug, Serialize)]

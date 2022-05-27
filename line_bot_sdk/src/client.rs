@@ -53,7 +53,7 @@ impl Client {
             notification_disabled,
         };
         line_post_request(
-            &self,
+            self,
             body,
             &format!("{}/v2/bot/message/reply", API_ENDPOINT_BASE),
         )
@@ -63,7 +63,7 @@ impl Client {
 
     pub async fn get_profile(&self, user_id: &str) -> Result<Profile, Error> {
         let url = format!("{}/v2/bot/profile/{}", API_ENDPOINT_BASE, user_id);
-        let mut res = line_get_request(&self, &url).await?;
+        let mut res = line_get_request(self, &url).await?;
         let res_body = res
             .body()
             .await
@@ -77,7 +77,7 @@ impl Client {
             "{}/v2/bot/message/{}/content",
             API_ENDPOINT_BASE, message_id
         );
-        let mut res = line_get_request(&self, &url).await?;
+        let mut res = line_get_request(self, &url).await?;
         let res_body = res
             .body()
             .await

@@ -24,7 +24,7 @@ pub struct FlexMessage {
 
 impl From<FlexMessage> for MessageObject {
     fn from(message: FlexMessage) -> Self {
-        MessageObject::Flex(message)
+        MessageObject::Flex(Box::new(message))
     }
 }
 
