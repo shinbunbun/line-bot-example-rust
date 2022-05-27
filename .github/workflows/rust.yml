@@ -29,14 +29,14 @@ jobs:
     - name: Setup nix store directory
       run: |
         sudo mkdir -p /nix/store
-        sudo chmod -R 755 /nix
+        sudo chmod -R 777 /nix
 
     - name: Cache NixStore
       uses: actions/cache@v2
       with:
         path: |
-          /nix/store
-        key: ${{ runner.os }}-cargo-${{ hashFiles('**/shell.nix') }}
+          /nix/store/**
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/shell.nix') }}-0
       
     - name: Setup nix
       uses: cachix/install-nix-action@v17
