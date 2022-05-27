@@ -15,7 +15,7 @@ use line_bot_sdk::{
             video::VideoMessage,
         },
         message::{
-            flex::FlexMessage,
+            flex::{FlexMessage, FlexText, FlexImage, FlexBox, FlexSeparator, FlexBubble, FlexButton, FlexBubbleStyles, FlexBlockStyle},
             imagemap::ImagemapURIAction,
             quick_reply::{QuickReply, QuickReplyItem},
             template::{
@@ -25,7 +25,7 @@ use line_bot_sdk::{
                 image_carousel::{self, ImageCarouselTemplate},
                 TemplateMessage,
             },
-            Message, MessageObject,
+            MessageObject,
         },
         webhook_event::{Event, Text},
     },
@@ -302,9 +302,101 @@ pub async fn text_event(
             .into(),
         ],
         "Flex Message" => {
-            let flex_message = FlexMessage::from_json(r##"{"type":"flex","altText":"Flex Message","contents":{"type":"bubble","header":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"Flex Message","color":"#FFFFFF","weight":"bold"}]},"hero":{"type":"image","url":"https://pbs.twimg.com/profile_images/1236928986212478976/wDa51i9T_400x400.jpg","size":"xl"},"body":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"しんぶんぶん","size":"xl","weight":"bold","align":"center"},{"type":"text","text":"会津大学学部一年","align":"center"},{"type":"separator","margin":"md"},{"type":"box","layout":"vertical","contents":[{"type":"button","action":{"type":"uri","label":"ホームページ","uri":"https://shinbunbun.info/"},"style":"primary","offsetBottom":"10px"},{"type":"button","action":{"type":"uri","label":"Twitter","uri":"https://twitter.com/shinbunbun_"},"style":"primary","color":"#1DA1F2"}],"paddingTop":"10px"}]},"styles":{"header":{"backgroundColor":"#008282"}}}}"##).map_err(AppError::LineBotSdkError)?;
-            vec![MessageObject::Flex(flex_message)]
-        }
+            vec![
+                FlexMessage::builder()
+                .alt_text("Flex Message")
+                .contents(
+                    FlexBubble::builder()
+                    .header(
+                        FlexBox::builder()
+                        .layout("vertical")
+                        .contents(vec![
+                            FlexText::builder()
+                            .text("Flex Message")
+                            .color("#FFFFFF")
+                            .weight("bold")
+                            .build()
+                            .into(),
+                        ])
+                        .build()
+                    )
+                    .hero(
+                        FlexImage::builder()
+                        .url("https://pbs.twimg.com/profile_images/1236928986212478976/wDa51i9T_400x400.jpg")
+                        .size("xl")
+                        .build()
+                        .into(),
+                    )
+                    .body(
+                        FlexBox::builder()
+                        .layout("vertical")
+                        .contents(vec![
+                            FlexText::builder()
+                            .text("しんぶんぶん")
+                            .size("xl")
+                            .weight("bold")
+                            .align("center")
+                            .build()
+                            .into(),
+                            FlexText::builder()
+                            .text("会津大学学部一年")
+                            .align("center")
+                            .build()
+                            .into(),
+                            FlexSeparator::builder()
+                            .margin("md")
+                            .build()
+                            .into(),
+                            FlexBox::builder()
+                            .layout("vertical")
+                            .contents(vec![
+                                FlexButton::builder()
+                                .action(
+                                    URIAction::builder()
+                                    .label("ホームページ")
+                                    .uri("https://shinbunbun.info/")
+                                    .build()
+                                    .into(),
+                                )
+                                .style("primary")
+                                .offset_bottom("10px")
+                                .build()
+                                .into(),
+                                FlexButton::builder()
+                                .action(
+                                    URIAction::builder()
+                                    .label("Twitter")
+                                    .uri("https://twitter.com/shinbunbun_")
+                                    .build()
+                                    .into(),
+                                )
+                                .style("primary")
+                                .color("#1DA1F2")
+                                .build()
+                                .into(),
+                            ])
+                            .padding_top("10px")
+                            .build()
+                            .into(),
+                        ])
+                        .build()
+                    )
+                    .styles(
+                        FlexBubbleStyles::builder()
+                        .header(
+                            FlexBlockStyle::builder()
+                            .background_color("#008282")
+                            .build()
+                        )
+                        .build()
+                    )
+                    .build()
+                    .into(),
+                )
+                .build()
+                .into()
+            ]
+        },
         "プロフィール"=>{
             let profile = client.get_profile(&event.source.user_id.as_ref().ok_or_else(|| AppError::BadRequest("userId not found".to_string()))?).await.map_err(AppError::LineBotSdkError)?;
             vec![
