@@ -28,8 +28,10 @@ jobs:
           target
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
       
-    - name: nix-shell
+    - name: Setup nix
       uses: cachix/install-nix-action@v17
+    
+    - name: nix-shell
       run: nix-shell
 
     - name: Build
