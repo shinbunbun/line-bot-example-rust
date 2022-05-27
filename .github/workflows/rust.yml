@@ -41,8 +41,14 @@ jobs:
     - name: nix-shell
       run: nix-shell
 
-    - name: Build
+    - name: cargo build
       run: nix-shell && cargo build
 
-    - name: Run tests
+    - name: cargo test
       run: nix-shell && cargo test
+
+    - name: cargo clippy
+      run: nix-shell && cargo clippy -- -D warnings
+
+    - name: cargo fmt
+      run: nix-shell && cargo fmt --check
