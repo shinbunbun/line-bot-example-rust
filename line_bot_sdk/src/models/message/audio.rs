@@ -3,7 +3,7 @@ use typed_builder::TypedBuilder;
 
 use super::{quick_reply::QuickReply, sender::Sender, MessageObject};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct AudioMessage {
     #[serde(rename = "type")]

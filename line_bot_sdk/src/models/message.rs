@@ -18,7 +18,7 @@ pub mod template;
 pub mod text;
 pub mod video;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum MessageObject {
     Text(TextMessage),

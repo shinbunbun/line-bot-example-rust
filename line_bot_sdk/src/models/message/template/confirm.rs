@@ -8,7 +8,7 @@ use crate::models::{
 
 use super::Template;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct ConfirmTemplate {
     #[serde(rename = "type")]

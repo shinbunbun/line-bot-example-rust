@@ -13,7 +13,7 @@ pub mod carousel;
 pub mod confirm;
 pub mod image_carousel;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct TemplateMessage {
     #[serde(rename = "type")]
@@ -36,7 +36,7 @@ impl From<TemplateMessage> for MessageObject {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Template {
     Buttons(ButtonsTemplate),

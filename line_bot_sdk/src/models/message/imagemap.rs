@@ -3,7 +3,7 @@ use typed_builder::TypedBuilder;
 
 use super::{quick_reply::QuickReply, sender::Sender, MessageObject};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct ImagemapMessage {
     #[serde(rename = "type")]
@@ -33,14 +33,14 @@ impl From<ImagemapMessage> for MessageObject {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BaseSize {
     pub width: u64,
     pub height: u64,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct Video {
     #[builder(setter(transform = |x: &str| x.to_string()))]
@@ -55,7 +55,7 @@ pub struct Video {
     actions: Vec<Action>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Area {
     pub x: u64,
@@ -64,7 +64,7 @@ pub struct Area {
     pub height: u64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct ExternalLink {
     #[builder(setter(transform = |x: &str| x.to_string()))]
@@ -73,14 +73,14 @@ pub struct ExternalLink {
     label: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Action {
     URIAction(ImagemapURIAction),
     MessageAction(ImagemapMessageAction),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct ImagemapURIAction {
     #[serde(rename = "type")]
@@ -101,7 +101,7 @@ impl From<ImagemapURIAction> for Action {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct ImagemapMessageAction {
     #[serde(rename = "type")]

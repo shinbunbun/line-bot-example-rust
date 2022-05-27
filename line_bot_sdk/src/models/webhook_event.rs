@@ -1,13 +1,13 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Root {
     pub destination: String,
     pub events: Vec<Event>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Event {
     #[serde(rename = "type")]
@@ -28,13 +28,13 @@ pub struct Event {
     pub link: Option<Link>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DeliveryContext {
     pub is_redelivery: bool,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum Message {
     Text(Text),
@@ -46,7 +46,7 @@ pub enum Message {
     Sticker(Sticker),
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Text {
     pub id: String,
@@ -55,7 +55,7 @@ pub struct Text {
     pub mention: Option<Mention>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Image {
     pub id: String,
@@ -63,7 +63,7 @@ pub struct Image {
     pub image_set: Option<ImageSet>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ContentProvider {
     #[serde(rename = "type")]
@@ -72,7 +72,7 @@ pub struct ContentProvider {
     pub preview_image_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ImageSet {
     pub id: String,
@@ -80,7 +80,7 @@ pub struct ImageSet {
     pub total: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Emoji {
     pub index: i64,
@@ -89,13 +89,13 @@ pub struct Emoji {
     pub emoji_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Mention {
     pub mentionees: Vec<Mentionee>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Mentionee {
     pub index: i64,
@@ -103,7 +103,7 @@ pub struct Mentionee {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Source {
     #[serde(rename = "type")]
@@ -113,7 +113,7 @@ pub struct Source {
     pub room_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Video {
     pub id: String,
@@ -121,7 +121,7 @@ pub struct Video {
     pub content_provider: ContentProvider,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Audio {
     pub id: String,
@@ -129,7 +129,7 @@ pub struct Audio {
     pub content_provider: ContentProvider,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct File {
     pub id: String,
@@ -137,7 +137,7 @@ pub struct File {
     pub file_size: i64,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Location {
     pub id: String,
@@ -147,7 +147,7 @@ pub struct Location {
     pub longitude: f64,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Sticker {
     pub id: String,
@@ -157,7 +157,7 @@ pub struct Sticker {
     pub keywords: Option<Vec<String>>,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub enum ResourceType {
     STATIC,
     ANIMATION,
@@ -171,32 +171,32 @@ pub enum ResourceType {
     MESSAGE,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Unsend {
     pub message_id: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Join {
     pub members: Vec<Source>,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Left {
     pub members: Vec<Source>,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Postback {
     pub data: String,
     pub params: Option<Params>,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Params {
     pub date: Option<String>,
@@ -206,7 +206,7 @@ pub struct Params {
     pub status: Option<Status>,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum Status {
     SUCCESS,
@@ -217,13 +217,13 @@ pub enum Status {
     FAILED,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoPlayComplete {
     pub tracking_id: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Beacon {
     pub hwid: String,
@@ -232,7 +232,7 @@ pub struct Beacon {
     pub dm: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Link {
     pub result: String,

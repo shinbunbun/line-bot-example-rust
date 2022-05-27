@@ -2,13 +2,13 @@ use crate::models::action::Actions;
 use serde::{Deserialize, Serialize};
 use typed_builder::TypedBuilder;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct QuickReply {
     pub items: Vec<QuickReplyItem>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct QuickReplyItem {
     #[serde(rename = "type")]

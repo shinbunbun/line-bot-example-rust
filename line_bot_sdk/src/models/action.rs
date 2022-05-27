@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use typed_builder::TypedBuilder;
 // use validator::Validate;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Actions {
     PostbackAction(PostbackAction),
@@ -15,9 +15,7 @@ pub enum Actions {
     RichmenuSwitchAction(RichmenuSwitchAction),
 }
 
-#[derive(
-    Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder /* , Validate */,
-)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder /* , Validate */)]
 #[serde(rename_all = "camelCase")]
 pub struct PostbackAction {
     #[serde(rename = "type")]
@@ -54,9 +52,7 @@ impl From<PostbackAction> for Actions {
     }
 }
 
-#[derive(
-    Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder /* , Validate */,
-)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder /* , Validate */)]
 #[serde(rename_all = "camelCase")]
 pub struct MessageAction {
     #[serde(rename = "type")]
@@ -76,7 +72,7 @@ impl From<MessageAction> for Actions {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct URIAction {
     #[serde(rename = "type")]
@@ -98,14 +94,14 @@ impl From<URIAction> for Actions {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct AltUri {
     #[builder(setter(transform = |x: &str| x.to_string()))]
     pub desktop: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct DatetimePickerAction {
     #[serde(rename = "type")]
@@ -135,7 +131,7 @@ impl From<DatetimePickerAction> for Actions {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct CameraAction {
     #[serde(rename = "type")]
@@ -151,7 +147,7 @@ impl From<CameraAction> for Actions {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct CameraRollAction {
     #[serde(rename = "type")]
@@ -167,7 +163,7 @@ impl From<CameraRollAction> for Actions {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct LocationAction {
     #[serde(rename = "type")]
@@ -183,7 +179,7 @@ impl From<LocationAction> for Actions {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct RichmenuSwitchAction {
     #[serde(rename = "type")]

@@ -8,7 +8,7 @@ use crate::models::{
 
 use super::Template;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct CarouselTemplate {
     #[serde(rename = "type")]
@@ -35,7 +35,7 @@ impl From<CarouselTemplate> for Template {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct Column {
     #[serde(skip_serializing_if = "Option::is_none")]

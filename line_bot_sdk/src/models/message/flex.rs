@@ -5,7 +5,7 @@ use crate::models::action::{Actions, URIAction};
 
 use super::{quick_reply::QuickReply, sender::Sender, MessageObject};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexMessage {
     #[serde(rename = "type")]
@@ -28,14 +28,14 @@ impl From<FlexMessage> for MessageObject {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum FlexContainer {
     Bubble(FlexBubble),
     Carousel(FlexCarousel),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexBubble {
     #[serde(rename = "type")]
@@ -73,7 +73,7 @@ impl From<FlexBubble> for FlexContainer {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexBubbleStyles {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -90,7 +90,7 @@ pub struct FlexBubbleStyles {
     pub footer: Option<FlexBlockStyle>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexBlockStyle {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -104,7 +104,7 @@ pub struct FlexBlockStyle {
     pub separator_color: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexCarousel {
     #[serde(rename = "type")]
@@ -119,7 +119,7 @@ impl From<FlexCarousel> for FlexContainer {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum FlexHero {
     Box(FlexBox),
@@ -127,7 +127,7 @@ pub enum FlexHero {
     Video(FlexVideo),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexBox {
     #[serde(rename = "type")]
@@ -228,7 +228,7 @@ impl From<FlexBox> for FlexVideoComponent {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexBoxBackground {
     #[serde(rename = "type")]
@@ -251,7 +251,7 @@ pub struct FlexBoxBackground {
     pub center_position: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum FlexBoxComponent {
     Box(FlexBox),
@@ -262,7 +262,7 @@ pub enum FlexBoxComponent {
     Filler(FlexFiller),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexButton {
     #[serde(rename = "type")]
@@ -313,7 +313,7 @@ impl From<FlexButton> for FlexBoxComponent {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexImage {
     #[serde(rename = "type")]
@@ -386,7 +386,7 @@ impl From<FlexImage> for FlexVideoComponent {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexVideo {
     #[serde(rename = "type")]
@@ -411,14 +411,14 @@ impl From<FlexVideo> for FlexHero {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum FlexVideoComponent {
     Box(FlexBox),
     Image(FlexImage),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexIcon {
     #[serde(rename = "type")]
@@ -452,7 +452,7 @@ pub struct FlexIcon {
     pub aspect_ratio: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexText {
     #[serde(rename = "type")]
@@ -529,7 +529,7 @@ impl From<FlexText> for FlexBoxComponent {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexSpan {
     #[serde(rename = "type")]
@@ -555,7 +555,7 @@ pub struct FlexSpan {
     pub decoration: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexSeparator {
     #[serde(rename = "type")]
@@ -575,7 +575,7 @@ impl From<FlexSeparator> for FlexBoxComponent {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TypedBuilder)]
+#[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
 pub struct FlexFiller {
     #[serde(rename = "type")]

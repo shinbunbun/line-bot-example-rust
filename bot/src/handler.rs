@@ -6,7 +6,7 @@ use line_bot_sdk::extractor::CustomHeader;
 use line_bot_sdk::models::message::MessageObject;
 use line_bot_sdk::models::webhook_event;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::config;
 use crate::error::AppError;
@@ -66,7 +66,7 @@ async fn webhook_handler(
     Ok(HttpResponse::Ok().json("Ok"))
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct ReplyMessage {
     #[serde(rename(serialize = "replyToken"))]
     reply_token: String,

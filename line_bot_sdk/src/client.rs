@@ -98,11 +98,7 @@ async fn line_post_request<T: serde::Serialize>(
         .post(url)
         .insert_header((
             header::AUTHORIZATION,
-            format!(
-                "{}{}",
-                "Bearer ".to_string(),
-                client.get_channel_access_token()
-            ),
+            format!("{}{}", "Bearer ", client.get_channel_access_token()),
         ))
         .send_json(&body)
         .await
