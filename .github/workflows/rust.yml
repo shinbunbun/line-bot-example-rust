@@ -28,6 +28,13 @@ jobs:
           ~/.cargo/git
           target
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+
+    - name: Cache NixStore
+      uses: actions/cache@v2
+      with:
+        path: |
+          /nix/store
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/shell.nix') }}
       
     - name: Setup nix
       uses: cachix/install-nix-action@v17
