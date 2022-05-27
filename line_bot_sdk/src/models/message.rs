@@ -1,7 +1,7 @@
 use self::{
     audio::AudioMessage, flex::FlexMessage, image::ImageMessage, imagemap::ImagemapMessage,
-    location::LocationMessage, quick_reply::QuickReply, sender::Sender, stamp::StampMessage,
-    template::TemplateMessage, text::TextMessage, video::VideoMessage,
+    location::LocationMessage, stamp::StampMessage, template::TemplateMessage, text::TextMessage,
+    video::VideoMessage,
 };
 use crate::error::Error;
 use serde::{Deserialize, Serialize};
@@ -32,13 +32,8 @@ pub enum MessageObject {
     Flex(FlexMessage),
 }
 
-pub trait Message<'a> {
-    fn from_json(json: &'a str) -> Result<Self, Error>
-    where
-        Self: std::marker::Sized + Deserialize<'a>,
-    {
+impl MessageObject {
+    pub fn from_json(json: &str) -> Result<Self, Error> {
         serde_json::from_str(json).map_err(Error::SerdeJsonError)
     }
-    fn with_quick_reply(self, quick_reply: QuickReply) -> Self;
-    fn with_sender(self, sender: Sender) -> Self;
 }
