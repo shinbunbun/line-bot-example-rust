@@ -7,5 +7,6 @@ pub struct Profile {
     pub user_id: String,
     pub language: String,
     pub picture_url: String,
-    pub status_message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
 }
