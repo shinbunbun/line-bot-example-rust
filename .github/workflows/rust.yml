@@ -31,7 +31,7 @@ jobs:
       run: |
         sudo mkdir -p /nix/store
         sudo chmod -R 1777 /nix
-	sudo chown -R $USER /nix
+        sudo chown -R $USER /nix
 
     - name: Cache NixStore
       uses: actions/cache@v2
