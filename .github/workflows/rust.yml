@@ -42,9 +42,7 @@ jobs:
       id: cache-nix-store
       uses: actions/cache@v2
       with:
-        key: installer4-${{ github.sha }}
-        restore-keys: |
-          installer4-
+        key: key: ${{ runner.os }}-nix-${{ hashFiles('**/shell.nix') }}
         path: |
           nix_store_dir
           nix_store_db.sqlite
