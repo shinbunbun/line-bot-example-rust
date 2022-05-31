@@ -31,6 +31,12 @@ jobs:
       uses: cachix/install-nix-action@v17
       with:
         nix_path: nixpkgs=channel:nixos-21.11
+        extra_nix_config: |
+          # save space on disk and in cache
+          auto-optimise-store = true
+          # keep all store paths necessary to build the outputs
+          keep-outputs = true
+          keep-derivations = true
 
     - name: cache nix store
       id: cache-nix-store
