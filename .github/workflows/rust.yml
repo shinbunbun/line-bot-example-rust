@@ -42,7 +42,7 @@ jobs:
       id: cache-nix-store
       uses: actions/cache@v2
       with:
-        key: key: ${{ runner.os }}-nix-${{ hashFiles('**/shell.nix') }}
+        key: ${{ runner.os }}-nix-${{ hashFiles('**/shell.nix') }}
         path: |
           nix_store_dir
           nix_store_db.sqlite
