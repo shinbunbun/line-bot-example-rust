@@ -80,8 +80,6 @@ jobs:
 
     - name: prepare nix store for caching
       run: |
-        # delete old stuff not relevant to this build
-        nix-collect-garbage
         sudo systemctl stop nix-daemon
         # move store to a place where the cache action can read it
         sudo mv /nix/store nix_store_dir
