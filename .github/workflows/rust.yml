@@ -27,31 +27,37 @@ jobs:
           target
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
 
-    - name: Setup nix store directory
-      run: |
-        sudo mkdir -p /nix/store
-        sudo chmod -R 1777 /nix
-        sudo chown -R $USER /nix
-    
-    - name: Cache NixStore
-      uses: actions/cache@v2
-      with:
-        path: |
-          /nix/store/**
-          /nix/var/nix/*/*
-          /nix/var/nix/db/*
-          /nix/var/nix/db/*/**
-          !/nix/var/nix/daemon-socket/socket
-          !/nix/var/nix/userpool/*
-          !/nix/var/nix/gc.lock
-          !/nix/var/nix/db/big-lock
-          !/nix/var/nix/db/reserved
-        key: ${{ runner.os }}-nix-${{ hashFiles('**/shell.nix') }}-0
-
     - name: Setup nix
       uses: cachix/install-nix-action@v17
       with:
         nix_path: nixpkgs=channel:nixos-21.11
+
+    - name: cache nix store
+      id: cache-nix-store
+      uses: actions/cache@v2
+      with:
+        key: installer4-${{ github.sha }}
+        restore-keys: |
+          installer4-
+        path: |
+          nix_store_dir
+          nix_store_db.sqlite
+    
+    - name: restore cached nix store
+      run: |
+        if [ -e nix_store_db.sqlite ]; then
+          sudo systemctl stop nix-daemon
+          # put cached store paths back in their proper locations
+          sudo rm -rf /nix/store /nix/var/nix/db/db.sqlite
+          sudo mv nix_store_dir /nix/store
+          sudo cp nix_store_db.sqlite /nix/var/nix/db/db.sqlite
+          # fix store permissions
+          sudo chmod 1775 /nix/store
+          sudo chown root:nixbld /nix/store
+          sudo chmod 0644 /nix/var/nix/db/db.sqlite
+          sudo chown -R root:root /nix/store /nix/var/nix/db/db.sqlite
+          sudo systemctl start nix-daemon
+        fi
 
     - name: nix-shell
       run: nix-shell
@@ -68,5 +74,11 @@ jobs:
     - name: cargo fmt
       run: nix-shell && cargo fmt --check
 
-    - name: Fix permissions
-      run: sudo chmod -R a+rwx /nix/store
+    - name: prepare nix store for caching
+      run: |
+        # delete old stuff not relevant to this build
+        nix-collect-garbage
+        sudo systemctl stop nix-daemon
+        # move store to a place where the cache action can read it
+        sudo mv /nix/store nix_store_dir
+        sudo mv /nix/var/nix/db/db.sqlite nix_store_db.sqlite
