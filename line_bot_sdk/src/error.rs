@@ -8,6 +8,7 @@ pub enum Error {
     AwcSendRequestError(awc::error::SendRequestError),
     FromUtf8Error(std::string::FromUtf8Error),
     AWCClientError(String),
+    SerdeUrlEncodedError(serde_urlencoded::ser::Error),
 }
 
 impl std::fmt::Display for Error {
@@ -27,6 +28,7 @@ impl std::fmt::Display for Error {
             }
             Error::FromUtf8Error(errors) => write!(f, "std string FromUtf8Error: {}", errors),
             Error::AWCClientError(errors) => write!(f, "AWC client error: {}", errors),
+            Error::SerdeUrlEncodedError(errors) => write!(f, "serde_urlencoded error: {}", errors),
         }
     }
 }
