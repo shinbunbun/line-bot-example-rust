@@ -104,6 +104,36 @@ impl Client {
         Ok(response)
     }
 
+    async fn delete<T: Serialize>(
+        &self,
+        url: &str,
+        query: Option<&T>,
+    ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
+        let url = match query {
+            Some(query) => {
+                let query =
+                    serde_urlencoded::to_string(query).map_err(Error::SerdeUrlEncodedError)?;
+                format!("{}?{}", url, query)
+            }
+            None => url.to_string(),
+        };
+        let mut response = awc::Client::new()
+            .delete(url)
+            .insert_header((
+                header::AUTHORIZATION,
+                format!("{}{}", "Bearer ", self.get_channel_access_token()),
+            ))
+            .send()
+            .await
+            .map_err(Error::AwcSendRequestError)?;
+        if response.status() != 200 {
+            let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
+            let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
+            return Err(Error::AWCClientError(res_body, "".to_string()));
+        }
+        Ok(response)
+    }
+
     pub fn verify_signature(&self, signature: &str, context: &str) -> Result<(), Error> {
         type HmacSha256 = Hmac<Sha256>;
         let secret = self.get_channel_secret();
