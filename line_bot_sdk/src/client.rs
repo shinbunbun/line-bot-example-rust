@@ -1,7 +1,6 @@
 use actix_http::{encoding::Decoder, header, Payload};
 use awc::ClientResponse;
 use hmac::{Hmac, Mac};
-use log::info;
 use serde::Serialize;
 use sha2::Sha256;
 
@@ -30,6 +29,112 @@ impl Client {
     pub fn get_channel_secret(&self) -> &str {
         &self.channel_secret
     }
+    async fn get<T: Serialize>(
+        &self,
+        url: &str,
+        query: Option<&T>,
+    ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
+        let url = match query {
+            Some(query) => {
+                let query =
+                    serde_urlencoded::to_string(query).map_err(Error::SerdeUrlEncodedError)?;
+                format!("{}?{}", url, query)
+            }
+            None => url.to_string(),
+        };
+        let mut response = awc::Client::new()
+            .get(url)
+            .insert_header((
+                header::AUTHORIZATION,
+                format!("{}{}", "Bearer ", self.get_channel_access_token()),
+            ))
+            .send()
+            .await
+            .map_err(Error::AwcSendRequestError)?;
+        if response.status() != 200 {
+            let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
+            let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
+            return Err(Error::AWCClientError(res_body, "".to_string()));
+        }
+        Ok(response)
+    }
+    async fn post<T: serde::Serialize>(
+        &self,
+        body: T,
+        url: &str,
+    ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
+        let json = serde_json::to_string(&body).expect("json encode error");
+        let mut response = awc::Client::new()
+            .post(url)
+            .insert_header((
+                header::AUTHORIZATION,
+                format!("{}{}", "Bearer ", self.get_channel_access_token()),
+            ))
+            .send_json(&body)
+            .await
+            .map_err(Error::AwcSendRequestError)?;
+        if response.status() != 200 {
+            let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
+            let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
+            return Err(Error::AWCClientError(res_body, json));
+        }
+        Ok(response)
+    }
+
+    #[allow(clippy::all)]
+    pub async fn put<T: serde::Serialize>(
+        &self,
+        body: T,
+        url: &str,
+    ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
+        let json = serde_json::to_string(&body).expect("json encode error");
+        let mut response = awc::Client::new()
+            .put(url)
+            .insert_header((
+                header::AUTHORIZATION,
+                format!("{}{}", "Bearer ", self.get_channel_access_token()),
+            ))
+            .send_json(&body)
+            .await
+            .map_err(Error::AwcSendRequestError)?;
+        if response.status() != 200 {
+            let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
+            let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
+            return Err(Error::AWCClientError(res_body, json));
+        }
+        Ok(response)
+    }
+
+    pub async fn delete<T: Serialize>(
+        &self,
+        url: &str,
+        query: Option<&T>,
+    ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
+        let url = match query {
+            Some(query) => {
+                let query =
+                    serde_urlencoded::to_string(query).map_err(Error::SerdeUrlEncodedError)?;
+                format!("{}?{}", url, query)
+            }
+            None => url.to_string(),
+        };
+        let mut response = awc::Client::new()
+            .delete(url)
+            .insert_header((
+                header::AUTHORIZATION,
+                format!("{}{}", "Bearer ", self.get_channel_access_token()),
+            ))
+            .send()
+            .await
+            .map_err(Error::AwcSendRequestError)?;
+        if response.status() != 200 {
+            let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
+            let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
+            return Err(Error::AWCClientError(res_body, "".to_string()));
+        }
+        Ok(response)
+    }
+
     pub fn verify_signature(&self, signature: &str, context: &str) -> Result<(), Error> {
         type HmacSha256 = Hmac<Sha256>;
         let secret = self.get_channel_secret();
@@ -52,18 +157,14 @@ impl Client {
             messages,
             notification_disabled,
         };
-        line_post_request(
-            self,
-            body,
-            &format!("{}/v2/bot/message/reply", API_ENDPOINT_BASE),
-        )
-        .await?;
+        self.post(body, &format!("{}/v2/bot/message/reply", API_ENDPOINT_BASE))
+            .await?;
         Ok(())
     }
 
     pub async fn get_profile(&self, user_id: &str) -> Result<Profile, Error> {
         let url = format!("{}/v2/bot/profile/{}", API_ENDPOINT_BASE, user_id);
-        let mut res = line_get_request(self, &url).await?;
+        let mut res = self.get(&url, None::<&[(); 0]>).await?;
         let res_body = res
             .body()
             .await
@@ -77,7 +178,7 @@ impl Client {
             "{}/v2/bot/message/{}/content",
             API_ENDPOINT_BASE, message_id
         );
-        let mut res = line_get_request(self, &url).await?;
+        let mut res = self.get(&url, None::<&[(); 0]>).await?;
         let res_body = res
             .body()
             .await
@@ -85,51 +186,6 @@ impl Client {
             .to_vec();
         Ok(res_body)
     }
-}
-
-async fn line_post_request<T: serde::Serialize>(
-    client: &Client,
-    body: T,
-    url: &str,
-) -> Result<ClientResponse<Decoder<Payload>>, Error> {
-    let json = serde_json::to_string(&body).expect("json encode error");
-    info!("{}", json);
-    let mut response = awc::Client::new()
-        .post(url)
-        .insert_header((
-            header::AUTHORIZATION,
-            format!("{}{}", "Bearer ", client.get_channel_access_token()),
-        ))
-        .send_json(&body)
-        .await
-        .map_err(Error::AwcSendRequestError)?;
-    if response.status() != 200 {
-        let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
-        let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
-        return Err(Error::AWCClientError(res_body));
-    }
-    Ok(response)
-}
-
-async fn line_get_request(
-    client: &Client,
-    url: &str,
-) -> Result<ClientResponse<Decoder<Payload>>, Error> {
-    let mut response = awc::Client::new()
-        .get(url)
-        .insert_header((
-            header::AUTHORIZATION,
-            format!("{}{}", "Bearer ", client.get_channel_access_token()),
-        ))
-        .send()
-        .await
-        .map_err(Error::AwcSendRequestError)?;
-    if response.status() != 200 {
-        let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
-        let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
-        return Err(Error::AWCClientError(res_body));
-    }
-    Ok(response)
 }
 
 #[derive(Debug, Serialize)]

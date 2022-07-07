@@ -7,7 +7,8 @@ pub enum Error {
     ActixWebPayloadError(actix_web::error::PayloadError),
     AwcSendRequestError(awc::error::SendRequestError),
     FromUtf8Error(std::string::FromUtf8Error),
-    AWCClientError(String),
+    AWCClientError(String, String),
+    SerdeUrlEncodedError(serde_urlencoded::ser::Error),
 }
 
 impl std::fmt::Display for Error {
@@ -26,7 +27,12 @@ impl std::fmt::Display for Error {
                 write!(f, "awc error SnedRequest error: {}", errors)
             }
             Error::FromUtf8Error(errors) => write!(f, "std string FromUtf8Error: {}", errors),
-            Error::AWCClientError(errors) => write!(f, "AWC client error: {}", errors),
+            Error::AWCClientError(errors, request_body) => write!(
+                f,
+                "AWC client error: {}\nRequest body: {}",
+                errors, request_body
+            ),
+            Error::SerdeUrlEncodedError(errors) => write!(f, "serde_urlencoded error: {}", errors),
         }
     }
 }
