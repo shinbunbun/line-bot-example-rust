@@ -13,6 +13,7 @@ in pkgs.mkShell {
     openssl
     pkg-config
     rust-analyzer
+    cargo-watch
   ];
 
   #
