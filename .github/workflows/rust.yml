@@ -71,6 +71,9 @@ jobs:
 
     - name: cargo test
       run: nix-shell && cargo test
+      env:
+        CHANNEL_ACCESS_TOKEN: ${{ secrets.CHANNEL_ACCESS_TOKEN }}
+        CHANNEL_SECRET: ${{ secrets.CHANNEL_SECRET }}
 
     - name: cargo clippy
       run: nix-shell && cargo clippy -- -D warnings
