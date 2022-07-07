@@ -81,7 +81,8 @@ impl Client {
         Ok(response)
     }
 
-    async fn put<T: serde::Serialize>(
+    #[allow(clippy::all)]
+    pub async fn put<T: serde::Serialize>(
         &self,
         body: T,
         url: &str,
@@ -104,7 +105,7 @@ impl Client {
         Ok(response)
     }
 
-    async fn delete<T: Serialize>(
+    pub async fn delete<T: Serialize>(
         &self,
         url: &str,
         query: Option<&T>,
