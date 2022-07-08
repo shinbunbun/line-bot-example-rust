@@ -16,13 +16,15 @@ pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
 pub struct Client {
     channel_access_token: String,
     channel_secret: String,
+    channel_id: String,
 }
 
 impl Client {
-    pub fn new(channel_access_token: String, channel_secret: String) -> Self {
+    pub fn new(channel_access_token: String, channel_secret: String, channel_id: String) -> Self {
         Self {
             channel_access_token,
             channel_secret,
+            channel_id,
         }
     }
     pub fn get_channel_access_token(&self) -> &str {
@@ -30,6 +32,9 @@ impl Client {
     }
     pub fn get_channel_secret(&self) -> &str {
         &self.channel_secret
+    }
+    pub fn get_channel_id(&self) -> &str {
+        &self.channel_id
     }
     async fn get<T: Serialize>(
         &self,

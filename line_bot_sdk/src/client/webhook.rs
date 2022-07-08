@@ -98,6 +98,7 @@ mod test {
         crate::Client::new(
             env::var("CHANNEL_ACCESS_TOKEN").unwrap(),
             env::var("CHANNEL_SECRET").unwrap(),
+            env::var("CHANNEL_ID").unwrap(),
         )
     }
 
