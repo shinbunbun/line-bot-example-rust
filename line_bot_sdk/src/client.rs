@@ -40,6 +40,8 @@ impl Client {
         &self,
         url: &str,
         query: Option<&T>,
+        content_type: Option<&str>,
+        with_authorization: bool,
     ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
         let url = match query {
             Some(query) => {
@@ -49,15 +51,17 @@ impl Client {
             }
             None => url.to_string(),
         };
-        let mut response = awc::Client::new()
-            .get(url)
-            .insert_header((
+        let mut response = awc::Client::new().get(url);
+        if with_authorization {
+            response = response.insert_header((
                 header::AUTHORIZATION,
                 format!("{}{}", "Bearer ", self.get_channel_access_token()),
-            ))
-            .send()
-            .await
-            .map_err(Error::AwcSendRequestError)?;
+            ));
+        }
+        if let Some(content_type) = content_type {
+            response = response.content_type(content_type);
+        }
+        let mut response = response.send().await.map_err(Error::AwcSendRequestError)?;
         if response.status() != 200 {
             let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
             let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
@@ -65,6 +69,7 @@ impl Client {
         }
         Ok(response)
     }
+
     async fn post<T: serde::Serialize>(
         &self,
         body: T,
@@ -171,7 +176,7 @@ impl Client {
 
     pub async fn get_profile(&self, user_id: &str) -> Result<Profile, Error> {
         let url = format!("{}/v2/bot/profile/{}", API_ENDPOINT_BASE, user_id);
-        let mut res = self.get(&url, None::<&[(); 0]>).await?;
+        let mut res = self.get(&url, None::<&[(); 0]>, None, true).await?;
         let res_body = res
             .body()
             .await
@@ -185,7 +190,7 @@ impl Client {
             "{}/v2/bot/message/{}/content",
             API_ENDPOINT_BASE, message_id
         );
-        let mut res = self.get(&url, None::<&[(); 0]>).await?;
+        let mut res = self.get(&url, None::<&[(); 0]>, None, true).await?;
         let res_body = res
             .body()
             .await
