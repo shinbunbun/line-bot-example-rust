@@ -2,6 +2,7 @@ name: Rust
 
 on:
   push:
+    branch: master
   pull_request:
 
 env:
