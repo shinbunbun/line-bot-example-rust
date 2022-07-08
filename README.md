@@ -13,7 +13,7 @@ botディレクトリがLINEBot本体のコード、line-bot-sdkディレクト�
 
 【SDK未実装の機能】
 - [ ] LINE Things全般
-- [ ] [Webhook設定](https://developers.line.biz/ja/reference/messaging-api/#webhook-settings)
+- [ x ] [Webhook設定](https://developers.line.biz/ja/reference/messaging-api/#webhook-settings)
 - [ ] [チャネルアクセストーン](https://developers.line.biz/ja/reference/messaging-api/#channel-access-token)
 - [ ] [メッセージ（応答メッセージを除く）](https://developers.line.biz/ja/reference/messaging-api/#send-broadcast-message)
 - [ ] [オーディエンス管理](https://developers.line.biz/ja/reference/messaging-api/#manage-audience-group)
