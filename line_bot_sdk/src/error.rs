@@ -9,6 +9,7 @@ pub enum Error {
     FromUtf8Error(std::string::FromUtf8Error),
     AWCClientError(String, String),
     SerdeUrlEncodedError(serde_urlencoded::ser::Error),
+    JoseError(josekit::JoseError),
 }
 
 impl std::fmt::Display for Error {
@@ -33,6 +34,7 @@ impl std::fmt::Display for Error {
                 errors, request_body
             ),
             Error::SerdeUrlEncodedError(errors) => write!(f, "serde_urlencoded error: {}", errors),
+            Error::JoseError(errors) => write!(f, "jose error: {}", errors),
         }
     }
 }
