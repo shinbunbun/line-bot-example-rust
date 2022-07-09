@@ -22,6 +22,8 @@ impl Client {
             .get(
                 &format!("{}/v2/bot/channel/webhook/endpoint", API_ENDPOINT_BASE),
                 None::<&[(); 0]>,
+                None,
+                true,
             )
             .await?;
         let res_body = res
@@ -98,6 +100,7 @@ mod test {
         crate::Client::new(
             env::var("CHANNEL_ACCESS_TOKEN").unwrap(),
             env::var("CHANNEL_SECRET").unwrap(),
+            env::var("CHANNEL_ID").unwrap(),
         )
     }
 

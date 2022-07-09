@@ -2,6 +2,8 @@ name: Rust
 
 on:
   push:
+    branches: 
+      - master
   pull_request:
 
 env:
@@ -74,6 +76,10 @@ jobs:
       env:
         CHANNEL_ACCESS_TOKEN: ${{ secrets.CHANNEL_ACCESS_TOKEN }}
         CHANNEL_SECRET: ${{ secrets.CHANNEL_SECRET }}
+        CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
+        JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
+        JWT_TEST_KID: ${{ secrets.JWT_TEST_KID }}
+
 
     - name: cargo clippy
       run: nix-shell && cargo clippy -- -D warnings

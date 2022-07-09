@@ -11,3 +11,7 @@ pub fn get_token() -> Result<String, VarError> {
 pub fn get_secret() -> Result<String, VarError> {
     get_env("CHANNEL_SECRET".to_string())
 }
+
+pub fn get_id() -> Result<String, VarError> {
+    get_env("CHANNLE_ID".to_string())
+}

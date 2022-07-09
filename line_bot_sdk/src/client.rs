@@ -1,3 +1,4 @@
+pub mod token;
 pub mod webhook;
 
 use actix_http::{encoding::Decoder, header, Payload};
@@ -16,13 +17,15 @@ pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
 pub struct Client {
     channel_access_token: String,
     channel_secret: String,
+    channel_id: String,
 }
 
 impl Client {
-    pub fn new(channel_access_token: String, channel_secret: String) -> Self {
+    pub fn new(channel_access_token: String, channel_secret: String, channel_id: String) -> Self {
         Self {
             channel_access_token,
             channel_secret,
+            channel_id,
         }
     }
     pub fn get_channel_access_token(&self) -> &str {
@@ -31,10 +34,15 @@ impl Client {
     pub fn get_channel_secret(&self) -> &str {
         &self.channel_secret
     }
+    pub fn get_channel_id(&self) -> &str {
+        &self.channel_id
+    }
     async fn get<T: Serialize>(
         &self,
         url: &str,
         query: Option<&T>,
+        content_type: Option<&str>,
+        with_authorization: bool,
     ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
         let url = match query {
             Some(query) => {
@@ -44,15 +52,17 @@ impl Client {
             }
             None => url.to_string(),
         };
-        let mut response = awc::Client::new()
-            .get(url)
-            .insert_header((
+        let mut response = awc::Client::new().get(url);
+        if with_authorization {
+            response = response.insert_header((
                 header::AUTHORIZATION,
                 format!("{}{}", "Bearer ", self.get_channel_access_token()),
-            ))
-            .send()
-            .await
-            .map_err(Error::AwcSendRequestError)?;
+            ));
+        }
+        if let Some(content_type) = content_type {
+            response = response.content_type(content_type);
+        }
+        let mut response = response.send().await.map_err(Error::AwcSendRequestError)?;
         if response.status() != 200 {
             let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
             let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
@@ -60,6 +70,7 @@ impl Client {
         }
         Ok(response)
     }
+
     async fn post<T: serde::Serialize>(
         &self,
         body: T,
@@ -73,6 +84,25 @@ impl Client {
                 format!("{}{}", "Bearer ", self.get_channel_access_token()),
             ))
             .send_json(&body)
+            .await
+            .map_err(Error::AwcSendRequestError)?;
+        if response.status() != 200 {
+            let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
+            let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
+            return Err(Error::AWCClientError(res_body, json));
+        }
+        Ok(response)
+    }
+
+    async fn post_form<T: serde::Serialize>(
+        &self,
+        body: T,
+        url: &str,
+    ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
+        let json = serde_json::to_string(&body).expect("json encode error");
+        let mut response = awc::Client::new()
+            .post(url)
+            .send_form(&body)
             .await
             .map_err(Error::AwcSendRequestError)?;
         if response.status() != 200 {
@@ -166,7 +196,7 @@ impl Client {
 
     pub async fn get_profile(&self, user_id: &str) -> Result<Profile, Error> {
         let url = format!("{}/v2/bot/profile/{}", API_ENDPOINT_BASE, user_id);
-        let mut res = self.get(&url, None::<&[(); 0]>).await?;
+        let mut res = self.get(&url, None::<&[(); 0]>, None, true).await?;
         let res_body = res
             .body()
             .await
@@ -180,7 +210,7 @@ impl Client {
             "{}/v2/bot/message/{}/content",
             API_ENDPOINT_BASE, message_id
         );
-        let mut res = self.get(&url, None::<&[(); 0]>).await?;
+        let mut res = self.get(&url, None::<&[(); 0]>, None, true).await?;
         let res_body = res
             .body()
             .await
