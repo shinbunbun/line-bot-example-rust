@@ -136,11 +136,11 @@ impl Client {
         serde_json::from_slice(&res_body).map_err(Error::SerdeJsonError)
     }
 
-    pub async fn verify_token_v2(&self, access_token: &str) -> Result<IssueTokenV2Response, Error> {
+    pub async fn verify_token_v2(&self, access_token: &str) -> Result<VerifyTokenResponse, Error> {
         let res_body = self
             .post_form(
                 &[("access_token", access_token)],
-                &format!("{}/v2/oauth/accessToken", API_ENDPOINT_BASE),
+                &format!("{}/v2/oauth/verify", API_ENDPOINT_BASE),
             )
             .await?
             .body()
@@ -174,9 +174,9 @@ mod test {
         Client::new(channel_access_token, channel_secret, channel_id)
     }
 
-    async fn test_verify_token(client: &Client, access_token: &str, channel_id: &str) {
+    async fn test_verify_token(client: &Client, access_token: &str) {
         let verify_token_response = client.verify_token(access_token).await.unwrap();
-        assert_eq!(verify_token_response.client_id, channel_id);
+        assert_eq!(verify_token_response.client_id, client.get_channel_id());
     }
 
     async fn test_verify_token_error(client: &Client, access_token: &str) {
@@ -211,8 +211,22 @@ mod test {
             .unwrap();
     }
 
+    async fn test_verify_token_v2(client: &Client, access_token: &str) {
+        let verify_token_response = client.verify_token_v2(access_token).await.unwrap();
+        assert_eq!(verify_token_response.client_id, client.get_channel_id());
+    }
+
+    async fn test_verify_token_v2_error(client: &Client, access_token: &str) {
+        let verify_token_response = client.verify_token_v2(access_token).await;
+        assert!(verify_token_response.is_err());
+    }
+
+    async fn test_revoke_token_v2(client: &Client, access_token: &str) {
+        client.revoke_token_v2(access_token).await.unwrap();
+    }
+
     #[actix_web::test]
-    async fn test_issue_token() {
+    async fn test_token_v2_1() {
         let kid = env::var("JWT_TEST_KID").unwrap();
         let private_key = env::var("JWT_PRIVATE_KEY").unwrap();
 
@@ -220,17 +234,28 @@ mod test {
         let jwt = jwt::create_jwt(&kid, client.get_channel_id(), &private_key).unwrap();
 
         let issue_token_response = client.issue_token(&jwt).await.unwrap();
-        test_verify_token(
-            &client,
-            &issue_token_response.access_token,
-            client.get_channel_id(),
-        )
-        .await;
+        test_verify_token(&client, &issue_token_response.access_token).await;
 
         test_get_tokens_kid(&kid, &private_key, &client, &issue_token_response.key_id).await;
 
         test_revoke_token(&client, &issue_token_response.access_token).await;
 
         test_verify_token_error(&client, &issue_token_response.access_token).await;
+    }
+
+    #[actix_web::test]
+    async fn test_token_v2() {
+        let client = create_client();
+
+        let issue_token_v2_response = client
+            .issue_token_v2(client.get_channel_id(), client.get_channel_secret())
+            .await
+            .unwrap();
+
+        test_verify_token_v2(&client, &issue_token_v2_response.access_token).await;
+
+        test_revoke_token_v2(&client, &issue_token_v2_response.access_token).await;
+
+        test_verify_token_v2_error(&client, &issue_token_v2_response.access_token).await;
     }
 }
