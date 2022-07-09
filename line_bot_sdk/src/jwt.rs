@@ -20,7 +20,7 @@ pub fn create_jwt(kid: &str, channel_id: &str, private_key: &str) -> Result<Stri
     payload.set_audience(vec!["https://api.line.me/"]);
     payload.set_expires_at(&(SystemTime::now() + time::Duration::from_secs(60 * 30)));
     payload
-        .set_claim("token_exp", Some(json!((60 * 60 * 24 * 30).to_string())))
+        .set_claim("token_exp", Some(json!(60 * 60 * 24 * 30)))
         .map_err(Error::JoseError)?;
 
     // Signing JWT

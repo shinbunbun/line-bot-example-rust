@@ -58,7 +58,7 @@ impl Client {
     pub async fn verify_token(&self, access_token: &str) -> Result<VerifyTokenResponse, Error> {
         let res_body = self
             .get(
-                &format!("{}/oauth2/v2.1/token/verify", API_ENDPOINT_BASE),
+                &format!("{}/oauth2/v2.1/verify", API_ENDPOINT_BASE),
                 Some(&[("access_token", access_token)]),
                 Some("application/x-www-form-urlencoded"),
                 false,
@@ -157,5 +157,49 @@ impl Client {
         )
         .await?;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use std::env;
+
+    use crate::{jwt, Client};
+
+    fn create_client() -> Client {
+        let channel_access_token = env::var("CHANNEL_ACCESS_TOKEN").unwrap();
+        let channel_secret = env::var("CHANNEL_SECRET").unwrap();
+        let channel_id = env::var("CHANNEL_ID").unwrap();
+
+        Client::new(channel_access_token, channel_secret, channel_id)
+    }
+
+    async fn test_verify_token(client: &Client, access_token: &str, channel_id: &str) {
+        let verify_token_response = client.verify_token(access_token).await.unwrap();
+        assert_eq!(verify_token_response.client_id, channel_id);
+    }
+
+    #[actix_web::test]
+    #[should_panic]
+    async fn test_verify_token_error() {
+        let client = create_client();
+        client.verify_token("dummy").await.unwrap();
+    }
+
+    #[actix_web::test]
+    async fn test_issue_token() {
+        let kid = env::var("JWT_TEST_KID").unwrap();
+        let private_key = env::var("JWT_PRIVATE_KEY").unwrap();
+
+        let client = create_client();
+        let jwt = jwt::create_jwt(&kid, client.get_channel_id(), &private_key).unwrap();
+
+        let issue_token_response = client.issue_token(&jwt).await.unwrap();
+        test_verify_token(
+            &client,
+            &issue_token_response.access_token,
+            client.get_channel_id(),
+        )
+        .await;
     }
 }
