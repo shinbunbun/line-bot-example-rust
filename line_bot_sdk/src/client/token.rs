@@ -186,6 +186,22 @@ mod test {
         client.verify_token("dummy").await.unwrap();
     }
 
+    async fn test_get_tokens_kid(
+        kid: &str,
+        private_key: &str,
+        client: &Client,
+        token_key_id: &str,
+    ) {
+        let jwt = jwt::create_jwt(kid, client.get_channel_id(), private_key).unwrap();
+
+        let mut get_tokens_kid_response = client.get_tokens_kid(&jwt).await.unwrap();
+        get_tokens_kid_response.kids.sort();
+        assert!(get_tokens_kid_response
+            .kids
+            .binary_search(&token_key_id.to_string())
+            .is_ok());
+    }
+
     #[actix_web::test]
     async fn test_issue_token() {
         let kid = env::var("JWT_TEST_KID").unwrap();
@@ -201,5 +217,7 @@ mod test {
             client.get_channel_id(),
         )
         .await;
+
+        test_get_tokens_kid(&kid, &private_key, &client, &issue_token_response.key_id).await;
     }
 }
