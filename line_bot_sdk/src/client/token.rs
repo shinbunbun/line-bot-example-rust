@@ -179,11 +179,9 @@ mod test {
         assert_eq!(verify_token_response.client_id, channel_id);
     }
 
-    #[actix_web::test]
-    #[should_panic]
-    async fn test_verify_token_error() {
-        let client = create_client();
-        client.verify_token("dummy").await.unwrap();
+    async fn test_verify_token_error(client: &Client, access_token: &str) {
+        let verify_token_response = client.verify_token(access_token).await;
+        assert!(verify_token_response.is_err());
     }
 
     async fn test_get_tokens_kid(
@@ -200,6 +198,17 @@ mod test {
             .kids
             .binary_search(&token_key_id.to_string())
             .is_ok());
+    }
+
+    async fn test_revoke_token(client: &Client, access_token: &str) {
+        client
+            .revoke_token(
+                client.get_channel_id(),
+                client.get_channel_secret(),
+                access_token,
+            )
+            .await
+            .unwrap();
     }
 
     #[actix_web::test]
@@ -219,5 +228,9 @@ mod test {
         .await;
 
         test_get_tokens_kid(&kid, &private_key, &client, &issue_token_response.key_id).await;
+
+        test_revoke_token(&client, &issue_token_response.access_token).await;
+
+        test_verify_token_error(&client, &issue_token_response.access_token).await;
     }
 }
