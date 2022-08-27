@@ -1,4 +1,6 @@
-#[derive(Debug)]
+use thiserror::Error;
+
+#[derive(Debug, Error)]
 pub enum Error {
     SerdeJsonError(serde_json::Error),
     HmacDijestInvalidLength(hmac::digest::InvalidLength),
