@@ -59,8 +59,8 @@ async fn webhook_handler(
                 .ok_or_else(|| AppError::BadRequest("Reply token not found".to_string()))?;
             client
                 .reply(reply_token, reply_messages, None)
-                .map_err(AppError::LineBotSdkError)?
-                .await;
+                .await
+                .map_err(AppError::LineBotSdkError)?;
         }
     }
     Ok(HttpResponse::Ok().json("Ok"))

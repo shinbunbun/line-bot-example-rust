@@ -10,7 +10,7 @@ use sha2::Sha256;
 use crate::{
     awc_wrapper::SendClientRequestFut,
     error::Error,
-    models::{message::MessageObject, profile::Profile},
+    models::{empty::Empty, message::MessageObject, profile::Profile},
 };
 
 pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
@@ -161,13 +161,15 @@ impl Client {
         reply_token: &str,
         messages: Vec<MessageObject>,
         notification_disabled: Option<bool>,
-    ) -> Result<SendClientRequest, Error> {
+    ) -> SendClientRequestFut<Empty> {
         let body = ReplyMessage {
             reply_token: reply_token.to_string(),
             messages,
             notification_disabled,
         };
-        self.post(body, &format!("{}/v2/bot/message/reply", API_ENDPOINT_BASE))
+        SendClientRequestFut::new(
+            self.post(body, &format!("{}/v2/bot/message/reply", API_ENDPOINT_BASE)),
+        )
     }
 
     pub fn get_profile(&self, user_id: &str) -> SendClientRequestFut<Profile> {
