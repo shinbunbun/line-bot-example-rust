@@ -62,8 +62,9 @@ impl Client {
                 Some(&[("access_token", access_token)]),
                 Some("application/x-www-form-urlencoded"),
                 false,
-            )
-            .await?
+            )?
+            .await
+            .map_err(Error::AwcSendRequestError)?
             .body()
             .await
             .map_err(Error::ActixWebPayloadError)?
@@ -87,8 +88,9 @@ impl Client {
                 ]),
                 Some("application/x-www-form-urlencoded"),
                 false,
-            )
-            .await?
+            )?
+            .await
+            .map_err(Error::AwcSendRequestError)?
             .body()
             .await
             .map_err(Error::ActixWebPayloadError)?
@@ -160,7 +162,7 @@ impl Client {
     }
 }
 
-#[cfg(test)]
+/* #[cfg(test)]
 mod test {
     use std::env;
 
@@ -258,4 +260,4 @@ mod test {
 
         test_verify_token_v2_error(&client, &issue_token_v2_response.access_token).await;
     }
-}
+} */

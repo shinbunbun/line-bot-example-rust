@@ -12,6 +12,8 @@ pub enum Error {
     AWCClientError(String, String),
     SerdeUrlEncodedError(serde_urlencoded::ser::Error),
     JoseError(josekit::JoseError),
+    AwcJsonPayloadError(awc::error::JsonPayloadError),
+    UnknownError,
 }
 
 impl std::fmt::Display for Error {
@@ -37,6 +39,8 @@ impl std::fmt::Display for Error {
             ),
             Error::SerdeUrlEncodedError(errors) => write!(f, "serde_urlencoded error: {}", errors),
             Error::JoseError(errors) => write!(f, "jose error: {}", errors),
+            Error::AwcJsonPayloadError(errors) => write!(f, "awc json payload error: {}", errors),
+            Error::UnknownError => write!(f, "unknown error"),
         }
     }
 }

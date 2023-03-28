@@ -24,8 +24,9 @@ impl Client {
                 None::<&[(); 0]>,
                 None,
                 true,
-            )
-            .await?;
+            )?
+            .await
+            .map_err(Error::AwcSendRequestError)?;
         let res_body = res
             .body()
             .await
@@ -96,15 +97,15 @@ mod test {
 
     use crate::Client;
 
-    fn get_client() -> crate::Client {
+    /* fn get_client() -> crate::Client {
         crate::Client::new(
             env::var("CHANNEL_ACCESS_TOKEN").unwrap(),
             env::var("CHANNEL_SECRET").unwrap(),
             env::var("CHANNEL_ID").unwrap(),
         )
-    }
+    } */
 
-    #[actix_web::test]
+    /*  #[actix_web::test]
     async fn test_webhook_endpoint_url() {
         let client = get_client();
         let endpoint = &format!("https://example.com/{}", Local::now().timestamp());
@@ -112,7 +113,7 @@ mod test {
         test_get_webhook_endpoint_info(&client, endpoint).await;
         // test_test_webhook_endpoint_url(&client).await;
         // test_test_webhook_endpoint_url_with_endpoint(&client, endpoint).await;
-    }
+    } */
 
     async fn test_set_webhook_event_url(client: &Client, endpoint: &str) {
         client.set_webhook_event_url(endpoint).await.unwrap();

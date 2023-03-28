@@ -2,7 +2,7 @@ pub mod token;
 pub mod webhook;
 
 use actix_http::{encoding::Decoder, header, Payload};
-use awc::ClientResponse;
+use awc::{ClientResponse, SendClientRequest};
 use hmac::{Hmac, Mac};
 use serde::Serialize;
 use sha2::Sha256;
@@ -10,6 +10,7 @@ use sha2::Sha256;
 use crate::{
     error::Error,
     models::{message::MessageObject, profile::Profile},
+    send_client_request_fut::SendClientRequestFut,
 };
 
 pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
@@ -17,15 +18,13 @@ pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
 pub struct Client {
     channel_access_token: String,
     channel_secret: String,
-    channel_id: String,
 }
 
 impl Client {
-    pub fn new(channel_access_token: String, channel_secret: String, channel_id: String) -> Self {
+    pub fn new(channel_access_token: String, channel_secret: String) -> Self {
         Self {
             channel_access_token,
             channel_secret,
-            channel_id,
         }
     }
     pub fn get_channel_access_token(&self) -> &str {
@@ -34,16 +33,13 @@ impl Client {
     pub fn get_channel_secret(&self) -> &str {
         &self.channel_secret
     }
-    pub fn get_channel_id(&self) -> &str {
-        &self.channel_id
-    }
-    async fn get<T: Serialize>(
+    fn get<T: Serialize>(
         &self,
         url: &str,
         query: Option<&T>,
         content_type: Option<&str>,
         with_authorization: bool,
-    ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
+    ) -> Result<SendClientRequest, Error> {
         let url = match query {
             Some(query) => {
                 let query =
@@ -52,23 +48,17 @@ impl Client {
             }
             None => url.to_string(),
         };
-        let mut response = awc::Client::new().get(url);
+        let mut request = awc::Client::new().get(url);
         if with_authorization {
-            response = response.insert_header((
+            request = request.insert_header((
                 header::AUTHORIZATION,
                 format!("{}{}", "Bearer ", self.get_channel_access_token()),
             ));
         }
         if let Some(content_type) = content_type {
-            response = response.content_type(content_type);
+            request = request.content_type(content_type);
         }
-        let mut response = response.send().await.map_err(Error::AwcSendRequestError)?;
-        if response.status() != 200 {
-            let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
-            let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
-            return Err(Error::AWCClientError(res_body, "".to_string()));
-        }
-        Ok(response)
+        Ok(request.send())
     }
 
     async fn post<T: serde::Serialize>(
@@ -194,29 +184,17 @@ impl Client {
         Ok(())
     }
 
-    pub async fn get_profile(&self, user_id: &str) -> Result<Profile, Error> {
+    pub fn get_profile(&self, user_id: &str) -> SendClientRequestFut<Profile> {
         let url = format!("{}/v2/bot/profile/{}", API_ENDPOINT_BASE, user_id);
-        let mut res = self.get(&url, None::<&[(); 0]>, None, true).await?;
-        let res_body = res
-            .body()
-            .await
-            .map_err(Error::ActixWebPayloadError)?
-            .to_vec();
-        serde_json::from_slice(&res_body).map_err(Error::SerdeJsonError)
+        SendClientRequestFut::new(self.get(&url, None::<&[(); 0]>, None, true))
     }
 
-    pub async fn get_content(&self, message_id: &str) -> Result<Vec<u8>, Error> {
+    pub async fn get_content(&self, message_id: &str) -> Result<SendClientRequest, Error> {
         let url = format!(
             "{}/v2/bot/message/{}/content",
             API_ENDPOINT_BASE, message_id
         );
-        let mut res = self.get(&url, None::<&[(); 0]>, None, true).await?;
-        let res_body = res
-            .body()
-            .await
-            .map_err(Error::ActixWebPayloadError)?
-            .to_vec();
-        Ok(res_body)
+        self.get(&url, None::<&[(); 0]>, None, true)
     }
 }
 
