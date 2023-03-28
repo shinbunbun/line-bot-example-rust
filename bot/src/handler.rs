@@ -23,7 +23,6 @@ pub async fn handler(
     let client = Client::new(
         config::get_token().map_err(AppError::Env)?,
         config::get_secret().map_err(AppError::Env)?,
-        config::get_id().map_err(AppError::Env)?,
     );
 
     let signature = &custom_header.x_line_signature;
