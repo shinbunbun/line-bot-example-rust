@@ -8,9 +8,9 @@ use serde::Serialize;
 use sha2::Sha256;
 
 use crate::{
+    awc_wrapper::SendClientRequestFut,
     error::Error,
     models::{message::MessageObject, profile::Profile},
-    send_client_request_fut::SendClientRequestFut,
 };
 
 pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
@@ -61,27 +61,15 @@ impl Client {
         Ok(request.send())
     }
 
-    async fn post<T: serde::Serialize>(
-        &self,
-        body: T,
-        url: &str,
-    ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
-        let json = serde_json::to_string(&body).expect("json encode error");
-        let mut response = awc::Client::new()
+    fn post<T: serde::Serialize>(&self, body: T, url: &str) -> Result<SendClientRequest, Error> {
+        let request = awc::Client::new()
             .post(url)
             .insert_header((
                 header::AUTHORIZATION,
                 format!("{}{}", "Bearer ", self.get_channel_access_token()),
             ))
-            .send_json(&body)
-            .await
-            .map_err(Error::AwcSendRequestError)?;
-        if response.status() != 200 {
-            let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
-            let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
-            return Err(Error::AWCClientError(res_body, json));
-        }
-        Ok(response)
+            .send_json(&body);
+        Ok(request)
     }
 
     async fn post_form<T: serde::Serialize>(
@@ -168,20 +156,18 @@ impl Client {
         mac.verify_slice(&x_line_signature[..])
             .map_err(Error::HmacDigestMacError)
     }
-    pub async fn reply(
+    pub fn reply(
         &self,
         reply_token: &str,
         messages: Vec<MessageObject>,
         notification_disabled: Option<bool>,
-    ) -> Result<(), Error> {
+    ) -> Result<SendClientRequest, Error> {
         let body = ReplyMessage {
             reply_token: reply_token.to_string(),
             messages,
             notification_disabled,
         };
         self.post(body, &format!("{}/v2/bot/message/reply", API_ENDPOINT_BASE))
-            .await?;
-        Ok(())
     }
 
     pub fn get_profile(&self, user_id: &str) -> SendClientRequestFut<Profile> {
