@@ -6,25 +6,25 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = "4"
-actix-http = "3"
-serde = { version = "1", features = ["derive"] }
-awc = { version = "3.0.0", features = ["rustls"] }
-rustls = "0"
-actix-rt = "1"
-validator = { version = "0", features = ["derive"] }
+actix-web = "4.3"
+actix-http = "3.3"
+serde = { version = "1.0", features = ["derive"] }
+awc = { version = "3.1", features = ["rustls"] }
+rustls = "0.20"
+actix-rt = "2.8"
+validator = { version = "0.16", features = ["derive"] }
 serde_json = "1.0"
-futures-util = { version = "0", default-features = false, features = ["std"] }
-hmac = "0"
-sha2 = "0"
-hex-literal = "0"
-async-trait = "0"
-futures = "0"
-base64="0"
-log="0"
-env_logger="0"
-typed-builder = "0.10.0"
-serde_urlencoded = "0"
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+hmac = "0.12"
+sha2 = "0.10"
+hex-literal = "0.3"
+async-trait = "0.1"
+futures = "0.3"
+base64 = "0.21"
+log = "0.4"
+env_logger = "0.10"
+typed-builder = "0.14"
+serde_urlencoded = "0.7"
 chrono = "0.4"
-josekit = "0.8.1"
-thiserror = "1.0.32"
+josekit = "0.8"
+thiserror = "1.0"
