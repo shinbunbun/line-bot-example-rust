@@ -27,12 +27,15 @@ impl Client {
             channel_secret,
         }
     }
+
     pub fn get_channel_access_token(&self) -> &str {
         &self.channel_access_token
     }
+
     pub fn get_channel_secret(&self) -> &str {
         &self.channel_secret
     }
+
     fn get<T: Serialize>(
         &self,
         url: &str,
@@ -83,27 +86,15 @@ impl Client {
     }
 
     #[allow(clippy::all)]
-    pub async fn put<T: serde::Serialize>(
-        &self,
-        body: T,
-        url: &str,
-    ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
-        let json = serde_json::to_string(&body).expect("json encode error");
-        let mut response = awc::Client::new()
+    fn put<T: serde::Serialize>(&self, body: T, url: &str) -> Result<SendClientRequest, Error> {
+        let request = awc::Client::new()
             .put(url)
             .insert_header((
                 header::AUTHORIZATION,
                 format!("{}{}", "Bearer ", self.get_channel_access_token()),
             ))
-            .send_json(&body)
-            .await
-            .map_err(Error::AwcSendRequestError)?;
-        if response.status() != 200 {
-            let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
-            let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
-            return Err(Error::AWCClientError(res_body, json));
-        }
-        Ok(response)
+            .send_json(&body);
+        Ok(request)
     }
 
     pub async fn delete<T: Serialize>(

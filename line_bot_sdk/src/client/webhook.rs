@@ -2,20 +2,19 @@ use serde::{Deserialize, Serialize};
 
 use crate::awc_wrapper::SendClientRequestFut;
 use crate::error::Error;
+use crate::models::empty::Empty;
 use crate::Client;
 
 use super::API_ENDPOINT_BASE;
 
 impl Client {
-    pub async fn set_webhook_event_url(&self, endpoint: &str) -> Result<(), Error> {
-        self.put(
+    pub fn set_webhook_event_url(&self, endpoint: &str) -> SendClientRequestFut<Empty> {
+        SendClientRequestFut::new(self.put(
             WebhookEndpointStruct {
                 endpoint: endpoint.to_string(),
             },
             &format!("{}/v2/bot/channel/webhook/endpoint", API_ENDPOINT_BASE),
-        )
-        .await?;
-        Ok(())
+        ))
     }
 
     pub async fn get_webhook_endpoint_info(&self) -> Result<WebhookEndpointInfo, Error> {
@@ -74,9 +73,6 @@ pub struct TestWebhookEndpointUrlResponse {
     pub reason: String,
     pub detail: String,
 }
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-struct Empty {}
 
 #[cfg(test)]
 mod test {
