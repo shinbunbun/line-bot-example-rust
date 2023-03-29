@@ -72,23 +72,14 @@ impl Client {
         Ok(request)
     }
 
-    async fn post_form<T: serde::Serialize>(
+    fn post_form<T: serde::Serialize>(
         &self,
         body: T,
         url: &str,
-    ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
-        let json = serde_json::to_string(&body).expect("json encode error");
-        let mut response = awc::Client::new()
-            .post(url)
-            .send_form(&body)
-            .await
-            .map_err(Error::AwcSendRequestError)?;
-        if response.status() != 200 {
-            let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
-            let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
-            return Err(Error::AWCClientError(res_body, json));
-        }
-        Ok(response)
+    ) -> Result<SendClientRequest, Error> {
+        let request = awc::Client::new().post(url).send_form(&body);
+
+        Ok(request)
     }
 
     #[allow(clippy::all)]
