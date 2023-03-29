@@ -9,11 +9,7 @@ use actix_http::header;
 use awc::SendClientRequest;
 use serde::Serialize;
 
-use crate::{
-    awc_wrapper::SendClientRequestFut,
-    error::Error,
-    models::{empty::Empty, message::MessageObject, profile::Profile},
-};
+use crate::{awc_wrapper::SendClientRequestFut, error::Error, models::message::MessageObject};
 
 pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
 
