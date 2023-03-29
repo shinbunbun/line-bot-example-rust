@@ -1,4 +1,5 @@
 pub mod message;
+pub mod profile;
 pub mod signature;
 pub mod token;
 pub mod webhook;
@@ -117,11 +118,6 @@ impl Client {
             ))
             .send();
         Ok(request)
-    }
-
-    pub fn get_profile(&self, user_id: &str) -> SendClientRequestFut<Profile> {
-        let url = format!("{}/v2/bot/profile/{}", API_ENDPOINT_BASE, user_id);
-        SendClientRequestFut::new(self.get(&url, None::<&[(); 0]>, None, true))
     }
 
     pub async fn get_content(&self, message_id: &str) -> Result<SendClientRequest, Error> {
