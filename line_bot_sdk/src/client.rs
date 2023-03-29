@@ -85,7 +85,6 @@ impl Client {
         Ok(request)
     }
 
-    #[allow(clippy::all)]
     fn put<T: serde::Serialize>(&self, body: T, url: &str) -> Result<SendClientRequest, Error> {
         let request = awc::Client::new()
             .put(url)
@@ -101,7 +100,7 @@ impl Client {
         &self,
         url: &str,
         query: Option<&T>,
-    ) -> Result<ClientResponse<Decoder<Payload>>, Error> {
+    ) -> Result<SendClientRequest, Error> {
         let url = match query {
             Some(query) => {
                 let query =
@@ -110,21 +109,14 @@ impl Client {
             }
             None => url.to_string(),
         };
-        let mut response = awc::Client::new()
+        let request = awc::Client::new()
             .delete(url)
             .insert_header((
                 header::AUTHORIZATION,
                 format!("{}{}", "Bearer ", self.get_channel_access_token()),
             ))
-            .send()
-            .await
-            .map_err(Error::AwcSendRequestError)?;
-        if response.status() != 200 {
-            let res_body = response.body().await.map_err(Error::ActixWebPayloadError)?;
-            let res_body = String::from_utf8(res_body.to_vec()).map_err(Error::FromUtf8Error)?;
-            return Err(Error::AWCClientError(res_body, "".to_string()));
-        }
-        Ok(response)
+            .send();
+        Ok(request)
     }
 
     pub fn verify_signature(&self, signature: &str, context: &str) -> Result<(), Error> {
