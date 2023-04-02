@@ -45,10 +45,12 @@ impl Client {
                     endpoint: endpoint.to_string(),
                 },
                 &format!("{}/v2/bot/channel/webhook/endpoint/test", API_ENDPOINT_BASE),
+                None,
             )),
             None => SendClientRequestFut::new(self.post(
                 Empty {},
                 &format!("{}/v2/bot/channel/webhook/endpoint/test", API_ENDPOINT_BASE),
+                None,
             )),
         }
     }
