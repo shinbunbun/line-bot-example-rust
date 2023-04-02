@@ -9,7 +9,7 @@ use actix_http::header;
 use awc::SendClientRequest;
 use serde::Serialize;
 
-use crate::{awc_wrapper::SendClientRequestFut, error::Error, models::message::MessageObject};
+use crate::{awc_wrapper::SendClientRequestFut, error::Error};
 
 pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
 
@@ -62,15 +62,23 @@ impl Client {
         Ok(request.send())
     }
 
-    fn post<T: serde::Serialize>(&self, body: T, url: &str) -> Result<SendClientRequest, Error> {
-        let request = awc::Client::new()
-            .post(url)
-            .insert_header((
-                header::AUTHORIZATION,
-                format!("{}{}", "Bearer ", self.get_channel_access_token()),
-            ))
-            .send_json(&body);
-        Ok(request)
+    fn post<T: serde::Serialize>(
+        &self,
+        body: T,
+        url: &str,
+        x_line_retry_key: Option<&str>,
+    ) -> Result<SendClientRequest, Error> {
+        let mut request = awc::Client::new().post(url).insert_header((
+            header::AUTHORIZATION,
+            format!("{}{}", "Bearer ", self.get_channel_access_token()),
+        ));
+        if let Some(x_line_retry_key) = x_line_retry_key {
+            request = request.insert_header((
+                header::HeaderName::from_static("X-Line-Retry-Key"),
+                x_line_retry_key,
+            ));
+        }
+        Ok(request.send_json(&body))
     }
 
     fn post_form<T: serde::Serialize>(
@@ -116,13 +124,4 @@ impl Client {
             .send();
         Ok(request)
     }
-}
-
-#[derive(Debug, Serialize)]
-#[serde(rename_all = "camelCase")]
-struct ReplyMessage {
-    reply_token: String,
-    messages: Vec<MessageObject>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    notification_disabled: Option<bool>,
 }
