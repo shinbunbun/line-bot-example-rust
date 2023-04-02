@@ -55,6 +55,12 @@ pub struct QuotaResponse {
     pub value: Option<String>,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct QuotaConsumptionResponse {
+    pub total_usage: i64,
+}
+
 impl Client {
     pub fn reply(
         &self,
@@ -136,6 +142,15 @@ impl Client {
     pub fn quota(&self) -> SendClientRequestFut<QuotaResponse> {
         SendClientRequestFut::new(self.get::<QuotaResponse>(
             &format!("{}/v2/bot/message/quota", API_ENDPOINT_BASE),
+            None,
+            None,
+            true,
+        ))
+    }
+
+    pub fn quota_consumption(&self) -> SendClientRequestFut<QuotaConsumptionResponse> {
+        SendClientRequestFut::new(self.get::<QuotaConsumptionResponse>(
+            &format!("{}/v2/bot/message/quota/consumption", API_ENDPOINT_BASE),
             None,
             None,
             true,
