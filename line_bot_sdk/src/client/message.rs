@@ -61,6 +61,13 @@ pub struct QuotaConsumptionResponse {
     pub total_usage: i64,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct DeliveryReplyResponse {
+    pub status: String,
+    pub success: Option<i64>,
+}
+
 impl Client {
     pub fn reply(
         &self,
@@ -140,18 +147,27 @@ impl Client {
     }
 
     pub fn quota(&self) -> SendClientRequestFut<QuotaResponse> {
-        SendClientRequestFut::new(self.get::<QuotaResponse>(
+        SendClientRequestFut::new(self.get(
             &format!("{}/v2/bot/message/quota", API_ENDPOINT_BASE),
-            None,
+            None::<&[(); 0]>,
             None,
             true,
         ))
     }
 
     pub fn quota_consumption(&self) -> SendClientRequestFut<QuotaConsumptionResponse> {
-        SendClientRequestFut::new(self.get::<QuotaConsumptionResponse>(
+        SendClientRequestFut::new(self.get(
             &format!("{}/v2/bot/message/quota/consumption", API_ENDPOINT_BASE),
+            None::<&[(); 0]>,
             None,
+            true,
+        ))
+    }
+
+    pub fn delivery_reply(&self, date: &str) -> SendClientRequestFut<DeliveryReplyResponse> {
+        SendClientRequestFut::new(self.get(
+            &format!("{}/v2/bot/message/delivery/reply", API_ENDPOINT_BASE),
+            Some(&[("date", date)]),
             None,
             true,
         ))
