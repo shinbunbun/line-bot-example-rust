@@ -118,6 +118,13 @@ pub struct AggregationInfoResponse {
     pub num_of_custom_aggregation_units: i64,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AggregationListResponse {
+    pub custom_aggregation_units: Vec<String>,
+    pub next: Option<String>,
+}
+
 impl Client {
     pub fn reply(
         &self,
@@ -296,6 +303,19 @@ impl Client {
         SendClientRequestFut::new(self.get(
             &format!("{}/v2/bot/message/aggregation/info", API_ENDPOINT_BASE),
             None::<&[(); 0]>,
+            None,
+            true,
+        ))
+    }
+
+    pub fn aggregation_list(
+        &self,
+        limit: Option<String>,
+        start: Option<String>,
+    ) -> SendClientRequestFut<AggregationListResponse> {
+        SendClientRequestFut::new(self.get(
+            &format!("{}/v2/bot/message/aggregation/list", API_ENDPOINT_BASE),
+            Some(&[("limit", limit), ("start", start)]),
             None,
             true,
         ))
