@@ -1,4 +1,4 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{
     awc_wrapper::SendClientRequestFut,
@@ -45,6 +45,14 @@ struct BroadcastRequest {
     messages: Vec<MessageObject>,
     #[serde(skip_serializing_if = "Option::is_none")]
     notification_disabled: Option<bool>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct QuotaResponse {
+    #[serde(rename = "type")]
+    pub quota_type: String,
+    pub value: Option<String>,
 }
 
 impl Client {
@@ -122,6 +130,15 @@ impl Client {
             body,
             &format!("{}/v2/bot/message/broadcast", API_ENDPOINT_BASE),
             x_line_retry_key,
+        ))
+    }
+
+    pub fn quota(&self) -> SendClientRequestFut<QuotaResponse> {
+        SendClientRequestFut::new(self.get::<QuotaResponse>(
+            &format!("{}/v2/bot/message/quota", API_ENDPOINT_BASE),
+            None,
+            None,
+            true,
         ))
     }
 }
