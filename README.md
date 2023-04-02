@@ -15,7 +15,8 @@ botディレクトリがLINEBot本体のコード、line-bot-sdkディレクト�
 - [ ] LINE Things全般
 - [x] [Webhook設定](https://developers.line.biz/ja/reference/messaging-api/#webhook-settings)
 - [x] [チャネルアクセストーン](https://developers.line.biz/ja/reference/messaging-api/#channel-access-token)
-- [ ] [メッセージ（応答メッセージを除く）](https://developers.line.biz/ja/reference/messaging-api/#send-broadcast-message)
+- [x] [メッセージ（応答メッセージを除く）](https://developers.line.biz/ja/reference/messaging-api/#send-broadcast-message)
+- [ ] ナローキャストメッセージ
 - [ ] [オーディエンス管理](https://developers.line.biz/ja/reference/messaging-api/#manage-audience-group)
 - [ ] [分析](https://developers.line.biz/ja/reference/messaging-api/#get-insight)
 - [ ] [LINE公式アカウントを友だち追加したユーザーのリストを取得する](https://developers.line.biz/ja/reference/messaging-api/#get-follower-ids)
