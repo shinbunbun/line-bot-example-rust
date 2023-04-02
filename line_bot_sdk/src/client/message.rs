@@ -65,6 +65,12 @@ struct ValidateMulticastRequest {
     messages: Vec<MessageObject>,
 }
 
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct ValidateNarrowcastRequest {
+    messages: Vec<MessageObject>,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct QuotaResponse {
@@ -252,6 +258,15 @@ impl Client {
         SendClientRequestFut::new(self.post(
             body,
             &format!("{}/v2/bot/message/validate/multicast", API_ENDPOINT_BASE),
+            None,
+        ))
+    }
+
+    pub fn validate_narrowcast(&self, messages: Vec<MessageObject>) -> SendClientRequestFut<Empty> {
+        let body = ValidateNarrowcastRequest { messages };
+        SendClientRequestFut::new(self.post(
+            body,
+            &format!("{}/v2/bot/message/validate/narrowcast", API_ENDPOINT_BASE),
             None,
         ))
     }
