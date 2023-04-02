@@ -60,7 +60,7 @@ impl Client {
 
     pub fn push(
         &self,
-        x_line_retry_key: &str,
+        x_line_retry_key: Option<&str>,
         to: &str,
         messages: Vec<MessageObject>,
         notification_disabled: Option<bool>,
@@ -75,13 +75,13 @@ impl Client {
         SendClientRequestFut::new(self.post(
             body,
             &format!("{}/v2/bot/message/push", API_ENDPOINT_BASE),
-            Some(x_line_retry_key),
+            x_line_retry_key,
         ))
     }
 
     pub fn multicast(
         &self,
-        x_line_retry_key: &str,
+        x_line_retry_key: Option<&str>,
         to: Vec<String>,
         messages: Vec<MessageObject>,
         notification_disabled: Option<bool>,
@@ -96,7 +96,7 @@ impl Client {
         SendClientRequestFut::new(self.post(
             body,
             &format!("{}/v2/bot/message/multicast", API_ENDPOINT_BASE),
-            Some(x_line_retry_key),
+            x_line_retry_key,
         ))
     }
 }
