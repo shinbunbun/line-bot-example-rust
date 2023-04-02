@@ -39,6 +39,14 @@ struct MulticastRequest {
     custom_aggregation_units: Option<Vec<String>>,
 }
 
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct BroadcastRequest {
+    messages: Vec<MessageObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    notification_disabled: Option<bool>,
+}
+
 impl Client {
     pub fn reply(
         &self,
@@ -96,6 +104,23 @@ impl Client {
         SendClientRequestFut::new(self.post(
             body,
             &format!("{}/v2/bot/message/multicast", API_ENDPOINT_BASE),
+            x_line_retry_key,
+        ))
+    }
+
+    pub fn broadcast(
+        &self,
+        x_line_retry_key: Option<&str>,
+        messages: Vec<MessageObject>,
+        notification_disabled: Option<bool>,
+    ) -> SendClientRequestFut<Empty> {
+        let body = BroadcastRequest {
+            messages,
+            notification_disabled,
+        };
+        SendClientRequestFut::new(self.post(
+            body,
+            &format!("{}/v2/bot/message/broadcast", API_ENDPOINT_BASE),
             x_line_retry_key,
         ))
     }
