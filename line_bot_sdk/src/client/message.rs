@@ -112,6 +112,12 @@ pub struct DeliveryBroadcastResponse {
     pub success: Option<i64>,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AggregationInfoResponse {
+    pub num_of_custom_aggregation_units: i64,
+}
+
 impl Client {
     pub fn reply(
         &self,
@@ -283,6 +289,15 @@ impl Client {
             body,
             &format!("{}/v2/bot/message/validate/broadcast", API_ENDPOINT_BASE),
             None,
+        ))
+    }
+
+    pub fn aggregation_info(&self) -> SendClientRequestFut<AggregationInfoResponse> {
+        SendClientRequestFut::new(self.get(
+            &format!("{}/v2/bot/message/aggregation/info", API_ENDPOINT_BASE),
+            None::<&[(); 0]>,
+            None,
+            true,
         ))
     }
 }
