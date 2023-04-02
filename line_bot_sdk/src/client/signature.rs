@@ -1,4 +1,5 @@
 use crate::error::Error;
+use base64::{engine::general_purpose, Engine as _};
 use hmac::{Hmac, Mac};
 use sha2::Sha256;
 
@@ -12,7 +13,9 @@ impl Client {
             .map_err(Error::HmacDijestInvalidLength)?;
         mac.update(context.as_bytes());
 
-        let x_line_signature = base64::decode(signature).map_err(Error::Base64DecodeError)?;
+        let x_line_signature = general_purpose::STANDARD
+            .decode(signature)
+            .map_err(Error::Base64DecodeError)?;
         mac.verify_slice(&x_line_signature[..])
             .map_err(Error::HmacDigestMacError)
     }
