@@ -45,7 +45,7 @@ pub struct IssueTokenV2Response {
 impl Client {
     pub fn issue_token(&self, client_assertion: &str) -> SendClientRequestFut<IssueTokenResponse> {
         SendClientRequestFut::new(self.post_form(
-            &[
+            [
                 ("grant_type", "client_credentials"),
                 (
                     "client_assertion_type",
@@ -107,7 +107,7 @@ impl Client {
         access_token: &str,
     ) -> SendClientRequestFut<Empty> {
         SendClientRequestFut::new(self.post_form(
-            &[
+            [
                 ("client_id", client_id),
                 ("client_secret", client_secret),
                 ("access_token", access_token),
@@ -122,7 +122,7 @@ impl Client {
         client_secret: &str,
     ) -> SendClientRequestFut<IssueTokenV2Response> {
         SendClientRequestFut::new(self.post_form(
-            &[
+            [
                 ("grant_type", "client_credentials"),
                 ("client_id", client_id),
                 ("client_secret", client_secret),
@@ -136,14 +136,14 @@ impl Client {
         access_token: &str,
     ) -> SendClientRequestFut<VerifyTokenV2Response> {
         SendClientRequestFut::new(self.post_form(
-            &[("access_token", access_token)],
+            [("access_token", access_token)],
             &format!("{}/v2/oauth/verify", API_ENDPOINT_BASE),
         ))
     }
 
     pub fn revoke_token_v2(&self, access_token: &str) -> SendClientRequestFut<Empty> {
         SendClientRequestFut::new(self.post_form(
-            &[("access_token", access_token)],
+            [("access_token", access_token)],
             &format!("{}/v2/oauth/revoke", API_ENDPOINT_BASE),
         ))
     }
