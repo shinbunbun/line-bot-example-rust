@@ -1,3 +1,4 @@
+pub mod awc_wrapper;
 pub(crate) mod client;
 pub(crate) mod error;
 pub mod extractor;
