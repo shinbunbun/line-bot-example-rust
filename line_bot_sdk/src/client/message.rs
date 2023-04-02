@@ -47,6 +47,12 @@ struct BroadcastRequest {
     notification_disabled: Option<bool>,
 }
 
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct ValidateReplyRequest {
+    messages: Vec<MessageObject>,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct QuotaResponse {
@@ -208,6 +214,15 @@ impl Client {
             Some(&[("date", date)]),
             None,
             true,
+        ))
+    }
+
+    pub fn validate_reply(&self, messages: Vec<MessageObject>) -> SendClientRequestFut<Empty> {
+        let body = ValidateReplyRequest { messages };
+        SendClientRequestFut::new(self.post(
+            body,
+            &format!("{}/v2/bot/message/validate/reply", API_ENDPOINT_BASE),
+            None,
         ))
     }
 }
