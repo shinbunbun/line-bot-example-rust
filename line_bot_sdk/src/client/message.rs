@@ -71,6 +71,12 @@ struct ValidateNarrowcastRequest {
     messages: Vec<MessageObject>,
 }
 
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct ValidateBroadcastRequest {
+    messages: Vec<MessageObject>,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct QuotaResponse {
@@ -267,6 +273,15 @@ impl Client {
         SendClientRequestFut::new(self.post(
             body,
             &format!("{}/v2/bot/message/validate/narrowcast", API_ENDPOINT_BASE),
+            None,
+        ))
+    }
+
+    pub fn validate_broadcast(&self, messages: Vec<MessageObject>) -> SendClientRequestFut<Empty> {
+        let body = ValidateBroadcastRequest { messages };
+        SendClientRequestFut::new(self.post(
+            body,
+            &format!("{}/v2/bot/message/validate/broadcast", API_ENDPOINT_BASE),
             None,
         ))
     }
