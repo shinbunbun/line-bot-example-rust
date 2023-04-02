@@ -68,6 +68,13 @@ pub struct DeliveryReplyResponse {
     pub success: Option<i64>,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct DeliveryMulticastResponse {
+    pub status: String,
+    pub success: Option<i64>,
+}
+
 impl Client {
     pub fn reply(
         &self,
@@ -167,6 +174,18 @@ impl Client {
     pub fn delivery_reply(&self, date: &str) -> SendClientRequestFut<DeliveryReplyResponse> {
         SendClientRequestFut::new(self.get(
             &format!("{}/v2/bot/message/delivery/reply", API_ENDPOINT_BASE),
+            Some(&[("date", date)]),
+            None,
+            true,
+        ))
+    }
+
+    pub fn delivery_multicast(
+        &self,
+        date: &str,
+    ) -> SendClientRequestFut<DeliveryMulticastResponse> {
+        SendClientRequestFut::new(self.get(
+            &format!("{}/v2/bot/message/delivery/multicast", API_ENDPOINT_BASE),
             Some(&[("date", date)]),
             None,
             true,
