@@ -20,6 +20,7 @@ pub struct Profile {
 #[serde(rename_all = "camelCase")]
 pub struct Followers {
     pub user_ids: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next: Option<String>,
 }
 
