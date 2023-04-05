@@ -1,6 +1,7 @@
 pub mod content;
 pub mod group;
 pub mod message;
+pub mod room;
 pub mod signature;
 pub mod token;
 pub mod user;
