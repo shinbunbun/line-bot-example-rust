@@ -1,8 +1,8 @@
 pub mod content;
 pub mod message;
-pub mod profile;
 pub mod signature;
 pub mod token;
+pub mod user;
 pub mod webhook;
 
 use actix_http::header;
