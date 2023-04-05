@@ -38,12 +38,15 @@ pub struct GroupMember {
 
 impl Client {
     pub fn group_summary(&self, group_id: &str) -> SendClientRequestFut<GroupSummary> {
-        let url = format!("{}/v2/group/{}/summary", API_ENDPOINT_BASE, group_id);
+        let url = format!("{}/v2/bot/group/{}/summary", API_ENDPOINT_BASE, group_id);
         SendClientRequestFut::new(self.get(&url, None::<&[(); 0]>, None, true))
     }
 
     pub fn group_members_count(&self, group_id: &str) -> SendClientRequestFut<GroupSummary> {
-        let url = format!("{}/v2/group/{}/members/count", API_ENDPOINT_BASE, group_id);
+        let url = format!(
+            "{}/v2/bot/group/{}/members/count",
+            API_ENDPOINT_BASE, group_id
+        );
         SendClientRequestFut::new(self.get(&url, None::<&[(); 0]>, None, true))
     }
 
@@ -52,7 +55,10 @@ impl Client {
         group_id: &str,
         start: Option<String>,
     ) -> SendClientRequestFut<GroupMembersIds> {
-        let url = format!("{}/v2/group/{}/members/ids", API_ENDPOINT_BASE, group_id);
+        let url = format!(
+            "{}/v2/bot/group/{}/members/ids",
+            API_ENDPOINT_BASE, group_id
+        );
         let mut params = vec![];
         if let Some(start) = start {
             params.push(("start", start));
@@ -66,14 +72,14 @@ impl Client {
         group_id: &str,
     ) -> SendClientRequestFut<GroupMembersIds> {
         let url = format!(
-            "{}/v2/group/{}/member/{}",
+            "{}/v2/bot/group/{}/member/{}",
             API_ENDPOINT_BASE, group_id, user_id
         );
         SendClientRequestFut::new(self.get(&url, None::<&[(); 0]>, None, true))
     }
 
     pub fn group_leave(&self, group_id: &str) -> SendClientRequestFut<Empty> {
-        let url = format!("{}/v2/group/{}/leave", API_ENDPOINT_BASE, group_id);
+        let url = format!("{}/v2/bot/group/{}/leave", API_ENDPOINT_BASE, group_id);
         SendClientRequestFut::new(self.post(Empty {}, &url, None))
     }
 }
