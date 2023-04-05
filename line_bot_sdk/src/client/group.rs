@@ -42,7 +42,7 @@ impl Client {
         SendClientRequestFut::new(self.get(&url, None::<&[(); 0]>, None, true))
     }
 
-    pub fn group_members_count(&self, group_id: &str) -> SendClientRequestFut<GroupSummary> {
+    pub fn group_members_count(&self, group_id: &str) -> SendClientRequestFut<GroupMembersCount> {
         let url = format!(
             "{}/v2/bot/group/{}/members/count",
             API_ENDPOINT_BASE, group_id
@@ -66,11 +66,7 @@ impl Client {
         SendClientRequestFut::new(self.get(&url, Some(&params), None, true))
     }
 
-    pub fn group_member(
-        &self,
-        user_id: &str,
-        group_id: &str,
-    ) -> SendClientRequestFut<GroupMembersIds> {
+    pub fn group_member(&self, user_id: &str, group_id: &str) -> SendClientRequestFut<GroupMember> {
         let url = format!(
             "{}/v2/bot/group/{}/member/{}",
             API_ENDPOINT_BASE, group_id, user_id
