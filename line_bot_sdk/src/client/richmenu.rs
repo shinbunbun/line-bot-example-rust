@@ -65,6 +65,13 @@ pub struct GetUserAllRichMenuResponse {
     pub rich_menu_id: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetRichMenuAliasResponse {
+    pub rich_menu_alias_id: String,
+    pub rich_menu_id: String,
+}
+
 impl Client {
     pub fn post_richmenu(
         &self,
@@ -185,6 +192,18 @@ impl Client {
                 API_ENDPOINT_BASE, rich_menu_alias_id
             ),
             None,
+        ))
+    }
+
+    pub fn get_richmenu_alias(&self, rich_menu_alias_id: &str) -> SendClientRequestFut<String> {
+        SendClientRequestFut::new(self.get(
+            &format!(
+                "{}/v2/bot/richmenu/alias/{}",
+                API_ENDPOINT_BASE, rich_menu_alias_id
+            ),
+            None::<&[(); 0]>,
+            None,
+            true,
         ))
     }
 }
