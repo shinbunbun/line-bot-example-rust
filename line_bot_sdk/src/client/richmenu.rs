@@ -1,9 +1,14 @@
+use futures::io::Empty;
 use serde::{Deserialize, Serialize};
 use typed_builder::TypedBuilder;
 
-use crate::{awc_wrapper::SendClientRequestFut, models::action::Actions, Client};
+use crate::{
+    awc_wrapper::{SendClientRequestByteFut, SendClientRequestFut},
+    models::action::Actions,
+    Client,
+};
 
-use super::API_ENDPOINT_BASE;
+use super::{API_DATA_ENDPOINT_BASE, API_ENDPOINT_BASE};
 
 #[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 pub struct RichMenuObject {
@@ -52,6 +57,17 @@ impl Client {
         SendClientRequestFut::new(self.post(
             richmenu,
             &format!("{}/v2/bot/richmenu/validate", API_ENDPOINT_BASE),
+            None,
+        ))
+    }
+
+    pub fn richmenu_content(&self, richmenu_id: &str) -> SendClientRequestByteFut {
+        SendClientRequestByteFut::new(self.post(
+            (),
+            &format!(
+                "{}/v2/bot/richmenu/{}/content",
+                API_DATA_ENDPOINT_BASE, richmenu_id
+            ),
             None,
         ))
     }

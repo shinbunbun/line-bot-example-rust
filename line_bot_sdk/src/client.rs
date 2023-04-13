@@ -16,6 +16,7 @@ use serde::Serialize;
 use crate::{awc_wrapper::SendClientRequestFut, error::Error};
 
 pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
+pub static API_DATA_ENDPOINT_BASE: &str = "https://api-data.line.me";
 
 pub struct Client {
     channel_access_token: String,
