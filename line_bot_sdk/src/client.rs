@@ -107,7 +107,7 @@ impl Client {
         Ok(request)
     }
 
-    pub async fn delete<T: Serialize>(
+    pub fn delete<T: Serialize>(
         &self,
         url: &str,
         query: Option<&T>,
