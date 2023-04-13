@@ -1,4 +1,3 @@
-use futures::io::Empty;
 use serde::{Deserialize, Serialize};
 use typed_builder::TypedBuilder;
 
@@ -11,6 +10,7 @@ use crate::{
 use super::{API_DATA_ENDPOINT_BASE, API_ENDPOINT_BASE};
 
 #[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
+#[serde(rename_all = "camelCase")]
 pub struct RichMenuObject {
     pub size: RichMenuSize,
     pub selected: bool,
@@ -20,18 +20,21 @@ pub struct RichMenuObject {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
+#[serde(rename_all = "camelCase")]
 pub struct RichMenuSize {
     pub width: u32,
     pub height: u32,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
+#[serde(rename_all = "camelCase")]
 pub struct RichMenuArea {
     pub bounds: RichMenuBounds,
     pub action: Actions,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
+#[serde(rename_all = "camelCase")]
 pub struct RichMenuBounds {
     pub x: u32,
     pub y: u32,
@@ -40,8 +43,20 @@ pub struct RichMenuBounds {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct RichMenuResponse {
     pub rich_menu_id: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RichMenuResponseObject {
+    pub richmenu_id: String,
+    pub size: RichMenuSize,
+    pub selected: bool,
+    pub name: String,
+    pub chat_bar_text: String,
+    pub areas: Vec<RichMenuArea>,
 }
 
 impl Client {
@@ -69,6 +84,15 @@ impl Client {
                 API_DATA_ENDPOINT_BASE, richmenu_id
             ),
             None,
+        ))
+    }
+
+    pub fn richmeu_list(&self) -> SendClientRequestFut<RichMenuResponseObject> {
+        SendClientRequestFut::new(self.get(
+            &format!("{}/v2/bot/richmenu/list", API_ENDPOINT_BASE),
+            None::<&[(); 0]>,
+            None,
+            true,
         ))
     }
 }
