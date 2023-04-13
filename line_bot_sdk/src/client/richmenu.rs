@@ -44,7 +44,7 @@ pub struct RichMenuBounds {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct RichMenuResponse {
+pub struct PostRichMenuResponse {
     pub rich_menu_id: String,
 }
 
@@ -60,7 +60,10 @@ pub struct RichMenuResponseObject {
 }
 
 impl Client {
-    pub fn richmenu(&self, richmenu: RichMenuObject) -> SendClientRequestFut<RichMenuResponse> {
+    pub fn post_richmenu(
+        &self,
+        richmenu: RichMenuObject,
+    ) -> SendClientRequestFut<PostRichMenuResponse> {
         SendClientRequestFut::new(self.post(
             richmenu,
             &format!("{}/v2/bot/richmenu", API_ENDPOINT_BASE),
