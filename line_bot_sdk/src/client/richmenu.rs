@@ -172,4 +172,19 @@ impl Client {
             None::<&[(); 0]>,
         ))
     }
+
+    pub fn update_richmenu_alias(
+        &self,
+        rich_menu_alias_id: &str,
+        rich_menu_id: &str,
+    ) -> SendClientRequestFut<()> {
+        SendClientRequestFut::new(self.post(
+            &[("richMenuId", rich_menu_id)],
+            &format!(
+                "{}/v2/bot/richmenu/alias/{}",
+                API_ENDPOINT_BASE, rich_menu_alias_id
+            ),
+            None,
+        ))
+    }
 }
