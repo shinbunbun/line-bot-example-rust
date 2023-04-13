@@ -114,4 +114,15 @@ impl Client {
             None::<&[(); 0]>,
         ))
     }
+
+    pub fn user_all_richmenu(&self, richmenu_id: &str) -> SendClientRequestFut<()> {
+        SendClientRequestFut::new(self.post(
+            (),
+            &format!(
+                "{}/v2/bot/user/all/richmenu/{}",
+                API_ENDPOINT_BASE, richmenu_id
+            ),
+            None,
+        ))
+    }
 }
