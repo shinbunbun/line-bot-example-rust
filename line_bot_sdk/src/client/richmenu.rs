@@ -162,4 +162,14 @@ impl Client {
             None,
         ))
     }
+
+    pub fn delete_richmenu_alias(&self, rich_menu_alias_id: &str) -> SendClientRequestFut<()> {
+        SendClientRequestFut::new(self.delete(
+            &format!(
+                "{}/v2/bot/richmenu/alias/{}",
+                API_ENDPOINT_BASE, rich_menu_alias_id
+            ),
+            None::<&[(); 0]>,
+        ))
+    }
 }
