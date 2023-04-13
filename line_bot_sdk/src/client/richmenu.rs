@@ -4,7 +4,7 @@ use typed_builder::TypedBuilder;
 use crate::{
     awc_wrapper::{SendClientRequestByteFut, SendClientRequestFut},
     models::action::Actions,
-    Client,
+    Client, Error,
 };
 
 use super::{API_DATA_ENDPOINT_BASE, API_ENDPOINT_BASE};
@@ -226,6 +226,39 @@ impl Client {
             None::<&[(); 0]>,
             None,
             true,
+        ))
+    }
+
+    pub fn post_user_richmenu(&self, user_id: &str, richmenu_id: &str) -> SendClientRequestFut<()> {
+        SendClientRequestFut::new(self.post(
+            (),
+            &format!(
+                "{}/v2/bot/user/{}/richmenu/{}",
+                API_ENDPOINT_BASE, user_id, richmenu_id
+            ),
+            None,
+        ))
+    }
+
+    pub fn post_rich_menu_bulk_link(
+        &self,
+        rich_menu_id: &str,
+        user_ids: Vec<String>,
+    ) -> Result<SendClientRequestFut<()>, Error> {
+        Ok(SendClientRequestFut::new(
+            self.post(
+                &[
+                    ("richMenuId", rich_menu_id),
+                    (
+                        "userIds",
+                        serde_json::to_string(user_ids.as_slice())
+                            .map_err(Error::SerdeJsonError)?
+                            .as_str(),
+                    ),
+                ],
+                &format!("{}/v2/bot/richmenu/bulk/link", API_ENDPOINT_BASE),
+                None,
+            ),
         ))
     }
 }
