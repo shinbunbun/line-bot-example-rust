@@ -85,6 +85,12 @@ pub struct GetRichMenuAliasListResponseAliases {
     pub rich_menu_id: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetUserRichMenuResponse {
+    pub rich_menu_id: String,
+}
+
 impl Client {
     pub fn post_richmenu(
         &self,
@@ -257,6 +263,43 @@ impl Client {
                     ),
                 ],
                 &format!("{}/v2/bot/richmenu/bulk/link", API_ENDPOINT_BASE),
+                None,
+            ),
+        ))
+    }
+
+    pub fn get_user_rich_menu(
+        &self,
+        user_id: &str,
+    ) -> SendClientRequestFut<GetUserRichMenuResponse> {
+        SendClientRequestFut::new(self.get(
+            &format!("{}/v2/bot/user/{}/richmenu", API_ENDPOINT_BASE, user_id),
+            None::<&[(); 0]>,
+            None,
+            true,
+        ))
+    }
+
+    pub fn delete_user_rich_menu(&self, user_id: &str) -> SendClientRequestFut<()> {
+        SendClientRequestFut::new(self.delete(
+            &format!("{}/v2/bot/user/{}/richmenu", API_ENDPOINT_BASE, user_id),
+            None::<&[(); 0]>,
+        ))
+    }
+
+    pub fn post_rich_menu_bulk_unlink(
+        &self,
+        user_ids: Vec<String>,
+    ) -> Result<SendClientRequestFut<()>, Error> {
+        Ok(SendClientRequestFut::new(
+            self.post(
+                &[(
+                    "userIds",
+                    serde_json::to_string(user_ids.as_slice())
+                        .map_err(Error::SerdeJsonError)?
+                        .as_str(),
+                )],
+                &format!("{}/v2/bot/richmenu/bulk/unlink", API_ENDPOINT_BASE),
                 None,
             ),
         ))
