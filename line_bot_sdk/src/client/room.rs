@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::{awc_wrapper::SendClientRequestFut, models::empty::Empty, Client};
+use crate::{awc_wrapper::SendClientRequestFut, Client};
 
 use super::API_ENDPOINT_BASE;
 
@@ -57,8 +57,8 @@ impl Client {
         SendClientRequestFut::new(self.get(&url, None::<&[(); 0]>, None, true))
     }
 
-    pub fn room_leave(&self, room_id: &str) -> SendClientRequestFut<Empty> {
+    pub fn room_leave(&self, room_id: &str) -> SendClientRequestFut<()> {
         let url = format!("{}/v2/bot/room/{}/leave", API_ENDPOINT_BASE, room_id);
-        SendClientRequestFut::new(self.post(Empty {}, &url, None))
+        SendClientRequestFut::new(self.post((), &url, None))
     }
 }
