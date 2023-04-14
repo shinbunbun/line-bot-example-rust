@@ -92,7 +92,7 @@ pub struct GetUserRichMenuResponse {
 }
 
 impl Client {
-    pub fn post_richmenu(
+    pub fn post_rich_menu(
         &self,
         richmenu: RichMenuObject,
     ) -> SendClientRequestFut<PostRichMenuResponse> {
@@ -103,7 +103,7 @@ impl Client {
         ))
     }
 
-    pub fn richmenu_validate(&self, richmenu: RichMenuObject) -> SendClientRequestFut<()> {
+    pub fn rich_menu_validate(&self, richmenu: RichMenuObject) -> SendClientRequestFut<()> {
         SendClientRequestFut::new(self.post(
             richmenu,
             &format!("{}/v2/bot/richmenu/validate", API_ENDPOINT_BASE),
@@ -111,7 +111,7 @@ impl Client {
         ))
     }
 
-    pub fn richmenu_content(&self, richmenu_id: &str) -> SendClientRequestByteFut {
+    pub fn rich_menu_content(&self, richmenu_id: &str) -> SendClientRequestByteFut {
         SendClientRequestByteFut::new(self.post(
             (),
             &format!(
@@ -122,7 +122,7 @@ impl Client {
         ))
     }
 
-    pub fn richmeu_list(&self) -> SendClientRequestFut<RichMenuResponseObject> {
+    pub fn rich_menu_list(&self) -> SendClientRequestFut<RichMenuResponseObject> {
         SendClientRequestFut::new(self.get(
             &format!("{}/v2/bot/richmenu/list", API_ENDPOINT_BASE),
             None::<&[(); 0]>,
@@ -131,7 +131,7 @@ impl Client {
         ))
     }
 
-    pub fn get_richmenu(&self, richmenu_id: &str) -> SendClientRequestFut<RichMenuResponseObject> {
+    pub fn get_rich_menu(&self, richmenu_id: &str) -> SendClientRequestFut<RichMenuResponseObject> {
         SendClientRequestFut::new(self.get(
             &format!("{}/v2/bot/richmenu/{}", API_ENDPOINT_BASE, richmenu_id),
             None::<&[(); 0]>,
@@ -140,14 +140,14 @@ impl Client {
         ))
     }
 
-    pub fn delete_richmenu(&self, richmenu_id: &str) -> SendClientRequestFut<()> {
+    pub fn delete_rich_menu(&self, richmenu_id: &str) -> SendClientRequestFut<()> {
         SendClientRequestFut::new(self.delete(
             &format!("{}/v2/bot/richmenu/{}", API_ENDPOINT_BASE, richmenu_id),
             None::<&[(); 0]>,
         ))
     }
 
-    pub fn post_user_all_richmenu(&self, richmenu_id: &str) -> SendClientRequestFut<()> {
+    pub fn post_user_all_rich_menu(&self, richmenu_id: &str) -> SendClientRequestFut<()> {
         SendClientRequestFut::new(self.post(
             (),
             &format!(
@@ -158,7 +158,7 @@ impl Client {
         ))
     }
 
-    pub fn get_user_all_richmenu(&self) -> SendClientRequestFut<GetUserAllRichMenuResponse> {
+    pub fn get_user_all_rich_menu(&self) -> SendClientRequestFut<GetUserAllRichMenuResponse> {
         SendClientRequestFut::new(self.get(
             &format!("{}/v2/bot/user/all/richmenu", API_ENDPOINT_BASE),
             None::<&[(); 0]>,
@@ -167,14 +167,14 @@ impl Client {
         ))
     }
 
-    pub fn delete_user_all_richmenu(&self) -> SendClientRequestFut<()> {
+    pub fn delete_user_all_rich_menu(&self) -> SendClientRequestFut<()> {
         SendClientRequestFut::new(self.delete(
             &format!("{}/v2/bot/user/all/richmenu", API_ENDPOINT_BASE),
             None::<&[(); 0]>,
         ))
     }
 
-    pub fn post_richmenu_alias(
+    pub fn post_rich_menu_alias(
         &self,
         rich_menu_alias_id: &str,
         rich_menu_id: &str,
@@ -189,7 +189,7 @@ impl Client {
         ))
     }
 
-    pub fn delete_richmenu_alias(&self, rich_menu_alias_id: &str) -> SendClientRequestFut<()> {
+    pub fn delete_rich_menu_alias(&self, rich_menu_alias_id: &str) -> SendClientRequestFut<()> {
         SendClientRequestFut::new(self.delete(
             &format!(
                 "{}/v2/bot/richmenu/alias/{}",
@@ -199,7 +199,7 @@ impl Client {
         ))
     }
 
-    pub fn update_richmenu_alias(
+    pub fn update_rich_menu_alias(
         &self,
         rich_menu_alias_id: &str,
         rich_menu_id: &str,
@@ -214,7 +214,7 @@ impl Client {
         ))
     }
 
-    pub fn get_richmenu_alias(&self, rich_menu_alias_id: &str) -> SendClientRequestFut<String> {
+    pub fn get_rich_menu_alias(&self, rich_menu_alias_id: &str) -> SendClientRequestFut<String> {
         SendClientRequestFut::new(self.get(
             &format!(
                 "{}/v2/bot/richmenu/alias/{}",
@@ -226,7 +226,7 @@ impl Client {
         ))
     }
 
-    pub fn get_richmenu_alias_list(&self) -> SendClientRequestFut<GetRichMenuAliasResponse> {
+    pub fn get_rich_menu_alias_list(&self) -> SendClientRequestFut<GetRichMenuAliasResponse> {
         SendClientRequestFut::new(self.get(
             &format!("{}/v2/bot/richmenu/alias/list", API_ENDPOINT_BASE),
             None::<&[(); 0]>,
@@ -235,7 +235,11 @@ impl Client {
         ))
     }
 
-    pub fn post_user_richmenu(&self, user_id: &str, richmenu_id: &str) -> SendClientRequestFut<()> {
+    pub fn post_user_rich_menu(
+        &self,
+        user_id: &str,
+        richmenu_id: &str,
+    ) -> SendClientRequestFut<()> {
         SendClientRequestFut::new(self.post(
             (),
             &format!(
