@@ -180,7 +180,7 @@ impl Client {
         rich_menu_id: &str,
     ) -> SendClientRequestFut<()> {
         SendClientRequestFut::new(self.post(
-            &[
+            [
                 ("richMenuId", rich_menu_id),
                 ("richMenuAliasId", rich_menu_alias_id),
             ],
@@ -205,7 +205,7 @@ impl Client {
         rich_menu_id: &str,
     ) -> SendClientRequestFut<()> {
         SendClientRequestFut::new(self.post(
-            &[("richMenuId", rich_menu_id)],
+            [("richMenuId", rich_menu_id)],
             &format!(
                 "{}/v2/bot/richmenu/alias/{}",
                 API_ENDPOINT_BASE, rich_menu_alias_id
@@ -257,7 +257,7 @@ impl Client {
     ) -> Result<SendClientRequestFut<()>, Error> {
         Ok(SendClientRequestFut::new(
             self.post(
-                &[
+                [
                     ("richMenuId", rich_menu_id),
                     (
                         "userIds",
@@ -297,7 +297,7 @@ impl Client {
     ) -> Result<SendClientRequestFut<()>, Error> {
         Ok(SendClientRequestFut::new(
             self.post(
-                &[(
+                [(
                     "userIds",
                     serde_json::to_string(user_ids.as_slice())
                         .map_err(Error::SerdeJsonError)?
