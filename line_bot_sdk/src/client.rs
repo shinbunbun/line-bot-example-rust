@@ -2,6 +2,7 @@ pub mod bot;
 pub mod content;
 pub mod group;
 pub mod message;
+pub mod richmenu;
 pub mod room;
 pub mod signature;
 pub mod token;
@@ -15,6 +16,7 @@ use serde::Serialize;
 use crate::{awc_wrapper::SendClientRequestFut, error::Error};
 
 pub static API_ENDPOINT_BASE: &str = "https://api.line.me";
+pub static API_DATA_ENDPOINT_BASE: &str = "https://api-data.line.me";
 
 pub struct Client {
     channel_access_token: String,
@@ -105,7 +107,7 @@ impl Client {
         Ok(request)
     }
 
-    pub async fn delete<T: Serialize>(
+    pub fn delete<T: Serialize>(
         &self,
         url: &str,
         query: Option<&T>,
