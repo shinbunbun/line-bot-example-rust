@@ -1,3 +1,4 @@
+pub mod account_link;
 pub mod bot;
 pub mod content;
 pub mod group;
