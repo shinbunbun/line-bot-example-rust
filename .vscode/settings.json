@@ -6,7 +6,4 @@
     "Imagemap"
   ],
   "editor.tabSize": 4,
-  "rust-analyzer.linkedProjects": [
-    "./line_bot_sdk/Cargo.toml"
-  ]
 }
