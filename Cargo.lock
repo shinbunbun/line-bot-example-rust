@@ -1124,9 +1124,9 @@ dependencies = [
 
 [[package]]
 name = "line_bot_sdk"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4ab9e217f5f1d35eb6c0fbe08e58f56c8b434bd2277e194f1d0d1f63c6756fe"
+checksum = "94f013d6a39dd805a61e35368cf96806199ddd4cbdf5fe768db74a4204877752"
 dependencies = [
  "actix-http",
  "actix-rt 2.8.0",
