@@ -12,6 +12,12 @@ pub trait SaveFile {
 
 pub struct SaveLocalFile;
 
+impl SaveLocalFile {
+    pub fn new() -> Self {
+        Self
+    }
+}
+
 #[async_trait(?Send)]
 impl SaveFile for SaveLocalFile {
     fn save_file(&self, bytes: &Bytes, path: &str) -> Result<(), AppError> {

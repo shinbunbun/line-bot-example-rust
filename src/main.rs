@@ -1,3 +1,4 @@
+mod app_context;
 mod error;
 mod event;
 mod file;
@@ -12,6 +13,7 @@ use router::router;
 
 pub struct AppState {
     line_client: Arc<Client>,
+    save_file: Arc<Box<dyn file::SaveFile>>,
 }
 
 #[actix_web::main]
@@ -26,6 +28,7 @@ async fn main() -> std::io::Result<()> {
                     env::var("CHANNEL_ACCESS_TOKEN").unwrap(),
                     env::var("CHANNEL_SECRET").unwrap(),
                 )),
+                save_file: Arc::new(Box::new(file::SaveLocalFile::new())),
             }))
     })
     .bind(("localhost", 8080))?

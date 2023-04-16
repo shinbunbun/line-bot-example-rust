@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
 use actix_web::rt::spawn;
-use line_bot_sdk::Client;
 use log::error;
 
 use actix_web::{web, HttpResponse, Responder};
@@ -11,6 +10,7 @@ use line_bot_sdk::models::webhook_event;
 
 use serde::{Deserialize, Serialize};
 
+use crate::app_context::AppContext;
 use crate::event::{
     follow, join, leave, member_joined, member_left, message, postback, unfollow, unsend,
 };
@@ -22,10 +22,16 @@ pub async fn handler(
     app_state: web::Data<AppState>,
 ) -> impl Responder {
     let client = Arc::clone(&app_state.line_client);
+    let save_file = Arc::clone(&app_state.save_file);
+
+    let app_context = AppContext::new(client, save_file);
 
     let signature = custom_header.x_line_signature;
 
-    if let Err(err) = client.verify_signature(&signature, &context) {
+    if let Err(err) = app_context
+        .line_client
+        .verify_signature(&signature, &context)
+    {
         error!("Invalid signature: {}", err);
     };
 
@@ -37,15 +43,15 @@ pub async fn handler(
         }
     };
 
-    spawn(async move { webhook_handler(&webhook_event, &client).await });
+    spawn(async move { webhook_handler(&webhook_event, &app_context).await });
 
     HttpResponse::Ok().body("")
 }
 
-async fn webhook_handler(context: &webhook_event::Root, client: &Client) {
+async fn webhook_handler(context: &webhook_event::Root, app_context: &AppContext) {
     for event in &context.events {
         let event_type_handler_response = match event.type_field.as_str() {
-            "message" => message::index(client, event).await,
+            "message" => message::index(app_context, event).await,
             "unsend" => unsend::index(event).await,
             "postback" => postback::index(event).await,
             "join" => join::index().await,
@@ -77,7 +83,11 @@ async fn webhook_handler(context: &webhook_event::Root, client: &Client) {
                 }
             };
 
-            if let Err(err) = client.reply(reply_token, reply_messages, None).await {
+            if let Err(err) = app_context
+                .line_client
+                .reply(reply_token, reply_messages, None)
+                .await
+            {
                 error!("Error: {}", err);
                 return;
             };
