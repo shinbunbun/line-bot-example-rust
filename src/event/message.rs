@@ -26,7 +26,7 @@ pub async fn index(
     match message {
         Message::Text(text_message) => text::text_event(app_context, event, text_message).await,
         Message::Image(image_message) => image::handler(app_context, image_message).await,
-        Message::Video(video_message) => video::handler(video_message),
+        Message::Video(video_message) => video::handler(app_context, video_message).await,
         Message::Audio(audio_message) => audio::handler(app_context, audio_message).await,
         Message::File(file_message) => file::handler(app_context, file_message).await,
         Message::Location(location_message) => location::handler(location_message),
