@@ -6,14 +6,14 @@ use crate::file::SaveFile;
 
 pub struct AppContext {
     pub line_client: Arc<Client>,
-    pub save_file: Arc<Box<dyn SaveFile>>,
+    pub destination: Arc<Box<dyn SaveFile>>,
 }
 
 impl AppContext {
-    pub fn new(line_client: Arc<Client>, save_file: Arc<Box<dyn SaveFile>>) -> Self {
+    pub fn new(line_client: Arc<Client>, destination: Arc<Box<dyn SaveFile>>) -> Self {
         Self {
             line_client,
-            save_file,
+            destination,
         }
     }
 }

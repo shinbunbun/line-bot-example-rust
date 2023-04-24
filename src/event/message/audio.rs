@@ -14,7 +14,7 @@ pub async fn handler(
         .await
         .map_err(AppError::LineBotSdkError)?;
     app_context
-        .save_file
+        .destination
         .save_file(&bytes, &format!("{}.mp3", message.id))?;
     Ok(Some(vec![TextMessage::builder()
         .text(&format!(

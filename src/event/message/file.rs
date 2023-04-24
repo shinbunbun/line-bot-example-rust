@@ -13,7 +13,7 @@ pub async fn handler(
         .get_message_content(&message.id)
         .await
         .map_err(AppError::LineBotSdkError)?;
-    app_context.save_file.save_file(&bytes, &message.id)?;
+    app_context.destination.save_file(&bytes, &message.id)?;
     Ok(Some(vec![TextMessage::builder()
         .text(&format!(
             "ファイルを受け取りました！\nメッセージID: {}",
