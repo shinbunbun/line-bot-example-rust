@@ -25,7 +25,7 @@ pub async fn index(
         .ok_or_else(|| AppError::BadRequest("Message not found".to_string()))?;
     match message {
         Message::Text(text_message) => text::text_event(app_context, event, text_message).await,
-        Message::Image(image_message) => image::handler(image_message),
+        Message::Image(image_message) => image::handler(app_context, image_message).await,
         Message::Video(video_message) => video::handler(video_message),
         Message::Audio(audio_message) => audio::handler(app_context, audio_message).await,
         Message::File(file_message) => file::handler(app_context, file_message).await,
