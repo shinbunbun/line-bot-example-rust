@@ -1,35 +1,38 @@
-use line_bot_sdk::models::{
-    action::{
-        CameraAction, CameraRollAction, DatetimePickerAction, LocationAction, MessageAction,
-        PostbackAction, URIAction,
-    },
-    message::{
-        audio::AudioMessage, image::ImageMessage, imagemap::ImagemapMessage,
-        location::LocationMessage, stamp::StampMessage, text::TextMessage, video::VideoMessage,
-    },
-    message::{
-        flex::{
-            FlexBlockStyle, FlexBox, FlexBubble, FlexBubbleStyles, FlexButton, FlexImage,
-            FlexMessage, FlexSeparator, FlexText,
+use line_bot_sdk::{
+    models::{
+        action::{
+            CameraAction, CameraRollAction, DatetimePickerAction, LocationAction, MessageAction,
+            PostbackAction, URIAction,
         },
-        imagemap::ImagemapURIAction,
-        quick_reply::{QuickReply, QuickReplyItem},
-        template::{
-            buttons::ButtonsTemplate,
-            carousel::{self, CarouselTemplate},
-            confirm::ConfirmTemplate,
-            image_carousel::{self, ImageCarouselTemplate},
-            TemplateMessage,
+        message::{
+            audio::AudioMessage, image::ImageMessage, imagemap::ImagemapMessage,
+            location::LocationMessage, stamp::StampMessage, text::TextMessage, video::VideoMessage,
         },
-        MessageObject,
+        message::{
+            flex::{
+                FlexBlockStyle, FlexBox, FlexBubble, FlexBubbleStyles, FlexButton, FlexImage,
+                FlexMessage, FlexSeparator, FlexText,
+            },
+            imagemap::ImagemapURIAction,
+            quick_reply::{QuickReply, QuickReplyItem},
+            template::{
+                buttons::ButtonsTemplate,
+                carousel::{self, CarouselTemplate},
+                confirm::ConfirmTemplate,
+                image_carousel::{self, ImageCarouselTemplate},
+                TemplateMessage,
+            },
+            MessageObject,
+        },
+        webhook_event::{Event, Text},
     },
-    webhook_event::{Event, Text},
+    Client,
 };
 
-use crate::{app_context::AppContext, error::AppError};
+use crate::error::AppError;
 
 pub async fn text_event(
-    app_context: &AppContext,
+    client: &Client,
     event: &Event,
     message: &Text,
 ) -> Result<Option<Vec<MessageObject>>, AppError> {
@@ -393,7 +396,7 @@ pub async fn text_event(
             ]
         },
         "プロフィール"=>{
-            let profile = app_context.line_client.profile(event.source.user_id.as_ref().ok_or_else(|| AppError::BadRequest("userId not found".to_string()))?).await.map_err(AppError::LineBotSdkError)?;
+            let profile = client.profile(event.source.user_id.as_ref().ok_or_else(|| AppError::BadRequest("userId not found".to_string()))?).await.map_err(AppError::LineBotSdkError)?;
             vec![
                 TextMessage::builder()
                 .text(&format!("あなたの名前: {}\nユーザーID: {}\nプロフィール画像のURL: {}\nステータスメッセージ: {}", profile.display_name, profile.user_id, profile.picture_url, profile.status_message.unwrap_or_else(|| "未設定".to_string())))
